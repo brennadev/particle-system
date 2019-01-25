@@ -6,7 +6,6 @@
 //  Copyright © 2019 Brenna Olson. All rights reserved.
 //
 
-// File for Metal kernel and shader functions
 
 #include <metal_stdlib>
 #include <simd/simd.h>
@@ -16,17 +15,16 @@
 
 using namespace metal;
 
-typedef struct
-{
+typedef struct {
     float3 position [[attribute(VertexAttributePosition)]];
     float2 texCoord [[attribute(VertexAttributeTexcoord)]];
 } Vertex;
 
-typedef struct
-{
+typedef struct {
     float4 position [[position]];
     float2 texCoord;
 } ColorInOut;
+
 
 vertex ColorInOut vertexShader(Vertex in [[stage_in]],
                                constant Uniforms & uniforms [[ buffer(BufferIndexUniforms) ]])

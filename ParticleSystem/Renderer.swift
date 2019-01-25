@@ -63,7 +63,8 @@ class Renderer: NSObject, MTKViewDelegate {
         
         
         // floor buffer
-        floorBuffer = device.makeBuffer(length: MemoryLayout<float3>.stride * 6, options: .storageModeShared)
+        var floorVertices = [float3(-20, 0, -20), float3(-20, 0, 20), float3(20, 0, 20), float3(-20, 0, -20), float3(20, 0, 20), float3(20, 0, -20)]
+        floorBuffer = device.makeBuffer(bytes: &floorVertices, length: MemoryLayout<float3>.stride * floorVertices.count, options: .storageModeShared)
         
         
         uniforms = UnsafeMutableRawPointer(dynamicUniformBuffer.contents()).bindMemory(to:Uniforms.self, capacity:1)
@@ -223,6 +224,8 @@ class Renderer: NSObject, MTKViewDelegate {
         rotation += 0.01
     }
 
+    
+    // MARK: - MTKViewDelegate
     func draw(in view: MTKView) {
         /// Per frame updates hare
 
@@ -251,11 +254,8 @@ class Renderer: NSObject, MTKViewDelegate {
                     renderEncoder.pushDebugGroup("Draw Box")
                     
                     renderEncoder.setCullMode(.back)
-                    
                     renderEncoder.setFrontFacing(.counterClockwise)
-                    
                     renderEncoder.setRenderPipelineState(pipelineState)
-                    
                     renderEncoder.setDepthStencilState(depthState)
                     
                     renderEncoder.setVertexBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
