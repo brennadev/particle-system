@@ -54,7 +54,14 @@ class Renderer: NSObject, MTKViewDelegate {
     var sphereMesh: MTKMesh
 
     
-    static var sphere = Particle(position: float3(0, 0, 0), velocity: float3(0, 0, 0), acceleration: float3(0, 0, 0), radius: 1)
+    static var sphere = Particle(position: float3(0, 20, 0),
+                                 velocity: float3(0, 0, 0),
+                                 acceleration: float3(0, -9.2, 0),  // standard acceleration due to gravity
+                                 radius: 1)
+    
+    /// Floor plane's location
+    /// - note: This is exposed as a property so it can be detected when the sphere has come in contact with it
+    let floorY: Float = -8
     
     // MARK: - Setup
     init?(metalKitView: MTKView) {
@@ -69,7 +76,7 @@ class Renderer: NSObject, MTKViewDelegate {
         
         
         // floor buffer
-        let floorY: Float = -8
+        
         let floorXZ: Float = 35
         /// floor in x-z plane
         var floorVertices = [float3(-floorXZ, floorY, -floorXZ),    // far left
@@ -126,7 +133,7 @@ class Renderer: NSObject, MTKViewDelegate {
         self.depthState = device.makeDepthStencilState(descriptor:depthStateDesciptor)!
 
         do {
-            sphereMesh = try Renderer.buildMesh(device: device, mtlVertexDescriptor: mtlVertexDescriptor)
+            sphereMesh = try Renderer.buildSphereMesh(device: device, mtlVertexDescriptor: mtlVertexDescriptor)
         } catch {
             print("Unable to build MetalKit Mesh. Error info: \(error)")
             return nil
@@ -193,7 +200,8 @@ class Renderer: NSObject, MTKViewDelegate {
     }
 
     
-    class func buildMesh(device: MTLDevice,
+    /// Set up the vertices for a sphere
+    class func buildSphereMesh(device: MTLDevice,
                          mtlVertexDescriptor: MTLVertexDescriptor) throws -> MTKMesh {
         /// Create and condition mesh data to feed into a pipeline using the given vertex descriptor
 
