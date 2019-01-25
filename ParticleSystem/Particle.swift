@@ -13,4 +13,5 @@ struct Particle {
     var position: float3
     var velocity: float3
     var acceleration: float3
+    var radius: Float
 }

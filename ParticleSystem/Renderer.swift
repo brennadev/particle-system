@@ -37,10 +37,11 @@ class Renderer: NSObject, MTKViewDelegate {
     var depthState: MTLDepthStencilState
     var colorMap: MTLTexture
 
+    
+    // MARK: - Buffer Properties
     let inFlightSemaphore = DispatchSemaphore(value: maxBuffersInFlight)
 
     var uniformBufferOffset = 0
-
     var uniformBufferIndex = 0
 
     var uniforms: UnsafeMutablePointer<Uniforms>
@@ -49,9 +50,11 @@ class Renderer: NSObject, MTKViewDelegate {
 
     var rotation: Float = 0
     
+    /// Sphere vertex data
+    var sphereMesh: MTKMesh
 
-    var mesh: MTKMesh
-
+    
+    static var sphere = Particle(position: float3(0, 0, 0), velocity: float3(0, 0, 0), acceleration: float3(0, 0, 0), radius: 1)
     
     // MARK: - Setup
     init?(metalKitView: MTKView) {
@@ -63,14 +66,18 @@ class Renderer: NSObject, MTKViewDelegate {
 
         dynamicUniformBuffer = device.makeBuffer(length:uniformBufferSize,
                                                            options:.storageModeShared)!
-
-        dynamicUniformBuffer.label = "UniformBuffer"
         
         
         // floor buffer
         let floorY: Float = -8
         let floorXZ: Float = 35
-        var floorVertices = [float3(-floorXZ, floorY, -floorXZ), float3(-floorXZ, floorY, floorXZ), float3(floorXZ, floorY, floorXZ), float3(-floorXZ, floorY, -floorXZ), float3(floorXZ, floorY, floorXZ), float3(floorXZ, floorY, -floorXZ)]
+        /// floor in x-z plane
+        var floorVertices = [float3(-floorXZ, floorY, -floorXZ),    // far left
+                             float3(-floorXZ, floorY, floorXZ),     // close left
+                             float3(floorXZ, floorY, floorXZ),      // close right
+                             float3(-floorXZ, floorY, -floorXZ),    // far left
+                             float3(floorXZ, floorY, floorXZ),      // close right
+                             float3(floorXZ, floorY, -floorXZ)]     // far right
         floorBuffer = device.makeBuffer(bytes: &floorVertices, length: MemoryLayout<float3>.stride * floorVertices.count, options: .storageModeShared)
         
         
@@ -119,7 +126,7 @@ class Renderer: NSObject, MTKViewDelegate {
         self.depthState = device.makeDepthStencilState(descriptor:depthStateDesciptor)!
 
         do {
-            mesh = try Renderer.buildMesh(device: device, mtlVertexDescriptor: mtlVertexDescriptor)
+            sphereMesh = try Renderer.buildMesh(device: device, mtlVertexDescriptor: mtlVertexDescriptor)
         } catch {
             print("Unable to build MetalKit Mesh. Error info: \(error)")
             return nil
@@ -194,9 +201,8 @@ class Renderer: NSObject, MTKViewDelegate {
 
         
         let segmentCount = 30
-        let radius: Float = 1
         
-        let sphereMesh = MDLMesh.newEllipsoid(withRadii: float3(radius, radius, radius), radialSegments: segmentCount, verticalSegments: segmentCount, geometryType: .triangles, inwardNormals: false, hemisphere: false, allocator: metalAllocator)
+        let sphereMesh = MDLMesh.newEllipsoid(withRadii: float3(sphere.radius, sphere.radius, sphere.radius), radialSegments: segmentCount, verticalSegments: segmentCount, geometryType: .triangles, inwardNormals: false, hemisphere: false, allocator: metalAllocator)
         
 
         let mdlVertexDescriptor = MTKModelIOVertexDescriptorFromMetal(mtlVertexDescriptor)
@@ -245,13 +251,10 @@ class Renderer: NSObject, MTKViewDelegate {
 
     
     /// Update any movement of objects
-    private func updateGameState() {
-        /// Update any game state before rendering
-
+    private func updateMatrices() {
         uniforms[0].projectionMatrix = projectionMatrix
-        rotation = 0
         let rotationAxis = float3(1, 1, 0)
-        let modelMatrix = matrix4x4_rotation(radians: rotation, axis: rotationAxis)
+        let modelMatrix = matrix4x4_rotation(radians: 0, axis: rotationAxis)
         let viewMatrix = matrix4x4_translation(0.0, 0.0, -8.0)
         uniforms[0].modelViewMatrix = simd_mul(viewMatrix, modelMatrix)
         
@@ -273,7 +276,7 @@ class Renderer: NSObject, MTKViewDelegate {
             }
             
             updateDynamicBufferState()
-            updateGameState()
+            updateMatrices()
             
             /// Delay getting the currentRenderPassDescriptor until we absolutely need it to avoid
             ///   holding onto the drawable and blocking the display pipeline any longer than necessary
@@ -294,20 +297,20 @@ class Renderer: NSObject, MTKViewDelegate {
                     
                     renderEncoder.setFragmentBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
                     
-                    for (index, element) in mesh.vertexDescriptor.layouts.enumerated() {
+                    for (index, element) in sphereMesh.vertexDescriptor.layouts.enumerated() {
                         guard let layout = element as? MDLVertexBufferLayout else {
                             return
                         }
                         
                         if layout.stride != 0 {
-                            let buffer = mesh.vertexBuffers[index]
+                            let buffer = sphereMesh.vertexBuffers[index]
                             renderEncoder.setVertexBuffer(buffer.buffer, offset:buffer.offset, index: index)
                         }
                     }
                     
                     renderEncoder.setFragmentTexture(colorMap, index: TextureIndex.color.rawValue)
                     
-                    for submesh in mesh.submeshes {
+                    for submesh in sphereMesh.submeshes {
                         renderEncoder.drawIndexedPrimitives(type: submesh.primitiveType,
                                                             indexCount: submesh.indexCount,
                                                             indexType: submesh.indexType,
