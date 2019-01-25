@@ -136,7 +136,7 @@ class Renderer: NSObject, MTKViewDelegate {
     }
 
     class func buildMetalVertexDescriptor() -> MTLVertexDescriptor {
-        // Creete a Metal vertex descriptor specifying how vertices will by laid out for input into our render
+        // Create a Metal vertex descriptor specifying how vertices will by laid out for input into our render
         //   pipeline and how we'll layout our Model IO vertices
 
         let mtlVertexDescriptor = MTLVertexDescriptor()
@@ -248,7 +248,7 @@ class Renderer: NSObject, MTKViewDelegate {
         /// Update any game state before rendering
 
         uniforms[0].projectionMatrix = projectionMatrix
-        rotation =  .pi / 2
+        rotation = 0
         let rotationAxis = float3(1, 1, 0)
         let modelMatrix = matrix4x4_rotation(radians: rotation, axis: rotationAxis)
         let viewMatrix = matrix4x4_translation(0.0, 0.0, -8.0)
