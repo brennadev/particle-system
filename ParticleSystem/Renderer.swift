@@ -68,8 +68,9 @@ class Renderer: NSObject, MTKViewDelegate {
         
         
         // floor buffer
-        let floorY: Float = -1
-        var floorVertices = [float3(-20, floorY, -20), float3(-20, floorY, 20), float3(20, floorY, 20), float3(-20, floorY, -20), float3(20, floorY, 20), float3(20, floorY, -20)]
+        let floorY: Float = -8
+        let floorXZ: Float = 35
+        var floorVertices = [float3(-floorXZ, floorY, -floorXZ), float3(-floorXZ, floorY, floorXZ), float3(floorXZ, floorY, floorXZ), float3(-floorXZ, floorY, -floorXZ), float3(floorXZ, floorY, floorXZ), float3(floorXZ, floorY, -floorXZ)]
         floorBuffer = device.makeBuffer(bytes: &floorVertices, length: MemoryLayout<float3>.stride * floorVertices.count, options: .storageModeShared)
         
         
