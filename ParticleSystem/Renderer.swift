@@ -237,15 +237,12 @@ class Renderer: NSObject, MTKViewDelegate {
                 semaphore.signal()
             }
             
-            self.updateDynamicBufferState()
-            
-            self.updateGameState()
+            updateDynamicBufferState()
+            updateGameState()
             
             /// Delay getting the currentRenderPassDescriptor until we absolutely need it to avoid
             ///   holding onto the drawable and blocking the display pipeline any longer than necessary
-            let renderPassDescriptor = view.currentRenderPassDescriptor
-            
-            if let renderPassDescriptor = renderPassDescriptor {
+            if let renderPassDescriptor = view.currentRenderPassDescriptor {
                 
                 /// Final pass rendering code here
                 if let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) {

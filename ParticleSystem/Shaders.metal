@@ -39,6 +39,10 @@ vertex ColorInOut vertexShader(Vertex in [[stage_in]],
     return out;
 }
 
+
+//vertex ColorInOut vertexFloor(
+
+
 fragment float4 fragmentShader(ColorInOut in [[stage_in]],
                                constant Uniforms & uniforms [[ buffer(BufferIndexUniforms) ]],
                                texture2d<half> colorMap     [[ texture(TextureIndexColor) ]])
