@@ -27,7 +27,8 @@ typedef struct {
 
 
 vertex ColorInOut vertexShader(Vertex in [[stage_in]],
-                               constant Uniforms & uniforms [[ buffer(BufferIndexUniforms) ]])
+                               constant Uniforms & uniforms [[ buffer(BufferIndexUniforms) ]],
+                               constant float3 *floorVertices [[ buffer(BufferIndexFloor) ]])
 {
     ColorInOut out;
 
