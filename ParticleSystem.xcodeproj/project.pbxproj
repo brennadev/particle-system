@@ -14,6 +14,7 @@
 		6572F88C21FB49E700E5334C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6572F88B21FB49E700E5334C /* Assets.xcassets */; };
 		6572F88F21FB49E700E5334C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6572F88D21FB49E700E5334C /* Main.storyboard */; };
 		6572F89A21FB612100E5334C /* MatrixMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6572F89921FB612100E5334C /* MatrixMath.swift */; };
+		6572F89C21FBA33900E5334C /* Particle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6572F89B21FBA33900E5334C /* Particle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		6572F89021FB49E700E5334C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6572F89121FB49E700E5334C /* ParticleSystem.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ParticleSystem.entitlements; sourceTree = "<group>"; };
 		6572F89921FB612100E5334C /* MatrixMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixMath.swift; sourceTree = "<group>"; };
+		6572F89B21FBA33900E5334C /* Particle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Particle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +67,7 @@
 				6572F88621FB49E300E5334C /* Renderer.swift */,
 				6572F89921FB612100E5334C /* MatrixMath.swift */,
 				6572F88821FB49E300E5334C /* Shaders.metal */,
+				6572F89B21FBA33900E5334C /* Particle.swift */,
 				6572F88A21FB49E300E5334C /* ShaderTypes.h */,
 				6572F88B21FB49E700E5334C /* Assets.xcassets */,
 				6572F88D21FB49E700E5334C /* Main.storyboard */,
@@ -144,6 +147,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6572F89C21FBA33900E5334C /* Particle.swift in Sources */,
 				6572F88921FB49E300E5334C /* Shaders.metal in Sources */,
 				6572F88521FB49E300E5334C /* GameViewController.swift in Sources */,
 				6572F88721FB49E300E5334C /* Renderer.swift in Sources */,

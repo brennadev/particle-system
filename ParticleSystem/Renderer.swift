@@ -253,6 +253,8 @@ class Renderer: NSObject, MTKViewDelegate {
         let modelMatrix = matrix4x4_rotation(radians: rotation, axis: rotationAxis)
         let viewMatrix = matrix4x4_translation(0.0, 0.0, -8.0)
         uniforms[0].modelViewMatrix = simd_mul(viewMatrix, modelMatrix)
+        
+        // this is the location where the ball location updating should go (the physics stuff)
         //rotation += 0.01
     }
 
