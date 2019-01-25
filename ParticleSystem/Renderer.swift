@@ -30,7 +30,9 @@ class Renderer: NSObject, MTKViewDelegate {
     var dynamicUniformBuffer: MTLBuffer
     var floorBuffer: MTLBuffer?
     
-    var pipelineState: MTLRenderPipelineState
+    var spherePipelineState: MTLRenderPipelineState
+    var floorPipelineState: MTLRenderPipelineState
+    
     var depthState: MTLDepthStencilState
     var colorMap: MTLTexture
 
@@ -75,12 +77,33 @@ class Renderer: NSObject, MTKViewDelegate {
 
         let mtlVertexDescriptor = Renderer.buildMetalVertexDescriptor()
 
+        
+        // pipeline states
+        // sphere
         do {
-            pipelineState = try Renderer.buildRenderPipelineWithDevice(device: device,
+            spherePipelineState = try Renderer.buildRenderPipelineWithDevice(device: device,
                                                                        metalKitView: metalKitView,
                                                                        mtlVertexDescriptor: mtlVertexDescriptor)
         } catch {
             print("Unable to compile render pipeline state.  Error info: \(error)")
+            return nil
+        }
+    
+        // floor
+        let library = device.makeDefaultLibrary()
+        let vertexFloorFunction = library?.makeFunction(name: "vertexFloor")
+        let fragmentFloorFunction = library?.makeFunction(name: "fragmentFloor")
+        let floorRenderPipelineDescriptor = MTLRenderPipelineDescriptor()
+        floorRenderPipelineDescriptor.vertexFunction = vertexFloorFunction
+        floorRenderPipelineDescriptor.fragmentFunction = fragmentFloorFunction
+        floorRenderPipelineDescriptor.colorAttachments[0].pixelFormat = metalKitView.colorPixelFormat
+        floorRenderPipelineDescriptor.depthAttachmentPixelFormat = metalKitView.depthStencilPixelFormat
+        
+        
+        do {
+            try floorPipelineState = device.makeRenderPipelineState(descriptor: floorRenderPipelineDescriptor)
+        } catch {
+            print("Unable to set up floorPipelineState")
             return nil
         }
 
@@ -252,7 +275,7 @@ class Renderer: NSObject, MTKViewDelegate {
                     
                     renderEncoder.setCullMode(.back)
                     renderEncoder.setFrontFacing(.counterClockwise)
-                    renderEncoder.setRenderPipelineState(pipelineState)
+                    renderEncoder.setRenderPipelineState(spherePipelineState)
                     renderEncoder.setDepthStencilState(depthState)
                     
                     renderEncoder.setVertexBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)

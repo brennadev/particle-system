@@ -18,7 +18,7 @@ class GameViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        guard let mtkView = self.view as? MTKView else {
+        guard let mtkView = view as? MTKView else {
             print("View attached to GameViewController is not an MTKView")
             return
         }
@@ -38,6 +38,7 @@ class GameViewController: NSViewController {
 
         renderer = newRenderer
 
+        // note to self: this is the resizing MTKViewDelegate method
         renderer.mtkView(mtkView, drawableSizeWillChange: mtkView.drawableSize)
 
         mtkView.delegate = renderer
