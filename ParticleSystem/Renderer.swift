@@ -68,7 +68,8 @@ class Renderer: NSObject, MTKViewDelegate {
         
         
         // floor buffer
-        var floorVertices = [float3(-20, 0, -20), float3(-20, 0, 20), float3(20, 0, 20), float3(-20, 0, -20), float3(20, 0, 20), float3(20, 0, -20)]
+        let floorY: Float = -1
+        var floorVertices = [float3(-20, floorY, -20), float3(-20, floorY, 20), float3(20, floorY, 20), float3(-20, floorY, -20), float3(20, floorY, 20), float3(20, floorY, -20)]
         floorBuffer = device.makeBuffer(bytes: &floorVertices, length: MemoryLayout<float3>.stride * floorVertices.count, options: .storageModeShared)
         
         
@@ -241,16 +242,18 @@ class Renderer: NSObject, MTKViewDelegate {
         uniforms = UnsafeMutableRawPointer(dynamicUniformBuffer.contents() + uniformBufferOffset).bindMemory(to:Uniforms.self, capacity:1)
     }
 
+    
+    /// Update any movement of objects
     private func updateGameState() {
         /// Update any game state before rendering
 
         uniforms[0].projectionMatrix = projectionMatrix
-
+        rotation =  .pi / 2
         let rotationAxis = float3(1, 1, 0)
         let modelMatrix = matrix4x4_rotation(radians: rotation, axis: rotationAxis)
         let viewMatrix = matrix4x4_translation(0.0, 0.0, -8.0)
         uniforms[0].modelViewMatrix = simd_mul(viewMatrix, modelMatrix)
-        rotation += 0.01
+        //rotation += 0.01
     }
 
     
@@ -279,7 +282,6 @@ class Renderer: NSObject, MTKViewDelegate {
                     // general setup
                     renderEncoder.setCullMode(.back)
                     renderEncoder.setFrontFacing(.counterClockwise)
-                    
                     renderEncoder.setDepthStencilState(depthState)
                     
                     
@@ -320,6 +322,7 @@ class Renderer: NSObject, MTKViewDelegate {
                     renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: floorVertexCount)
 
                     
+                    // ready to draw
                     renderEncoder.endEncoding()
                     
                     if let drawable = view.currentDrawable {
