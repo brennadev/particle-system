@@ -16,6 +16,7 @@ import simd
 let alignedUniformsSize = (MemoryLayout<Uniforms>.size & ~0xFF) + 0x100
 
 let maxBuffersInFlight = 3
+let floorVertexCount = 6
 
 enum RendererError: Error {
     case badVertexDescriptor
@@ -51,6 +52,8 @@ class Renderer: NSObject, MTKViewDelegate {
 
     var mesh: MTKMesh
 
+    
+    // MARK: - Setup
     init?(metalKitView: MTKView) {
         device = metalKitView.device!
         commandQueue = device.makeCommandQueue()!
@@ -226,6 +229,8 @@ class Renderer: NSObject, MTKViewDelegate {
 
     }
 
+    
+    // MARK: - Updates
     private func updateDynamicBufferState() {
         /// Update the state of our uniform buffers before rendering
 
@@ -270,17 +275,17 @@ class Renderer: NSObject, MTKViewDelegate {
                 
                 /// Final pass rendering code here
                 if let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) {
+                    
+                    // general setup
                     renderEncoder.label = "Primary Render Encoder"
-                    
-                    renderEncoder.pushDebugGroup("Draw Box")
-                    
                     renderEncoder.setCullMode(.back)
                     renderEncoder.setFrontFacing(.counterClockwise)
                     renderEncoder.setRenderPipelineState(spherePipelineState)
                     renderEncoder.setDepthStencilState(depthState)
                     
+                    
+                    // sphere
                     renderEncoder.setVertexBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
-                    renderEncoder.setVertexBuffer(floorBuffer, offset: 0, index: BufferIndex.floor.rawValue)
                     renderEncoder.setFragmentBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
                     
                     for (index, element) in mesh.vertexDescriptor.layouts.enumerated() {
@@ -305,7 +310,13 @@ class Renderer: NSObject, MTKViewDelegate {
                         
                     }
                     
-                    renderEncoder.popDebugGroup()
+                    
+                    // floor
+                    
+                    renderEncoder.setVertexBuffer(floorBuffer, offset: 0, index: BufferIndex.floor.rawValue)
+                    
+                    renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: floorVertexCount)
+
                     
                     renderEncoder.endEncoding()
                     
