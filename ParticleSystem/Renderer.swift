@@ -98,6 +98,7 @@ class Renderer: NSObject, MTKViewDelegate {
         floorRenderPipelineDescriptor.fragmentFunction = fragmentFloorFunction
         floorRenderPipelineDescriptor.colorAttachments[0].pixelFormat = metalKitView.colorPixelFormat
         floorRenderPipelineDescriptor.depthAttachmentPixelFormat = metalKitView.depthStencilPixelFormat
+        floorRenderPipelineDescriptor.stencilAttachmentPixelFormat = metalKitView.depthStencilPixelFormat
         
         
         do {
