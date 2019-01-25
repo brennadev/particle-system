@@ -26,7 +26,7 @@ typedef struct {
 } ColorInOut;
 
 
-
+# pragma mark - Ball Shading (provided in Apple's template)
 vertex ColorInOut vertexShader(Vertex in [[stage_in]],
                                constant Uniforms & uniforms [[ buffer(BufferIndexUniforms) ]],
                                constant float3 *floorVertices [[ buffer(BufferIndexFloor) ]])
@@ -56,9 +56,13 @@ fragment float4 fragmentShader(ColorInOut in [[stage_in]],
 
 
 # pragma mark - Floor Shading (very simple)
-
-vertex float4 vertexFloor(uint vertexID [[ vertex_id ]], constant float3 *floorVertices [[ buffer(BufferIndexFloor) ]]) {
-    return float4(floorVertices[vertexID], 1);
+/// Only returns the position - no texture coordinates or other data; based off of the Apple-provided vertex function above
+vertex float4 vertexFloor(uint vertexID [[ vertex_id ]],
+                          constant Uniforms & uniforms [[ buffer(BufferIndexUniforms) ]],
+                          constant float3 *floorVertices [[ buffer(BufferIndexFloor) ]]) {
+    float4 position = float4(in.position, 1.0);
+    out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
+    return position;
 }
 
 
