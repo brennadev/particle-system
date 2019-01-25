@@ -41,6 +41,8 @@ class Renderer: NSObject, MTKViewDelegate {
     var projectionMatrix: matrix_float4x4 = matrix_float4x4()
 
     var rotation: Float = 0
+    
+    //let sphere =
 
     var mesh: MTKMesh
 
@@ -150,11 +152,17 @@ class Renderer: NSObject, MTKViewDelegate {
 
         let metalAllocator = MTKMeshBufferAllocator(device: device)
 
-        let mdlMesh = MDLMesh.newBox(withDimensions: float3(4, 4, 4),
-                                     segments: uint3(2, 2, 2),
+        //let mdlMesh = MDLMesh.newBox(withDimensions: float3(4, 4, 4),
+                                     /*segments: uint3(2, 2, 2),
                                      geometryType: MDLGeometryType.triangles,
                                      inwardNormals:false,
-                                     allocator: metalAllocator)
+                                     allocator: metalAllocator)*/
+        
+        let segmentCount = 30
+        let radius: Float = 3
+        
+        let mdlMesh = MDLMesh.newEllipsoid(withRadii: float3(radius, radius, radius), radialSegments: segmentCount, verticalSegments: segmentCount, geometryType: .triangles, inwardNormals: false, hemisphere: false, allocator: metalAllocator)
+        
 
         let mdlVertexDescriptor = MTKModelIOVertexDescriptorFromMetal(mtlVertexDescriptor)
 
@@ -291,7 +299,8 @@ class Renderer: NSObject, MTKViewDelegate {
     }
 }
 
-// Generic matrix math utility functions
+
+// MARK: - Generic matrix math utility functions
 func matrix4x4_rotation(radians: Float, axis: float3) -> matrix_float4x4 {
     let unitAxis = normalize(axis)
     let ct = cosf(radians)
