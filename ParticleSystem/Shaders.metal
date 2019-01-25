@@ -26,6 +26,7 @@ typedef struct {
 } ColorInOut;
 
 
+
 vertex ColorInOut vertexShader(Vertex in [[stage_in]],
                                constant Uniforms & uniforms [[ buffer(BufferIndexUniforms) ]],
                                constant float3 *floorVertices [[ buffer(BufferIndexFloor) ]])
@@ -40,9 +41,6 @@ vertex ColorInOut vertexShader(Vertex in [[stage_in]],
 }
 
 
-//vertex ColorInOut vertexFloor(
-
-
 fragment float4 fragmentShader(ColorInOut in [[stage_in]],
                                constant Uniforms & uniforms [[ buffer(BufferIndexUniforms) ]],
                                texture2d<half> colorMap     [[ texture(TextureIndexColor) ]])
@@ -54,4 +52,17 @@ fragment float4 fragmentShader(ColorInOut in [[stage_in]],
     half4 colorSample   = colorMap.sample(colorSampler, in.texCoord.xy);
 
     return float4(colorSample);
+}
+
+
+# pragma mark - Floor Shading (very simple)
+
+vertex float4 vertexFloor(uint vertexID [[ vertex_id ]], constant float3 *floorVertices [[ buffer(BufferIndexFloor) ]]) {
+    return float4(floorVertices[vertexID], 1);
+}
+
+
+/// Just returns white to keep things simple
+fragment float4 fragmentFloor(float4 vertexIn [[ stage_in ]]) {
+    return float4(1, 1, 1, 1);
 }
