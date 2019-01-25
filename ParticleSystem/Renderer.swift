@@ -277,15 +277,16 @@ class Renderer: NSObject, MTKViewDelegate {
                 if let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) {
                     
                     // general setup
-                    renderEncoder.label = "Primary Render Encoder"
                     renderEncoder.setCullMode(.back)
                     renderEncoder.setFrontFacing(.counterClockwise)
-                    renderEncoder.setRenderPipelineState(spherePipelineState)
+                    
                     renderEncoder.setDepthStencilState(depthState)
                     
                     
                     // sphere
+                    renderEncoder.setRenderPipelineState(spherePipelineState)
                     renderEncoder.setVertexBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
+                    
                     renderEncoder.setFragmentBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
                     
                     for (index, element) in mesh.vertexDescriptor.layouts.enumerated() {
@@ -307,13 +308,14 @@ class Renderer: NSObject, MTKViewDelegate {
                                                             indexType: submesh.indexType,
                                                             indexBuffer: submesh.indexBuffer.buffer,
                                                             indexBufferOffset: submesh.indexBuffer.offset)
-                        
                     }
                     
                     
                     // floor
+                    renderEncoder.setRenderPipelineState(floorPipelineState)
                     
                     renderEncoder.setVertexBuffer(floorBuffer, offset: 0, index: BufferIndex.floor.rawValue)
+                    renderEncoder.setVertexBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
                     
                     renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: floorVertexCount)
 
