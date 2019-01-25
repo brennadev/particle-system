@@ -23,9 +23,13 @@ enum RendererError: Error {
 
 class Renderer: NSObject, MTKViewDelegate {
 
+    // MARK: - Metal Properties
     public let device: MTLDevice
     let commandQueue: MTLCommandQueue
+    
     var dynamicUniformBuffer: MTLBuffer
+    var floorBuffer: MTLBuffer?
+    
     var pipelineState: MTLRenderPipelineState
     var depthState: MTLDepthStencilState
     var colorMap: MTLTexture
@@ -42,21 +46,26 @@ class Renderer: NSObject, MTKViewDelegate {
 
     var rotation: Float = 0
     
-    //let sphere =
 
     var mesh: MTKMesh
 
     init?(metalKitView: MTKView) {
-        self.device = metalKitView.device!
-        self.commandQueue = self.device.makeCommandQueue()!
+        device = metalKitView.device!
+        commandQueue = device.makeCommandQueue()!
 
+        // sphere buffer
         let uniformBufferSize = alignedUniformsSize * maxBuffersInFlight
 
-        self.dynamicUniformBuffer = self.device.makeBuffer(length:uniformBufferSize,
-                                                           options:[MTLResourceOptions.storageModeShared])!
+        dynamicUniformBuffer = device.makeBuffer(length:uniformBufferSize,
+                                                           options:.storageModeShared)!
 
-        self.dynamicUniformBuffer.label = "UniformBuffer"
-
+        dynamicUniformBuffer.label = "UniformBuffer"
+        
+        
+        // floor buffer
+        floorBuffer = device.makeBuffer(length: MemoryLayout<float3>.stride * 6, options: .storageModeShared)
+        
+        
         uniforms = UnsafeMutableRawPointer(dynamicUniformBuffer.contents()).bindMemory(to:Uniforms.self, capacity:1)
 
         metalKitView.depthStencilPixelFormat = MTLPixelFormat.depth32Float_stencil8
@@ -146,22 +155,18 @@ class Renderer: NSObject, MTKViewDelegate {
         return try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
     }
 
+    
     class func buildMesh(device: MTLDevice,
                          mtlVertexDescriptor: MTLVertexDescriptor) throws -> MTKMesh {
         /// Create and condition mesh data to feed into a pipeline using the given vertex descriptor
 
         let metalAllocator = MTKMeshBufferAllocator(device: device)
 
-        //let mdlMesh = MDLMesh.newBox(withDimensions: float3(4, 4, 4),
-                                     /*segments: uint3(2, 2, 2),
-                                     geometryType: MDLGeometryType.triangles,
-                                     inwardNormals:false,
-                                     allocator: metalAllocator)*/
         
         let segmentCount = 30
-        let radius: Float = 3
+        let radius: Float = 1
         
-        let mdlMesh = MDLMesh.newEllipsoid(withRadii: float3(radius, radius, radius), radialSegments: segmentCount, verticalSegments: segmentCount, geometryType: .triangles, inwardNormals: false, hemisphere: false, allocator: metalAllocator)
+        let sphereMesh = MDLMesh.newEllipsoid(withRadii: float3(radius, radius, radius), radialSegments: segmentCount, verticalSegments: segmentCount, geometryType: .triangles, inwardNormals: false, hemisphere: false, allocator: metalAllocator)
         
 
         let mdlVertexDescriptor = MTKModelIOVertexDescriptorFromMetal(mtlVertexDescriptor)
@@ -172,11 +177,12 @@ class Renderer: NSObject, MTKViewDelegate {
         attributes[VertexAttribute.position.rawValue].name = MDLVertexAttributePosition
         attributes[VertexAttribute.texcoord.rawValue].name = MDLVertexAttributeTextureCoordinate
 
-        mdlMesh.vertexDescriptor = mdlVertexDescriptor
+        sphereMesh.vertexDescriptor = mdlVertexDescriptor
 
-        return try MTKMesh(mesh:mdlMesh, device:device)
+        return try MTKMesh(mesh:sphereMesh, device:device)
     }
 
+    
     class func loadTexture(device: MTLDevice,
                            textureName: String) throws -> MTLTexture {
         /// Load texture data with optimal parameters for sampling
