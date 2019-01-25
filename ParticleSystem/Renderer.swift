@@ -29,6 +29,7 @@ class Renderer: NSObject, MTKViewDelegate {
     let commandQueue: MTLCommandQueue
     
     var dynamicUniformBuffer: MTLBuffer
+    var floorUniformBuffer: MTLBuffer?
     var floorBuffer: MTLBuffer?
     
     var spherePipelineState: MTLRenderPipelineState
@@ -44,7 +45,8 @@ class Renderer: NSObject, MTKViewDelegate {
     var uniformBufferOffset = 0
     var uniformBufferIndex = 0
 
-    var uniforms: UnsafeMutablePointer<Uniforms>
+    var sphereUniforms: UnsafeMutablePointer<Uniforms>
+    var floorUniforms: UnsafeMutablePointer<Uniforms>
 
     var projectionMatrix: matrix_float4x4 = matrix_float4x4()
 
@@ -68,12 +70,14 @@ class Renderer: NSObject, MTKViewDelegate {
         device = metalKitView.device!
         commandQueue = device.makeCommandQueue()!
 
-        // sphere buffer
+        // sphere uniforms buffer
         let uniformBufferSize = alignedUniformsSize * maxBuffersInFlight
 
         dynamicUniformBuffer = device.makeBuffer(length:uniformBufferSize,
                                                            options:.storageModeShared)!
         
+        // floor uniforms buffer
+        floorUniformBuffer = device.makeBuffer(length: uniformBufferSize, options: .storageModeShared)
         
         // floor buffer
         
@@ -88,7 +92,7 @@ class Renderer: NSObject, MTKViewDelegate {
         floorBuffer = device.makeBuffer(bytes: &floorVertices, length: MemoryLayout<float3>.stride * floorVertices.count, options: .storageModeShared)
         
         
-        uniforms = UnsafeMutableRawPointer(dynamicUniformBuffer.contents()).bindMemory(to:Uniforms.self, capacity:1)
+        sphereUniforms = UnsafeMutableRawPointer(dynamicUniformBuffer.contents()).bindMemory(to:Uniforms.self, capacity:1)
 
         metalKitView.depthStencilPixelFormat = MTLPixelFormat.depth32Float_stencil8
         metalKitView.colorPixelFormat = MTLPixelFormat.bgra8Unorm_srgb
@@ -175,6 +179,7 @@ class Renderer: NSObject, MTKViewDelegate {
         return mtlVertexDescriptor
     }
 
+    
     class func buildRenderPipelineWithDevice(device: MTLDevice,
                                              metalKitView: MTKView,
                                              mtlVertexDescriptor: MTLVertexDescriptor) throws -> MTLRenderPipelineState {
@@ -254,17 +259,17 @@ class Renderer: NSObject, MTKViewDelegate {
 
         uniformBufferOffset = alignedUniformsSize * uniformBufferIndex
 
-        uniforms = UnsafeMutableRawPointer(dynamicUniformBuffer.contents() + uniformBufferOffset).bindMemory(to:Uniforms.self, capacity:1)
+        sphereUniforms = UnsafeMutableRawPointer(dynamicUniformBuffer.contents() + uniformBufferOffset).bindMemory(to:Uniforms.self, capacity:1)
     }
 
     
     /// Update any movement of objects
     private func updateMatrices() {
-        uniforms[0].projectionMatrix = projectionMatrix
+        sphereUniforms[0].projectionMatrix = projectionMatrix
         let rotationAxis = float3(1, 1, 0)
         let modelMatrix = matrix4x4_rotation(radians: 0, axis: rotationAxis)
         let viewMatrix = matrix4x4_translation(0.0, 0.0, -8.0)
-        uniforms[0].modelViewMatrix = simd_mul(viewMatrix, modelMatrix)
+        sphereUniforms[0].modelViewMatrix = simd_mul(viewMatrix, modelMatrix)
         
         // this is the location where the ball location updating should go (the physics stuff)
         //rotation += 0.01
