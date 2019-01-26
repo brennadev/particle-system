@@ -283,7 +283,8 @@ class Renderer: NSObject, MTKViewDelegate {
         
         // this is the location where the ball location updating should go (the physics stuff)
         // I wonder if the velocity needs to be set first (and then the position set); the acceleration stays constant (maybe) since it's just the acceleration due to gravity - what about when the ball bounces back up though since hitting the ground is a force
-        Renderer.sphere.updatePosition(for: 1)
+        Renderer.sphere.updatePosition(for: 0.01)
+        print("sphere position: \(Renderer.sphere.position)")
         
         // FIXME: line below causes nothing to appear on screen (something must be off with what's getting called in the shaders)
         //sphereModelMatrix[3] = float4(xyz: Renderer.sphere.position)
