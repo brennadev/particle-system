@@ -14,4 +14,18 @@ struct Particle {
     var velocity: float3
     var acceleration: float3
     var radius: Float
+    
+    
+    // MARK: - Physics Motion Calculations
+    /// Final velocity (vf) calculation, which updates `velocity`.
+    mutating func updateFinalVelocity(for deltaT: Float) {
+        velocity = velocity + acceleration * deltaT
+    }
+    
+    
+    /// Final position (xf) calculation, which updates `position`. Also updates `velocity`.
+    mutating func updatePosition(for deltaT: Float) {
+        position = position + velocity * deltaT + 0.5 * acceleration * powf(deltaT, 2)
+        updateFinalVelocity(for: deltaT)
+    }
 }
