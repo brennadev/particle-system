@@ -45,12 +45,12 @@ class Renderer: NSObject, MTKViewDelegate {
     var uniformBufferOffset = 0
     var uniformBufferIndex = 0
 
+    // separate values for sphere and float as the model matrices may vary
     var sphereUniforms: UnsafeMutablePointer<Uniforms>
     var floorUniforms: UnsafeMutablePointer<Uniforms>
 
     var projectionMatrix: matrix_float4x4 = matrix_float4x4()
 
-    var rotation: Float = 0
     
     /// Sphere vertex data
     var sphereMesh: MTKMesh
@@ -58,12 +58,12 @@ class Renderer: NSObject, MTKViewDelegate {
     
     static var sphere = Particle(position: float3(0, 20, 0),
                                  velocity: float3(0, 0, 0),
-                                 acceleration: float3(0, -9.2, 0),  // standard acceleration due to gravity
+                                 acceleration: float3(0, -9.8, 0),  // standard acceleration due to gravity
                                  radius: 1)
     
     /// Floor plane's location
     /// - note: This is exposed as a property so it can be detected when the sphere has come in contact with it
-    let floorY: Float = -8
+    private let floorY: Float = -8
     
     // MARK: - Setup
     init?(metalKitView: MTKView) {
@@ -253,6 +253,8 @@ class Renderer: NSObject, MTKViewDelegate {
 
     
     // MARK: - Updates
+    /// Update buffers containing uniform data such as matrices
+    /// - note: Call `updateMatrices()` before calling this method
     private func updateDynamicBufferState() {
         /// Update the state of our uniform buffers before rendering
 
