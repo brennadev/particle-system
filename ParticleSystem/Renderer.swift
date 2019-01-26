@@ -274,15 +274,22 @@ class Renderer: NSObject, MTKViewDelegate {
         
         let rotationAxis = float3(1, 1, 0)
         // TODO: sphere model matrix will eventually need to be modified since it will need to adjust the translation based on the ball's movement
-        let sphereModelMatrix = matrix4x4_rotation(radians: 0, axis: rotationAxis)
+        var sphereModelMatrix = matrix4x4_rotation(radians: 0, axis: rotationAxis)
         let floorModelMatrix = matrix4x4_rotation(radians: 0, axis: rotationAxis)
         let viewMatrix = matrix4x4_translation(0.0, 0.0, -8.0)
-        sphereUniforms[0].modelViewMatrix = simd_mul(viewMatrix, sphereModelMatrix)
-        floorUniforms[0].modelViewMatrix = simd_mul(viewMatrix, floorModelMatrix)
+        
+        
+        
         
         // this is the location where the ball location updating should go (the physics stuff)
         // I wonder if the velocity needs to be set first (and then the position set); the acceleration stays constant (maybe) since it's just the acceleration due to gravity - what about when the ball bounces back up though since hitting the ground is a force
-
+        Renderer.sphere.updatePosition(for: 1)
+        
+        // FIXME: line below causes nothing to appear on screen (something must be off with what's getting called in the shaders)
+        //sphereModelMatrix[3] = float4(xyz: Renderer.sphere.position)
+        
+        sphereUniforms[0].modelViewMatrix = simd_mul(viewMatrix, sphereModelMatrix)
+        floorUniforms[0].modelViewMatrix = simd_mul(viewMatrix, floorModelMatrix)
     }
 
     
