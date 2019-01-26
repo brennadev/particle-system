@@ -29,7 +29,7 @@ class Renderer: NSObject, MTKViewDelegate {
     let commandQueue: MTLCommandQueue
     
     var dynamicUniformBuffer: MTLBuffer
-    var floorUniformBuffer: MTLBuffer?
+    var floorUniformBuffer: MTLBuffer
     var floorBuffer: MTLBuffer?
     
     var spherePipelineState: MTLRenderPipelineState
@@ -77,7 +77,7 @@ class Renderer: NSObject, MTKViewDelegate {
                                                            options:.storageModeShared)!
         
         // floor uniforms buffer
-        floorUniformBuffer = device.makeBuffer(length: uniformBufferSize, options: .storageModeShared)
+        floorUniformBuffer = device.makeBuffer(length: uniformBufferSize, options: .storageModeShared)!
         
         // floor buffer
         
@@ -93,6 +93,7 @@ class Renderer: NSObject, MTKViewDelegate {
         
         
         sphereUniforms = UnsafeMutableRawPointer(dynamicUniformBuffer.contents()).bindMemory(to:Uniforms.self, capacity:1)
+        floorUniforms = UnsafeMutableRawPointer(floorUniformBuffer.contents()).bindMemory(to: Uniforms.self, capacity: 1)
 
         metalKitView.depthStencilPixelFormat = MTLPixelFormat.depth32Float_stencil8
         metalKitView.colorPixelFormat = MTLPixelFormat.bgra8Unorm_srgb
@@ -259,20 +260,27 @@ class Renderer: NSObject, MTKViewDelegate {
 
         uniformBufferOffset = alignedUniformsSize * uniformBufferIndex
 
-        sphereUniforms = UnsafeMutableRawPointer(dynamicUniformBuffer.contents() + uniformBufferOffset).bindMemory(to:Uniforms.self, capacity:1)
+        sphereUniforms = UnsafeMutableRawPointer(dynamicUniformBuffer.contents() + uniformBufferOffset).bindMemory(to: Uniforms.self, capacity: 1)
+        floorUniforms = UnsafeMutableRawPointer(floorUniformBuffer.contents() + uniformBufferOffset).bindMemory(to: Uniforms.self, capacity: 1)
     }
 
     
     /// Update any movement of objects
     private func updateMatrices() {
         sphereUniforms[0].projectionMatrix = projectionMatrix
+        floorUniforms[0].projectionMatrix = projectionMatrix
+        
         let rotationAxis = float3(1, 1, 0)
-        let modelMatrix = matrix4x4_rotation(radians: 0, axis: rotationAxis)
+        // TODO: sphere model matrix will eventually need to be modified since it will need to adjust the translation based on the ball's movement
+        let sphereModelMatrix = matrix4x4_rotation(radians: 0, axis: rotationAxis)
+        let floorModelMatrix = matrix4x4_rotation(radians: 0, axis: rotationAxis)
         let viewMatrix = matrix4x4_translation(0.0, 0.0, -8.0)
-        sphereUniforms[0].modelViewMatrix = simd_mul(viewMatrix, modelMatrix)
+        sphereUniforms[0].modelViewMatrix = simd_mul(viewMatrix, sphereModelMatrix)
+        floorUniforms[0].modelViewMatrix = simd_mul(viewMatrix, floorModelMatrix)
         
         // this is the location where the ball location updating should go (the physics stuff)
-        //rotation += 0.01
+        // I wonder if the velocity needs to be set first (and then the position set); the acceleration stays constant (maybe) since it's just the acceleration due to gravity - what about when the ball bounces back up though since hitting the ground is a force
+
     }
 
     
