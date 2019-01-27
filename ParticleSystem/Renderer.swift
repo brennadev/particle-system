@@ -276,7 +276,7 @@ class Renderer: NSObject, MTKViewDelegate {
         let floorModelMatrix = matrix_identity_float4x4
         let viewMatrix = matrix4x4_translation(0.0, 0.0, -8.0)
         
-        let positionUpdateAmount = 0.01
+        let positionUpdateAmount: Float = 0.01
         
         // update physics
         // when the ball is going downward
