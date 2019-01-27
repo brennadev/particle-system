@@ -153,7 +153,7 @@ class Renderer: NSObject, MTKViewDelegate {
         
         // attempting to get the ball inside the fov more
         Renderer.sphere.position.y = 5
-        Renderer.sphere.position.z = -2
+        Renderer.sphere.position.z = -10
 
         super.init()
 
@@ -280,22 +280,17 @@ class Renderer: NSObject, MTKViewDelegate {
         let floorModelMatrix = matrix_identity_float4x4
         let viewMatrix = matrix4x4_translation(0.0, 0.0, -8.0)
         
-        let positionUpdateAmount: Float = 0.01
+        let positionUpdateAmount: Float = 0.02
         
         // update physics
         // when the ball is going downward
-        if Renderer.sphere.position.y > 0 {
+        if Renderer.sphere.position.y > floorY + Renderer.sphere.radius {
             Renderer.sphere.updatePosition(for: positionUpdateAmount)
-            //sphereModelMatrix[3] = float4(xyz: Renderer.sphere.position)
             
             // once the ball hits the ground
         } else {
             Renderer.sphere.velocity *= -1
-            print("position before: \(Renderer.sphere.position)")
             Renderer.sphere.updatePosition(for: positionUpdateAmount)
-            //sphereModelMatrix[3] = float4(xyz: Renderer.sphere.position)
-            print("position after: \(Renderer.sphere.position)")
-            print("after ball hits ground")
         }
         
         sphereModelMatrix[3] = float4(xyz: Renderer.sphere.position)

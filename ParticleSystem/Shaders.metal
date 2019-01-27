@@ -65,7 +65,7 @@ vertex float4 vertexFloor(uint vertexID [[ vertex_id ]],
 }
 
 
-/// Just returns white to keep things simple
+/// Always returns one color no matter the input to keep things simple
 fragment float4 fragmentFloor(float4 vertexIn [[ stage_in ]]) {
-    return float4(1, 1, 1, 1);
+    return float4(0, 0.8, 1, 1);
 }
