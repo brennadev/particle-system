@@ -279,26 +279,14 @@ class Renderer: NSObject, MTKViewDelegate {
         let viewMatrix = matrix4x4_translation(0.0, 0.0, -8.0)
         
         
-        
-        
-        // this is the location where the ball location updating should go (the physics stuff)
-        // I wonder if the velocity needs to be set first (and then the position set); the acceleration stays constant (maybe) since it's just the acceleration due to gravity - what about when the ball bounces back up though since hitting the ground is a force
+        // update physics
         Renderer.sphere.updatePosition(for: 0.005)
         print("sphere position: \(Renderer.sphere.position)")
         print("sphere velocity: \(Renderer.sphere.velocity)")
         
-        // FIXME: line below causes nothing to appear on screen (something must be off with what's getting called in the shaders)
-        //sphereModelMatrix[3] = float4(xyz: Renderer.sphere.position)
-        //print("sphereModelMatrix before: \(sphereModelMatrix)")
-        //Renderer.sphere.position.x = 1
-        //Renderer.sphere.position.y = 4
-        // manually setting the y value (line above) works, so something must be wrong in the position/velocity calculations
-        
-        // things do work, but the floor moves with the ball, which shouldn't be happening - that's the reason I separated the model matrices in the first place
-        
-        sphereModelMatrix[3][0] = Renderer.sphere.position.x
-        sphereModelMatrix[3][1] = Renderer.sphere.position.y
-        //print("sphereModelMatrix after: \(sphereModelMatrix)")
+
+        sphereModelMatrix[3] = float4(xyz: Renderer.sphere.position)
+
         
         print("sphereModelMatrix: \(sphereModelMatrix)")
         print("floorModelMatrix: \(floorModelMatrix)")

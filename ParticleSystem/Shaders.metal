@@ -54,7 +54,7 @@ fragment float4 fragmentShader(ColorInOut in [[stage_in]],
 }
 
 
-# pragma mark - Floor Shading (very simple)
+# pragma mark - Floor Shading (very simple - written by me)
 /// Only returns the position - no texture coordinates or other data; based off of the Apple-provided vertex function above
 vertex float4 vertexFloor(uint vertexID [[ vertex_id ]],
                           constant Uniforms & uniforms [[ buffer(BufferIndexFloorUniforms) ]],
