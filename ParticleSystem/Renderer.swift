@@ -280,8 +280,15 @@ class Renderer: NSObject, MTKViewDelegate {
         
         
         // update physics
-        Renderer.sphere.updatePosition(for: 0.005)
-        sphereModelMatrix[3] = float4(xyz: Renderer.sphere.position)
+        // when the ball is going downward
+        if Renderer.sphere.position.y > 0 {
+            Renderer.sphere.updatePosition(for: 0.005)
+            sphereModelMatrix[3] = float4(xyz: Renderer.sphere.position)
+            
+            // once the ball hits the ground
+        } else {
+            Renderer.sphere.velocity *= -1
+        }
 
         
         sphereUniforms[0].modelViewMatrix = simd_mul(viewMatrix, sphereModelMatrix)
