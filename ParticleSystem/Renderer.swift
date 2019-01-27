@@ -272,17 +272,15 @@ class Renderer: NSObject, MTKViewDelegate {
         sphereUniforms[0].projectionMatrix = projectionMatrix
         floorUniforms[0].projectionMatrix = projectionMatrix
         
-        let rotationAxis = float3(1, 1, 0)
-
-        var sphereModelMatrix = matrix4x4_rotation(radians: 0, axis: rotationAxis)
-        let floorModelMatrix = matrix4x4_rotation(radians: 0, axis: rotationAxis)
+        var sphereModelMatrix = matrix_identity_float4x4
+        let floorModelMatrix = matrix_identity_float4x4
         let viewMatrix = matrix4x4_translation(0.0, 0.0, -8.0)
         
         
         // update physics
         // when the ball is going downward
         if Renderer.sphere.position.y > 0 {
-            Renderer.sphere.updatePosition(for: 0.005)
+            Renderer.sphere.updatePosition(for: 0.01)
             sphereModelMatrix[3] = float4(xyz: Renderer.sphere.position)
             
             // once the ball hits the ground

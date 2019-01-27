@@ -8,7 +8,7 @@
 
 import simd
 
-// aka matrix_float4x4
+// aka simd_float4x4
 extension matrix_float4x4 {
     /// 4x4 identity matrix
     static var identity: matrix_float4x4 {
