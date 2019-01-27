@@ -23,7 +23,7 @@ struct Particle {
     }
     
     
-    /// Final position (xf) calculation, which updates `position`. Also updates `velocity`.
+    /// Final position (xf) calculation, which updates `position`. Also updates `velocity` accordingly.
     mutating func updatePosition(for deltaT: Float) {
         position = position + velocity * deltaT + 0.5 * acceleration * powf(deltaT, 2)
         updateFinalVelocity(for: deltaT)

@@ -49,7 +49,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var sphereUniforms: UnsafeMutablePointer<Uniforms>
     var floorUniforms: UnsafeMutablePointer<Uniforms>
 
-    var projectionMatrix: matrix_float4x4 = matrix_float4x4()
+    var projectionMatrix = matrix_float4x4()
 
     
     /// Sphere vertex data
@@ -276,16 +276,19 @@ class Renderer: NSObject, MTKViewDelegate {
         let floorModelMatrix = matrix_identity_float4x4
         let viewMatrix = matrix4x4_translation(0.0, 0.0, -8.0)
         
+        let positionUpdateAmount = 0.01
         
         // update physics
         // when the ball is going downward
         if Renderer.sphere.position.y > 0 {
-            Renderer.sphere.updatePosition(for: 0.01)
+            Renderer.sphere.updatePosition(for: positionUpdateAmount)
             sphereModelMatrix[3] = float4(xyz: Renderer.sphere.position)
             
             // once the ball hits the ground
         } else {
             Renderer.sphere.velocity *= -1
+            Renderer.sphere.updatePosition(for: positionUpdateAmount)
+            print("after ball hits ground")
         }
 
         
