@@ -281,15 +281,8 @@ class Renderer: NSObject, MTKViewDelegate {
         
         // update physics
         Renderer.sphere.updatePosition(for: 0.005)
-        print("sphere position: \(Renderer.sphere.position)")
-        print("sphere velocity: \(Renderer.sphere.velocity)")
-        
-
         sphereModelMatrix[3] = float4(xyz: Renderer.sphere.position)
 
-        
-        print("sphereModelMatrix: \(sphereModelMatrix)")
-        print("floorModelMatrix: \(floorModelMatrix)")
         
         sphereUniforms[0].modelViewMatrix = simd_mul(viewMatrix, sphereModelMatrix)
         floorUniforms[0].modelViewMatrix = simd_mul(viewMatrix, floorModelMatrix)
