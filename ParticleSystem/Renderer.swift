@@ -273,7 +273,7 @@ class Renderer: NSObject, MTKViewDelegate {
         floorUniforms[0].projectionMatrix = projectionMatrix
         
         let rotationAxis = float3(1, 1, 0)
-        // TODO: sphere model matrix will eventually need to be modified since it will need to adjust the translation based on the ball's movement
+
         var sphereModelMatrix = matrix4x4_rotation(radians: 0, axis: rotationAxis)
         let floorModelMatrix = matrix4x4_rotation(radians: 0, axis: rotationAxis)
         let viewMatrix = matrix4x4_translation(0.0, 0.0, -8.0)
@@ -283,11 +283,25 @@ class Renderer: NSObject, MTKViewDelegate {
         
         // this is the location where the ball location updating should go (the physics stuff)
         // I wonder if the velocity needs to be set first (and then the position set); the acceleration stays constant (maybe) since it's just the acceleration due to gravity - what about when the ball bounces back up though since hitting the ground is a force
-        Renderer.sphere.updatePosition(for: 0.01)
+        Renderer.sphere.updatePosition(for: 0.005)
         print("sphere position: \(Renderer.sphere.position)")
+        print("sphere velocity: \(Renderer.sphere.velocity)")
         
         // FIXME: line below causes nothing to appear on screen (something must be off with what's getting called in the shaders)
         //sphereModelMatrix[3] = float4(xyz: Renderer.sphere.position)
+        //print("sphereModelMatrix before: \(sphereModelMatrix)")
+        //Renderer.sphere.position.x = 1
+        //Renderer.sphere.position.y = 4
+        // manually setting the y value (line above) works, so something must be wrong in the position/velocity calculations
+        
+        // things do work, but the floor moves with the ball, which shouldn't be happening - that's the reason I separated the model matrices in the first place
+        
+        sphereModelMatrix[3][0] = Renderer.sphere.position.x
+        sphereModelMatrix[3][1] = Renderer.sphere.position.y
+        //print("sphereModelMatrix after: \(sphereModelMatrix)")
+        
+        print("sphereModelMatrix: \(sphereModelMatrix)")
+        print("floorModelMatrix: \(floorModelMatrix)")
         
         sphereUniforms[0].modelViewMatrix = simd_mul(viewMatrix, sphereModelMatrix)
         floorUniforms[0].modelViewMatrix = simd_mul(viewMatrix, floorModelMatrix)
@@ -354,7 +368,7 @@ class Renderer: NSObject, MTKViewDelegate {
                     renderEncoder.setRenderPipelineState(floorPipelineState)
                     
                     renderEncoder.setVertexBuffer(floorBuffer, offset: 0, index: BufferIndex.floor.rawValue)
-                    renderEncoder.setVertexBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
+                    renderEncoder.setVertexBuffer(floorUniformBuffer, offset: uniformBufferOffset, index: BufferIndex.floorUniforms.rawValue)
                     
                     renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: floorVertexCount)
 

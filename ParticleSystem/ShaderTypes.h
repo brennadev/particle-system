@@ -26,7 +26,8 @@ typedef NS_ENUM(NSInteger, BufferIndex)
     BufferIndexMeshPositions = 0,
     BufferIndexMeshGenerics  = 1,
     BufferIndexUniforms      = 2,
-    BufferIndexFloor         = 3
+    BufferIndexFloor         = 3,
+    BufferIndexFloorUniforms = 4
 };
 
 typedef NS_ENUM(NSInteger, VertexAttribute)
