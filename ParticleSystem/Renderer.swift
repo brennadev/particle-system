@@ -79,6 +79,7 @@ class Renderer: NSObject, MTKViewDelegate {
         // floor uniforms buffer
         floorUniformBuffer = device.makeBuffer(length: uniformBufferSize, options: .storageModeShared)!
         
+        
         // floor buffer
         
         let floorXZ: Float = 45
