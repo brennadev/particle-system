@@ -13,15 +13,15 @@ import MetalKit
 class GameViewController: NSViewController {
 
     var renderer: Renderer!
-    var mtkView: MTKView!
+    @IBOutlet var mtkView: MTKView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        guard let mtkView = view as? MTKView else {
+        /*guard let mtkView = view as? MTKView else {
             print("View attached to GameViewController is not an MTKView")
             return
-        }
+        }*/
 
         // Select the device to render with.  We choose the default device
         guard let defaultDevice = MTLCreateSystemDefaultDevice() else {

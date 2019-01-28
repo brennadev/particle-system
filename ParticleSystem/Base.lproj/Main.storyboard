@@ -711,11 +711,40 @@
                     <view key="view" wantsLayer="YES" id="m2S-Jp-Qdl" customClass="MTKView">
                         <rect key="frame" x="0.0" y="0.0" width="800" height="600"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="9uB-ZC-Zxh" customClass="MTKView">
+                                <rect key="frame" x="0.0" y="0.0" width="800" height="539"/>
+                            </customView>
+                            <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8Vw-E0-NSK">
+                                <rect key="frame" x="349" y="557" width="103" height="24"/>
+                                <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="Sa5-dw-gFb">
+                                    <font key="font" metaFont="system"/>
+                                    <segments>
+                                        <segment width="32"/>
+                                        <segment width="32" selected="YES" tag="1"/>
+                                        <segment width="32">
+                                            <nil key="label"/>
+                                        </segment>
+                                    </segments>
+                                </segmentedCell>
+                            </segmentedControl>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="8Vw-E0-NSK" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="4Gp-tE-RQ4"/>
+                            <constraint firstAttribute="trailing" secondItem="9uB-ZC-Zxh" secondAttribute="trailing" id="7Dp-bM-4GW"/>
+                            <constraint firstItem="8Vw-E0-NSK" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" id="Hm5-Ox-bVy"/>
+                            <constraint firstItem="9uB-ZC-Zxh" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="O3r-Eo-ndA"/>
+                            <constraint firstItem="9uB-ZC-Zxh" firstAttribute="top" secondItem="8Vw-E0-NSK" secondAttribute="bottom" constant="20" id="QcS-2k-dR1"/>
+                            <constraint firstAttribute="bottom" secondItem="9uB-ZC-Zxh" secondAttribute="bottom" id="R3U-pk-S7o"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="mtkView" destination="9uB-ZC-Zxh" id="ZEW-Bp-TUD"/>
+                    </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="817"/>
+            <point key="canvasLocation" x="74" y="942"/>
         </scene>
     </scenes>
 </document>
