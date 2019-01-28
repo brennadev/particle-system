@@ -81,7 +81,7 @@ class Renderer: NSObject, MTKViewDelegate {
         
         // floor buffer
         
-        let floorXZ: Float = 35
+        let floorXZ: Float = 45
         /// floor in x-z plane
         var floorVertices = [float3(-floorXZ, floorY, -floorXZ),    // far left
                              float3(-floorXZ, floorY, floorXZ),     // close left
