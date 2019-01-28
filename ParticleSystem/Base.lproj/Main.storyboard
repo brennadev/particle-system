@@ -726,6 +726,9 @@
                                             <nil key="label"/>
                                         </segment>
                                     </segments>
+                                    <connections>
+                                        <action selector="modeSegmentedControlSegmentClicked:" target="XfG-lQ-9wD" id="KGK-3F-nbw"/>
+                                    </connections>
                                 </segmentedCell>
                             </segmentedControl>
                         </subviews>

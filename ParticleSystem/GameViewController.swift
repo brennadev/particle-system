@@ -11,17 +11,17 @@ import MetalKit
 
 // Our macOS specific view controller
 class GameViewController: NSViewController {
-
-    var renderer: Renderer!
+    
     @IBOutlet var mtkView: MTKView!
+    
+    var renderer: Renderer!
+    
+    /// Which simulation the particle system is currently showing. Default is `.firework`.
+    var mode = ParticleSystemType.firework
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        /*guard let mtkView = view as? MTKView else {
-            print("View attached to GameViewController is not an MTKView")
-            return
-        }*/
 
         // Select the device to render with.  We choose the default device
         guard let defaultDevice = MTLCreateSystemDefaultDevice() else {
@@ -43,4 +43,16 @@ class GameViewController: NSViewController {
 
         mtkView.delegate = renderer
     }
+    
+    
+    @IBAction func modeSegmentedControlSegmentClicked(_ sender: NSSegmentedCell) {
+        switch sender.label(forSegment: sender.selectedSegment) {
+        case "Firework":
+            break
+        // TODO: add other simulation type
+        default:
+            break
+        }
+    }
+    
 }
