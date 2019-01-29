@@ -58,7 +58,7 @@ class Renderer: NSObject, MTKViewDelegate {
     
     static var sphere = Particle(position: float3(0, 20, 0),
                                  velocity: float3(0, 0, 0),
-                                 acceleration: float3(0, -9.8, 0),  // standard acceleration due to gravity
+                                 acceleration: float3(1, -9.8, 0),  // standard acceleration due to gravity
                                  radius: 1)
     
     /// Floor plane's location
@@ -154,8 +154,9 @@ class Renderer: NSObject, MTKViewDelegate {
         }
         
         // attempting to get the ball inside the fov more
-        Renderer.sphere.position.y = 5
-        Renderer.sphere.position.z = -10
+        Renderer.sphere.position.x = -30
+        Renderer.sphere.position.y = 4
+        Renderer.sphere.position.z = -30
 
         super.init()
 
@@ -292,7 +293,8 @@ class Renderer: NSObject, MTKViewDelegate {
             
             // once the ball hits the ground
         } else {
-            Renderer.sphere.velocity *= -0.95
+            Renderer.sphere.velocity.x *= 0.9
+            Renderer.sphere.velocity.y *= -0.85
             Renderer.sphere.updatePosition(for: positionUpdateAmount)
         }
         
