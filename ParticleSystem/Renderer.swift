@@ -65,6 +65,7 @@ class Renderer: NSObject, MTKViewDelegate {
     /// - note: This is exposed as a property so it can be detected when the sphere has come in contact with it
     private let floorY: Float = -8
     
+    
     // MARK: - Setup
     init?(metalKitView: MTKView) {
         device = metalKitView.device!
@@ -160,6 +161,7 @@ class Renderer: NSObject, MTKViewDelegate {
 
     }
 
+    
     class func buildMetalVertexDescriptor() -> MTLVertexDescriptor {
         // Create a Metal vertex descriptor specifying how vertices will by laid out for input into our render
         //   pipeline and how we'll layout our Model IO vertices
@@ -290,7 +292,7 @@ class Renderer: NSObject, MTKViewDelegate {
             
             // once the ball hits the ground
         } else {
-            Renderer.sphere.velocity *= -1
+            Renderer.sphere.velocity *= -0.95
             Renderer.sphere.updatePosition(for: positionUpdateAmount)
         }
         
@@ -380,6 +382,7 @@ class Renderer: NSObject, MTKViewDelegate {
         }
     }
 
+    
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         /// Respond to drawable size or orientation changes here
 
