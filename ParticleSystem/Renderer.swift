@@ -157,7 +157,7 @@ class Renderer: NSObject, MTKViewDelegate {
         
         // attempting to get the ball inside the fov more
         Renderer.sphere.position.x = -30
-        Renderer.sphere.position.y = 6
+        Renderer.sphere.position.y = 4
         Renderer.sphere.position.z = -30
 
         super.init()
@@ -286,7 +286,7 @@ class Renderer: NSObject, MTKViewDelegate {
         let floorModelMatrix = matrix_identity_float4x4
         let viewMatrix = matrix4x4_translation(0.0, 0.0, -8.0)
         
-        let positionUpdateAmount = secondsElapsedSinceLastDrawCall.timeIntervalSinceNow
+        let positionUpdateAmount = secondsElapsedSinceLastDrawCall.timeIntervalSinceNow * -1
         //print("positionUpdateAmount: \(positionUpdateAmount)")
         
         // update physics
