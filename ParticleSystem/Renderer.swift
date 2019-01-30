@@ -297,7 +297,7 @@ class Renderer: NSObject, MTKViewDelegate {
         // once the ball hits the ground
         } else {
             // the ball should be moving less both in the x and y directions as it hits the ground more times
-            Renderer.sphere.velocity.x *= 0.9
+            Renderer.sphere.velocity.x *= 0.7
             Renderer.sphere.velocity.y *= -0.85     // the ball has to reverse direction
             Renderer.sphere.updatePosition(for: Float(positionUpdateAmount))
         }
