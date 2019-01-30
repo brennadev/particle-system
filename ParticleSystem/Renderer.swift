@@ -65,6 +65,8 @@ class Renderer: NSObject, MTKViewDelegate {
     /// - note: This is exposed as a property so it can be detected when the sphere has come in contact with it
     private let floorY: Float = -8
     
+    private var secondsElapsedSinceLastDrawCall = Date()
+    
     
     // MARK: - Setup
     init?(metalKitView: MTKView) {
@@ -155,7 +157,7 @@ class Renderer: NSObject, MTKViewDelegate {
         
         // attempting to get the ball inside the fov more
         Renderer.sphere.position.x = -30
-        Renderer.sphere.position.y = 4
+        Renderer.sphere.position.y = 6
         Renderer.sphere.position.z = -30
 
         super.init()
@@ -284,18 +286,20 @@ class Renderer: NSObject, MTKViewDelegate {
         let floorModelMatrix = matrix_identity_float4x4
         let viewMatrix = matrix4x4_translation(0.0, 0.0, -8.0)
         
-        let positionUpdateAmount: Float = 0.02
+        let positionUpdateAmount = secondsElapsedSinceLastDrawCall.timeIntervalSinceNow
+        //print("positionUpdateAmount: \(positionUpdateAmount)")
         
         // update physics
         // when the ball is going downward
         if Renderer.sphere.position.y > floorY + Renderer.sphere.radius {
-            Renderer.sphere.updatePosition(for: positionUpdateAmount)
+            Renderer.sphere.updatePosition(for: Float(positionUpdateAmount))
             
-            // once the ball hits the ground
+        // once the ball hits the ground
         } else {
+            // the ball should be moving less both in the x and y directions as it hits the ground more times
             Renderer.sphere.velocity.x *= 0.9
-            Renderer.sphere.velocity.y *= -0.85
-            Renderer.sphere.updatePosition(for: positionUpdateAmount)
+            Renderer.sphere.velocity.y *= -0.85     // the ball has to reverse direction
+            Renderer.sphere.updatePosition(for: Float(positionUpdateAmount))
         }
         
         sphereModelMatrix[3] = float4(xyz: Renderer.sphere.position)
@@ -303,6 +307,9 @@ class Renderer: NSObject, MTKViewDelegate {
         
         sphereUniforms[0].modelViewMatrix = simd_mul(viewMatrix, sphereModelMatrix)
         floorUniforms[0].modelViewMatrix = simd_mul(viewMatrix, floorModelMatrix)
+        
+        // reset the timer to what's now the current number of seconds
+        secondsElapsedSinceLastDrawCall = Date()
     }
 
     
