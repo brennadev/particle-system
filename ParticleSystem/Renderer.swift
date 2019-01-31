@@ -404,4 +404,10 @@ class Renderer: NSObject, MTKViewDelegate {
         let aspect = Float(size.width) / Float(size.height)
         projectionMatrix = matrix_perspective_right_hand(fovyRadians: radians_from_degrees(65), aspectRatio:aspect, nearZ: 0.001, farZ: 500.0)
     }
+    
+    // MARK: - Particle Setup
+    /// For each new particle that's to be added
+    func addParticle() {
+        
+    }
 }
