@@ -58,7 +58,7 @@ class Renderer: NSObject, MTKViewDelegate {
     
     static var sphere = Particle(position: float3(0, 20, 0),
                                  velocity: float3(0, 0, 0),
-                                 acceleration: float3(1, -9.8, 0),  // standard acceleration due to gravity
+                                 acceleration: float3(0.75, -9.8, 0),  // standard acceleration due to gravity
                                  radius: 1)
     
     /// Floor plane's location
@@ -157,7 +157,7 @@ class Renderer: NSObject, MTKViewDelegate {
         
         // attempting to get the ball inside the fov more
         Renderer.sphere.position.x = -30
-        Renderer.sphere.position.y = 4
+        Renderer.sphere.position.y = 3
         Renderer.sphere.position.z = -30
 
         super.init()
@@ -226,7 +226,7 @@ class Renderer: NSObject, MTKViewDelegate {
         
         let segmentCount = 30
         
-        let sphereMesh = MDLMesh.newEllipsoid(withRadii: float3(sphere.radius, sphere.radius, sphere.radius), radialSegments: segmentCount, verticalSegments: segmentCount, geometryType: .triangles, inwardNormals: false, hemisphere: false, allocator: metalAllocator)
+        let sphereMesh = MDLMesh.newEllipsoid(withRadii: float3(Particle.radius, Particle.radius, Particle.radius), radialSegments: segmentCount, verticalSegments: segmentCount, geometryType: .triangles, inwardNormals: false, hemisphere: false, allocator: metalAllocator)
         
 
         let mdlVertexDescriptor = MTKModelIOVertexDescriptorFromMetal(mtlVertexDescriptor)
@@ -291,7 +291,7 @@ class Renderer: NSObject, MTKViewDelegate {
         
         // update physics
         // when the ball is going downward
-        if Renderer.sphere.position.y > floorY + Renderer.sphere.radius {
+        if Renderer.sphere.position.y > floorY + Particle.radius {
             Renderer.sphere.updatePosition(for: Float(positionUpdateAmount))
             
         // once the ball hits the ground
@@ -301,6 +301,12 @@ class Renderer: NSObject, MTKViewDelegate {
             Renderer.sphere.velocity.y *= -0.85     // the ball has to reverse direction
             Renderer.sphere.updatePosition(for: Float(positionUpdateAmount))
         }
+        
+        if Renderer.sphere.position.y < floorY + Particle.radius {
+            Renderer.sphere.position.y = floorY + Particle.radius
+        }
+        
+        print("position: \(Renderer.sphere.position)")
         
         sphereModelMatrix[3] = float4(xyz: Renderer.sphere.position)
 

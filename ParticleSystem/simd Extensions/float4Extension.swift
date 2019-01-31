@@ -12,4 +12,8 @@ extension float4 {
     init(xyz: float3, w: Float = 1) {
         self.init(xyz.x, xyz.y, xyz.z, w)
     }
+    
+    static var white: float4 {
+        return float4(1, 1, 1, 1)
+    }
 }

@@ -13,18 +13,20 @@ struct Particle {
     var position: float3
     var velocity: float3
     var acceleration: float3
-    var radius: Float
+    static var radius: Float = 1
     
     /// Stage of the animation - for fireworks only
     var stage: FireworkParticleStage
+    var color: float4
+    var lifespan: Float = 0
     
     
-    init(position: float3, velocity: float3, acceleration: float3, radius: Float, stage: FireworkParticleStage = .beforeExplosion) {
+    init(position: float3, velocity: float3, acceleration: float3, radius: Float, stage: FireworkParticleStage = .beforeExplosion, color: float4 = .white) {
         self.position = position
         self.velocity = velocity
         self.acceleration = acceleration
-        self.radius = radius
         self.stage = stage
+        self.color = color
     }
     
     
@@ -38,7 +40,8 @@ struct Particle {
     /// Final position (xf) calculation, which updates `position`. Also updates `velocity` accordingly.
     mutating func updatePosition(for deltaT: Float) {
         //position = position + velocity * deltaT + 0.5 * acceleration * powf(deltaT, 2)
-        position += velocity * deltaT
         updateFinalVelocity(for: deltaT)
+        position += velocity * deltaT
+        
     }
 }
