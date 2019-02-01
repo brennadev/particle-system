@@ -58,24 +58,11 @@ class GameViewController: NSViewController {
     }
     
     @IBAction func metalViewRotated(_ sender: NSRotationGestureRecognizer) {
-        //print("rotation value: \(sender.rotationInDegrees)")
-        
-        // right now, it does some weird jumping back when a new gesture is initiated - thus checking the state
-        // rotation value is cumulative; so that means the last angle needs to be saved
-        
-        switch sender.state {
-        case .began:
+        if sender.state == .began {
             previousRotation = 0
-        case .changed:
-            break
-        case .ended:
-            break
-        default:
-            break
         }
-        print("rotation: \(Float(sender.rotation) - previousRotation)")
+        
         renderer.viewMatrix *= matrix4x4_rotation(radians: Float(sender.rotation) - previousRotation, axis: float3(0, 1, 0))
-        print("viewMatrix: \(renderer.viewMatrix)")
         previousRotation = Float(sender.rotation)
     }
     
