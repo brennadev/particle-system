@@ -18,6 +18,8 @@ class GameViewController: NSViewController {
     
     /// Which simulation the particle system is currently showing. Default is `.firework`.
     var mode = ParticleSystemType.firework
+    
+    var previousRotation: Float = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,13 +58,14 @@ class GameViewController: NSViewController {
     }
     
     @IBAction func metalViewRotated(_ sender: NSRotationGestureRecognizer) {
-        print("rotation value: \(sender.rotationInDegrees)")
+        //print("rotation value: \(sender.rotationInDegrees)")
         
         // right now, it does some weird jumping back when a new gesture is initiated - thus checking the state
+        // rotation value is cumulative; so that means the last angle needs to be saved
         
         switch sender.state {
         case .began:
-            break
+            previousRotation = 0
         case .changed:
             break
         case .ended:
@@ -70,8 +73,10 @@ class GameViewController: NSViewController {
         default:
             break
         }
-        
-        renderer.viewMatrix = matrix4x4_rotation(radians: Float(sender.rotation), axis: float3(0, 1, 0))
+        print("rotation: \(Float(sender.rotation) - previousRotation)")
+        renderer.viewMatrix *= matrix4x4_rotation(radians: Float(sender.rotation) - previousRotation, axis: float3(0, 1, 0))
+        print("viewMatrix: \(renderer.viewMatrix)")
+        previousRotation = Float(sender.rotation)
     }
     
 }

@@ -307,7 +307,7 @@ class Renderer: NSObject, MTKViewDelegate {
             Renderer.sphere.position.y = floorY + Particle.radius
         }
         
-        print("position: \(Renderer.sphere.position)")
+        //print("position: \(Renderer.sphere.position)")
         
         sphereModelMatrix[3] = float4(xyz: Renderer.sphere.position)
 
