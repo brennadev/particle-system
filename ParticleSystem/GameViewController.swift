@@ -57,6 +57,20 @@ class GameViewController: NSViewController {
     
     @IBAction func metalViewRotated(_ sender: NSRotationGestureRecognizer) {
         print("rotation value: \(sender.rotationInDegrees)")
+        
+        // right now, it does some weird jumping back when a new gesture is initiated - thus checking the state
+        
+        switch sender.state {
+        case .began:
+            break
+        case .changed:
+            break
+        case .ended:
+            break
+        default:
+            break
+        }
+        
         renderer.viewMatrix = matrix4x4_rotation(radians: Float(sender.rotation), axis: float3(0, 1, 0))
     }
     
