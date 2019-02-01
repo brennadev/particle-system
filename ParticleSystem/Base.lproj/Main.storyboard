@@ -735,6 +735,16 @@
                                     </connections>
                                 </segmentedCell>
                             </segmentedControl>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mcc-5y-Vhu">
+                                <rect key="frame" x="510" y="564" width="70" height="32"/>
+                                <buttonCell key="cell" type="push" title="Start" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ZhP-kU-T1e">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="startButtonClicked:" target="XfG-lQ-9wD" id="I5u-Zu-BHM"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="8Vw-E0-NSK" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="4Gp-tE-RQ4"/>
@@ -743,6 +753,10 @@
                             <constraint firstItem="9uB-ZC-Zxh" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="O3r-Eo-ndA"/>
                             <constraint firstItem="9uB-ZC-Zxh" firstAttribute="top" secondItem="8Vw-E0-NSK" secondAttribute="bottom" constant="8" id="QcS-2k-dR1"/>
                             <constraint firstAttribute="bottom" secondItem="9uB-ZC-Zxh" secondAttribute="bottom" id="R3U-pk-S7o"/>
+                            <constraint firstItem="Mcc-5y-Vhu" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="8" id="Uk8-U4-PcX"/>
+                            <constraint firstItem="9uB-ZC-Zxh" firstAttribute="top" secondItem="Mcc-5y-Vhu" secondAttribute="bottom" constant="8" id="i07-sa-Pb6"/>
+                            <constraint firstAttribute="trailing" secondItem="Mcc-5y-Vhu" secondAttribute="trailing" constant="226" id="l0k-TN-ipH"/>
+                            <constraint firstItem="Mcc-5y-Vhu" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="8Vw-E0-NSK" secondAttribute="trailing" constant="8" symbolic="YES" id="vRP-gP-hws"/>
                         </constraints>
                     </view>
                     <connections>

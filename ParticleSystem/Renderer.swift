@@ -158,7 +158,7 @@ class Renderer: NSObject, MTKViewDelegate {
         
         // attempting to get the ball inside the fov more
         Renderer.sphere.position.x = -30
-        Renderer.sphere.position.y = 3
+        Renderer.sphere.position.y = 4
         Renderer.sphere.position.z = -30
 
         super.init()

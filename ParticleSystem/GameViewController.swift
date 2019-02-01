@@ -23,7 +23,7 @@ class GameViewController: NSViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        //mtkView.isPaused = true
 
         // Select the device to render with.  We choose the default device
         guard let defaultDevice = MTLCreateSystemDefaultDevice() else {
@@ -56,6 +56,11 @@ class GameViewController: NSViewController {
             break
         }
     }
+    
+    @IBAction func startButtonClicked(_ sender: NSButton) {
+        //mtkView.isPaused = false
+    }
+    
     
     @IBAction func metalViewRotated(_ sender: NSRotationGestureRecognizer) {
         if sender.state == .began {
