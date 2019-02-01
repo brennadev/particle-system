@@ -50,7 +50,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var floorUniforms: UnsafeMutablePointer<Uniforms>
 
     var projectionMatrix = matrix_float4x4()
-    let viewMatrix = matrix4x4_translation(0.0, 0.0, -8.0)
+    var viewMatrix = matrix4x4_translation(0.0, 0.0, -8.0)
 
     
     /// Sphere vertex data

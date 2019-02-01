@@ -54,8 +54,10 @@ class GameViewController: NSViewController {
             break
         }
     }
+    
     @IBAction func metalViewRotated(_ sender: NSRotationGestureRecognizer) {
-        
+        print("rotation value: \(sender.rotationInDegrees)")
+        renderer.viewMatrix = matrix4x4_rotation(radians: Float(sender.rotation), axis: float3(0, 1, 0))
     }
     
 }
