@@ -50,6 +50,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var floorUniforms: UnsafeMutablePointer<Uniforms>
 
     var projectionMatrix = matrix_float4x4()
+    let viewMatrix = matrix4x4_translation(0.0, 0.0, -8.0)
 
     
     /// Sphere vertex data
@@ -284,7 +285,7 @@ class Renderer: NSObject, MTKViewDelegate {
         
         var sphereModelMatrix = matrix_identity_float4x4
         let floorModelMatrix = matrix_identity_float4x4
-        let viewMatrix = matrix4x4_translation(0.0, 0.0, -8.0)
+        
         
         let positionUpdateAmount = secondsElapsedSinceLastDrawCall.timeIntervalSinceNow * -1
         //print("positionUpdateAmount: \(positionUpdateAmount)")

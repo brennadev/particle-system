@@ -714,14 +714,21 @@
                         <subviews>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="9uB-ZC-Zxh" customClass="MTKView">
                                 <rect key="frame" x="0.0" y="0.0" width="800" height="563"/>
+                                <gestureRecognizers>
+                                    <rotationGestureRecognizer delaysRotationEvents="YES" id="24C-Di-bcW">
+                                        <connections>
+                                            <action selector="metalViewRotated:" target="XfG-lQ-9wD" id="gZb-C9-ll9"/>
+                                        </connections>
+                                    </rotationGestureRecognizer>
+                                </gestureRecognizers>
                             </customView>
                             <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8Vw-E0-NSK">
-                                <rect key="frame" x="325" y="569" width="152" height="24"/>
+                                <rect key="frame" x="330" y="569" width="140" height="24"/>
                                 <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="Sa5-dw-gFb">
                                     <font key="font" metaFont="system"/>
                                     <segments>
                                         <segment label="Fireworks" width="73" selected="YES"/>
-                                        <segment width="72" tag="1"/>
+                                        <segment label="Water" tag="1"/>
                                     </segments>
                                     <connections>
                                         <action selector="modeSegmentedControlSegmentClicked:" target="XfG-lQ-9wD" id="KGK-3F-nbw"/>

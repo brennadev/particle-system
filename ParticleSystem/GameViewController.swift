@@ -54,5 +54,8 @@ class GameViewController: NSViewController {
             break
         }
     }
+    @IBAction func metalViewRotated(_ sender: NSRotationGestureRecognizer) {
+        
+    }
     
 }
