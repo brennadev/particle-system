@@ -50,8 +50,9 @@ class GameViewController: NSViewController {
     @IBAction func modeSegmentedControlSegmentClicked(_ sender: NSSegmentedCell) {
         switch sender.label(forSegment: sender.selectedSegment) {
         case "Firework":
-            break
-        // TODO: add other simulation type
+            mode = .firework
+        case "Water":
+            mode = .water
         default:
             break
         }

@@ -8,9 +8,10 @@
 
 // Little stuff that controls things such as the mode the particle system is in
 
-// TODO: add one more particle system type
+/// Which particle system we're viewing
 enum ParticleSystemType {
     case firework
+    case water
 }
 
 enum FireworkParticleStage {
