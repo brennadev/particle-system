@@ -68,6 +68,7 @@ class Renderer: NSObject, MTKViewDelegate {
     
     private var secondsElapsedSinceLastDrawCall = Date()
     
+    var particleSystem = ParticleSystem()
     
     // MARK: - Setup
     init?(metalKitView: MTKView) {

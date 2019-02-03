@@ -16,8 +16,6 @@ class GameViewController: NSViewController {
     
     var renderer: Renderer!
     
-    /// Which simulation the particle system is currently showing. Default is `.firework`.
-    var mode = ParticleSystemType.firework
     
     var previousRotation: Float = 0
     var previousPanLocation = float2(0, 0)
@@ -52,9 +50,9 @@ class GameViewController: NSViewController {
         // TODO: need to put some stuff in so things are properly regenerated
         switch sender.label(forSegment: sender.selectedSegment) {
         case "Firework":
-            mode = .firework
+            renderer.particleSystem.mode = .firework
         case "Water":
-            mode = .water
+            renderer.particleSystem.mode = .water
         default:
             break
         }

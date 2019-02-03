@@ -11,6 +11,13 @@ import simd
 /// Singleton to manage all the particles in use in the particle system. Will manage empty holes in the array from dead particles and fill them as needed when new particles are created.
 struct ParticleSystem {
  
+    init() {
+        
+    }
+    
+    /// Which simulation the particle system is currently showing. Default is `.firework`.
+    var mode = ParticleSystemType.firework
+    
     // MARK: - Particle Storage
     /// All the particles in the system. May contain dead particles, which can be checked by looking at an element's `isAlive` property.
     /// - note: Particles are removed by setting an individual element's `isAlive` property to `false`.
@@ -43,9 +50,12 @@ struct ParticleSystem {
         
     }
     
+    
     /// Particles per second to generate
     private let particleGenerationRate = 10
     
+    
+    /// How many new particles to generate for the given frame
     func numberOfParticlesToGenerate(in dt: Float) -> Int {
         
         
@@ -54,12 +64,12 @@ struct ParticleSystem {
         // not sure where this is supposed to be used
         let numberOfParticlesFraction = numberOfParticles - Float(numberOfParticlesRoundedDown)
         
-        if Float.random(in: 0...100) < dt * Float(particleGenerationRate) {
+        // TODO: don't know what the random range should be
+        if Float.random(in: 0...1) < dt * Float(particleGenerationRate) {
             return numberOfParticlesRoundedDown + 1
         } else {
             return numberOfParticlesRoundedDown
         }
-        
     }
     
     
