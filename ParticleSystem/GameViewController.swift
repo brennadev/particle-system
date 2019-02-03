@@ -49,6 +49,7 @@ class GameViewController: NSViewController {
     
     
     @IBAction func modeSegmentedControlSegmentClicked(_ sender: NSSegmentedCell) {
+        // TODO: need to put some stuff in so things are properly regenerated
         switch sender.label(forSegment: sender.selectedSegment) {
         case "Firework":
             mode = .firework

@@ -34,6 +34,15 @@ struct ParticleSystem {
     
     
     // MARK: - Initial Generation
+    
+    /// If the type of thing being rendered changes, then everything must start all over
+    mutating func particleSystemTypeChanged() {
+        allParticles = []
+        
+        
+        
+    }
+    
     /// Particles per second to generate
     private let particleGenerationRate = 10
     
@@ -53,8 +62,14 @@ struct ParticleSystem {
         
     }
     
-    /// Generate the actual details about the particle
+    
+    /// Generate the details about the particle
     func generateParticle() -> Particle {
+        // TODO: fill in
+        
         return Particle(position: float3(0, 0, 0), velocity: float3(0, 0, 0), acceleration: float3(0, 0, 0), radius: 0)
     }
+    
+    
+    
 }
