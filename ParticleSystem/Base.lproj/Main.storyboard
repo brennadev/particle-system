@@ -720,6 +720,11 @@
                                             <action selector="metalViewRotated:" target="XfG-lQ-9wD" id="gZb-C9-ll9"/>
                                         </connections>
                                     </rotationGestureRecognizer>
+                                    <panGestureRecognizer delaysPrimaryMouseButtonEvents="YES" id="6bz-hs-B1O">
+                                        <connections>
+                                            <action selector="metalViewPanned:" target="XfG-lQ-9wD" id="cDO-cC-hbe"/>
+                                        </connections>
+                                    </panGestureRecognizer>
                                 </gestureRecognizers>
                             </customView>
                             <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8Vw-E0-NSK">

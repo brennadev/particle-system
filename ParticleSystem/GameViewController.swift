@@ -20,6 +20,7 @@ class GameViewController: NSViewController {
     var mode = ParticleSystemType.firework
     
     var previousRotation: Float = 0
+    var previousPanLocation = float2(0, 0)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,6 +71,21 @@ class GameViewController: NSViewController {
         
         renderer.viewMatrix *= matrix4x4_rotation(radians: Float(sender.rotation) - previousRotation, axis: float3(0, 1, 0))
         previousRotation = Float(sender.rotation)
+    }
+    
+    
+    @IBAction func metalViewPanned(_ sender: NSPanGestureRecognizer) {
+        if sender.state == .began {
+            previousPanLocation = float2(0, 0)
+        }
+        
+        
+        print("translation: \(sender.translation(in: mtkView))")
+        renderer.viewMatrix *= matrix4x4_translation((Float(sender.translation(in: mtkView).x) - previousPanLocation.x) * 0.25,
+                                                     0,
+                                                     (Float(sender.translation(in: mtkView).y) - previousPanLocation.y) * 0.25)
+        
+        previousPanLocation = float2(Float(sender.location(in: mtkView).x), Float(sender.location(in: mtkView).y))
     }
     
 }
