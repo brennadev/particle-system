@@ -52,4 +52,9 @@ struct ParticleSystem {
         }
         
     }
+    
+    /// Generate the actual details about the particle
+    func generateParticle() -> Particle {
+        return Particle(position: float3(0, 0, 0), velocity: float3(0, 0, 0), acceleration: float3(0, 0, 0), radius: 0)
+    }
 }
