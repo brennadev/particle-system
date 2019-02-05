@@ -77,7 +77,12 @@ struct ParticleSystem {
     func generateWaterParticle() -> Particle {
         // TODO: fill in
         
-        return Particle(position: float3(0, 0, 0), velocity: float3(0, 0, 0), acceleration: float3(0, 0, 0), radius: 0)
+        // currently set up to pull a random value from a square
+        let position = float3(Float.random(in: 0...2), 0, Float.random(in: 0...2))
+        let velocity = float3(Float.random(in: 0...1), 4, Float.random(in: 0...1))
+        
+        
+        return Particle(position: position, velocity: velocity, acceleration: float3(0, -9.8, 0), radius: 1)
     }
     
     
@@ -85,7 +90,26 @@ struct ParticleSystem {
     func generateFireworkParticle() -> Particle {
         // TODO: fill in
         
-        return Particle(position: float3(0, 0, 0), velocity: float3(0, 0, 0), acceleration: float3(0, 0, 0), radius: 0)
+        // start with the particles all having the same x/z, then once a particle reaches a certain height, then have the x/z change (the firework exploding)
+        // the particles will start out in a straight line going in the y direction - thus don't want a lot of perturbation in the x/z directions
+        
+        
+        // these values may need to be tweaked some once I can test
+        
+        // currently set up to pull a random value from a square
+        let position = float3(Float.random(in: 0...1), 0, Float.random(in: 0...1))
+        let velocity = float3(Float.random(in: 0...1), 4, Float.random(in: 0...1))
+        
+        
+        return Particle(position: position, velocity: velocity, acceleration: float3(0, -9.8, 0), radius: 1)
+    }
+    
+    func updateWaterParticles() {
+        
+    }
+    
+    func updateFireworkParticles() {
+        
     }
     
 }
