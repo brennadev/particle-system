@@ -37,7 +37,9 @@ class Renderer: NSObject, MTKViewDelegate {
     
     var depthState: MTLDepthStencilState
     var colorMap: MTLTexture
-
+    var fireworkTexture: MTLTexture
+    var waterTexture: MTLTexture
+    
     
     // MARK: - Buffer Properties
     let inFlightSemaphore = DispatchSemaphore(value: maxBuffersInFlight)
@@ -154,6 +156,20 @@ class Renderer: NSObject, MTKViewDelegate {
             colorMap = try Renderer.loadTexture(device: device, textureName: "ColorMap")
         } catch {
             print("Unable to load texture. Error info: \(error)")
+            return nil
+        }
+        
+        do {
+            fireworkTexture = try Renderer.loadTexture(device: device, textureName: "Firework")
+        } catch {
+            print("Unable to load firework texture. Error info: \(error)")
+            return nil
+        }
+        
+        do {
+            waterTexture = try Renderer.loadTexture(device: device, textureName: "Water")
+        } catch {
+            print("Unable to load water texture. Error info: \(error)")
             return nil
         }
         
