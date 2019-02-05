@@ -73,13 +73,19 @@ struct ParticleSystem {
     }
     
     
-    /// Generate the details about the particle
-    func generateParticle() -> Particle {
+    /// Generate the details about a water particle
+    func generateWaterParticle() -> Particle {
         // TODO: fill in
         
         return Particle(position: float3(0, 0, 0), velocity: float3(0, 0, 0), acceleration: float3(0, 0, 0), radius: 0)
     }
     
     
+    /// Generate the details about a firework particle
+    func generateFireworkParticle() -> Particle {
+        // TODO: fill in
+        
+        return Particle(position: float3(0, 0, 0), velocity: float3(0, 0, 0), acceleration: float3(0, 0, 0), radius: 0)
+    }
     
 }

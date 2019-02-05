@@ -80,9 +80,9 @@ class GameViewController: NSViewController {
         
         
         print("translation: \(sender.translation(in: mtkView))")
-        renderer.viewMatrix *= matrix4x4_translation((Float(sender.translation(in: mtkView).x) - previousPanLocation.x) * 0.25,
+        renderer.viewMatrix *= matrix4x4_translation((Float(sender.translation(in: mtkView).x) * 0.9 - previousPanLocation.x),
                                                      0,
-                                                     (Float(sender.translation(in: mtkView).y) - previousPanLocation.y) * 0.25)
+                                                     (Float(sender.translation(in: mtkView).y) * 0.9 - previousPanLocation.y) )
         
         previousPanLocation = float2(Float(sender.location(in: mtkView).x), Float(sender.location(in: mtkView).y))
     }
