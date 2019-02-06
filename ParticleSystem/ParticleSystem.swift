@@ -46,7 +46,7 @@ struct ParticleSystem {
     mutating func particleSystemTypeChanged() {
         allParticles = []
         
-        
+        // not sure if anything else needs to go here since then the updates just need to start occurring
         
     }
     
@@ -104,12 +104,34 @@ struct ParticleSystem {
         return Particle(position: position, velocity: velocity, acceleration: float3(0, -9.8, 0), radius: 1)
     }
     
-    func updateWaterParticles() {
+    
+    // MARK: - Updates
+    func updateWaterParticle(particle: inout Particle, for dt: Float) {
+        particle.updatePosition(for: dt)
+        particle.lifespan += dt
         
+        // TODO: this value may need to be tweaked some
+        if particle.lifespan > 10 {
+            particle.isAlive = false
+        }
     }
     
-    func updateFireworkParticles() {
+    
+    func updateFireworkParticle(particle: inout Particle, for dt: Float) {
+        // once it's just about to the highest point, the firework should explode
+        if abs(particle.velocity.y) < 0.001 {
+            particle.stage = .afterExplosion
+            particle.velocity = float3(Float.random(in: 0.1...5), Float.random(in: 0.1...5), Float.random(in: 0.1...5))
+            
+        }
         
+        particle.updatePosition(for: dt)
+        particle.lifespan += dt
+        
+        // TODO: this value may need to be tweaked some
+        if particle.lifespan > 10 {
+            particle.isAlive = false
+        }
     }
     
 }

@@ -70,6 +70,7 @@ class Renderer: NSObject, MTKViewDelegate {
     
     private var secondsElapsedSinceLastDrawCall = Date()
     
+    /// Does a lot of the work of the particle system
     var particleSystem = ParticleSystem()
     
     // MARK: - Setup
