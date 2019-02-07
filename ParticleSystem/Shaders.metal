@@ -26,7 +26,7 @@ typedef struct {
 } ColorInOut;
 
 
-# pragma mark - Ball Shading (provided in Apple's template)
+
 vertex ColorInOut vertexShader(Vertex in [[stage_in]],
                                constant Uniforms & uniforms [[ buffer(BufferIndexUniforms) ]])
 {
@@ -37,6 +37,19 @@ vertex ColorInOut vertexShader(Vertex in [[stage_in]],
     out.texCoord = in.texCoord;
 
     return out;
+}
+
+// TODO: need to take in texture coords
+vertex ColorInOut vertexParticles(uint vertexID [[ vertex_id ]],
+                                  constant Uniforms &uniforms [[ buffer(BufferIndexUniforms) ]],
+                                  constant float3 *particleVertices [[ buffer(BufferIndexParticlePositions) ]]) {
+    ColorInOut returnValue;
+    
+    float4 position = float4(particleVertices[vertexID], 1);
+    returnValue.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
+    //returnValue.texCoord =
+    
+    return returnValue;
 }
 
 
