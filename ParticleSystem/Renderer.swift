@@ -32,6 +32,9 @@ class Renderer: NSObject, MTKViewDelegate {
     var floorUniformBuffer: MTLBuffer
     var floorBuffer: MTLBuffer?
     
+    /// Locations of all particles
+    var particleVerticesBuffer: MTLBuffer?
+    
     var spherePipelineState: MTLRenderPipelineState
     var floorPipelineState: MTLRenderPipelineState
     var particlesPipelineState: MTLRenderPipelineState
@@ -60,12 +63,12 @@ class Renderer: NSObject, MTKViewDelegate {
     var sphereMesh: MTKMesh
 
     // can use for the texture coords - will be the same for all particles
-    let squareVertices = [float2(0, 0),
-                          float2(0, 1),
-                          float2(1, 1),
-                          float2(0, 0),
-                          float2(1, 1),
-                          float2(1, 0)]
+    let unitSquareVertices = [float2(0, 0),
+                              float2(0, 1),
+                              float2(1, 1),
+                              float2(0, 0),
+                              float2(1, 1),
+                              float2(1, 0)]
     
     
     /// Get a single square translated to a given location
@@ -129,6 +132,11 @@ class Renderer: NSObject, MTKViewDelegate {
 
         let mtlVertexDescriptor = Renderer.buildMetalVertexDescriptor()
 
+        
+        
+        // particle vertex buffer
+        // because there's a max number of particles, this shouldn't need to be resized
+        particleVerticesBuffer = device.makeBuffer(length: ParticleSystem.particleGenerationRate * ParticleSystem.particleLifespan * MemoryLayout<float2>.stride * 6, options: .storageModeShared)
         
         // pipeline states
         // sphere
@@ -370,6 +378,11 @@ class Renderer: NSObject, MTKViewDelegate {
         
         // reset the timer to what's now the current number of seconds
         secondsElapsedSinceLastDrawCall = Date()
+    }
+    
+    
+    func updateParticleVerticesBuffer() {
+        
     }
 
     

@@ -52,7 +52,9 @@ struct ParticleSystem {
     
     
     /// Particles per second to generate
-    private let particleGenerationRate = 10
+    static let particleGenerationRate = 10
+    /// Lifespan of single particle
+    static let particleLifespan = 10
     
     
     mutating func addParticles(for dt: Float) {
@@ -74,13 +76,13 @@ struct ParticleSystem {
     private func numberOfParticlesToGenerate(in dt: Float) -> Int {
         
         
-        let numberOfParticles = Float(particleGenerationRate) * dt
+        let numberOfParticles = Float(ParticleSystem.particleGenerationRate) * dt
         let numberOfParticlesRoundedDown = Int(numberOfParticles.rounded(.down))
         // not sure where this is supposed to be used
         let numberOfParticlesFraction = numberOfParticles - Float(numberOfParticlesRoundedDown)
         
         // TODO: don't know what the random range should be
-        if Float.random(in: 0...1) < dt * Float(particleGenerationRate) {
+        if Float.random(in: 0...1) < dt * Float(ParticleSystem.particleGenerationRate) {
             return numberOfParticlesRoundedDown + 1
         } else {
             return numberOfParticlesRoundedDown
