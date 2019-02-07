@@ -106,6 +106,7 @@ struct ParticleSystem {
     
     
     // MARK: - Updates
+    // TODO: remove
     func updateWaterParticle(particle: inout Particle, for dt: Float) {
         particle.updatePosition(for: dt)
         particle.lifespan += dt
@@ -116,7 +117,7 @@ struct ParticleSystem {
         }
     }
     
-    
+    // TODO: remove
     func updateFireworkParticle(particle: inout Particle, for dt: Float) {
         // once it's just about to the highest point, the firework should explode
         if abs(particle.velocity.y) < 0.001 {
@@ -131,6 +132,53 @@ struct ParticleSystem {
         // TODO: this value may need to be tweaked some
         if particle.lifespan > 10 {
             particle.isAlive = false
+        }
+    }
+    
+    
+    /// Perform updates for all particles
+    mutating func updateParticles(for dt: Float) {
+        switch mode {
+        case .firework:
+            updateFireworkParticles(for: dt)
+        case .water:
+            updateWaterParticles(for: dt)
+        }
+    }
+    
+    
+    mutating func updateFireworkParticles(for dt: Float) {
+        for (index, particle) in allParticles.enumerated() {
+            if particle.isAlive {
+                // once it's just about to the highest point, the firework should explode
+                if abs(particle.velocity.y) < 0.001 {
+                    allParticles[index].stage = .afterExplosion
+                    allParticles[index].velocity = float3(Float.random(in: 0.1...5), Float.random(in: 0.1...5), Float.random(in: 0.1...5))
+                    
+                }
+                
+                allParticles[index].updatePosition(for: dt)
+                allParticles[index].lifespan += dt
+                
+                // TODO: this value may need to be tweaked some
+                if particle.lifespan > 10 {
+                    allParticles[index].isAlive = false
+                }
+            }
+        }
+    }
+    
+    mutating func updateWaterParticles(for dt: Float) {
+        for (index, particle) in allParticles.enumerated() {
+            if particle.isAlive {
+                allParticles[index].updatePosition(for: dt)
+                allParticles[index].lifespan += dt
+                
+                // TODO: this value may need to be tweaked some
+                if particle.lifespan > 10 {
+                    allParticles[index].isAlive = false
+                }
+            }
         }
     }
     
