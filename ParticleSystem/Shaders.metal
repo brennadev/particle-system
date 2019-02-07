@@ -26,7 +26,7 @@ typedef struct {
 } ColorInOut;
 
 
-
+# pragma mark - Textured Shading
 vertex ColorInOut vertexShader(Vertex in [[stage_in]],
                                constant Uniforms & uniforms [[ buffer(BufferIndexUniforms) ]])
 {
@@ -39,15 +39,16 @@ vertex ColorInOut vertexShader(Vertex in [[stage_in]],
     return out;
 }
 
-// TODO: need to take in texture coords
+
 vertex ColorInOut vertexParticles(uint vertexID [[ vertex_id ]],
                                   constant Uniforms &uniforms [[ buffer(BufferIndexUniforms) ]],
-                                  constant float3 *particleVertices [[ buffer(BufferIndexParticlePositions) ]]) {
+                                  constant float3 *particleVertices [[ buffer(BufferIndexParticlePositions) ]],
+                                  constant float2 *particleTexCoords [[ buffer(BufferIndexParticleTexCoords) ]]) {
     ColorInOut returnValue;
     
     float4 position = float4(particleVertices[vertexID], 1);
     returnValue.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
-    //returnValue.texCoord =
+    returnValue.texCoord = particleTexCoords[vertexID];
     
     return returnValue;
 }
@@ -67,7 +68,7 @@ fragment float4 fragmentShader(ColorInOut in [[stage_in]],
 }
 
 
-# pragma mark - Floor Shading (very simple - written by me)
+# pragma mark - Non-textured Shading
 /// Only returns the position - no texture coordinates or other data; based off of the Apple-provided vertex function above
 vertex float4 vertexFloor(uint vertexID [[ vertex_id ]],
                           constant Uniforms & uniforms [[ buffer(BufferIndexFloorUniforms) ]],
