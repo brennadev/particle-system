@@ -32,12 +32,19 @@ struct ParticleSystem {
         if let last = emptyIndices.last {
             allParticles[last] = newParticle
             emptyIndices.removeLast(1)
+            
+            updatedParticleIndices.append(last)
          
         // if not, then just append it on the end
         } else {
             allParticles.append(newParticle)
+            
+            updatedParticleIndices.append(allParticles.count - 1)
         }
     }
+    
+    /// All particle indices that need updating - for Renderer to use in buffer updating
+    var updatedParticleIndices = [Int]()
     
     
     // MARK: - Initial Generation
@@ -151,6 +158,7 @@ struct ParticleSystem {
                 // TODO: this value may need to be tweaked some
                 if particle.lifespan > 10 {
                     allParticles[index].isAlive = false
+                    emptyIndices.append(index)
                 }
             }
         }
@@ -167,6 +175,7 @@ struct ParticleSystem {
                 // TODO: this value may need to be tweaked some
                 if particle.lifespan > 10 {
                     allParticles[index].isAlive = false
+                    emptyIndices.append(index)
                 }
             }
         }
