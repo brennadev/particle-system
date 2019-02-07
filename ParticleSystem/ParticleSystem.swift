@@ -44,7 +44,10 @@ struct ParticleSystem {
     }
     
     /// All particle indices that need updating - for Renderer to use in buffer updating
+    // TODO: how will the buffer know which indices are the ones to use since right now, this will just correspond to the index in allParticles regardless of if it's being used; the only thing is if it's not being used to set it to some sentinel - but I can't exactly use -1 as a sentinel though
     var updatedParticleIndices = [Int]()
+    /// So the vertex buffer and shader know which indices to access for particle vertex data
+    var particleIndicesInUse = [Int]()
     
     
     // MARK: - Initial Generation

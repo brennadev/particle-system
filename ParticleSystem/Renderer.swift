@@ -451,6 +451,11 @@ class Renderer: NSObject, MTKViewDelegate {
                     renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: floorVertexCount)
 
                     
+                    // particles
+                    renderEncoder.setRenderPipelineState(particlesPipelineState)
+                    renderEncoder.setVertexBytes(unitSquareVertices, length: MemoryLayout<float2>.stride * 6, index: BufferIndex.particleTexCoords.rawValue)
+                    renderEncoder.setVertexBuffer(particleVerticesBuffer, offset: 0, index: BufferIndex.particlePositions.rawValue)
+                    
                     // ready to draw
                     renderEncoder.endEncoding()
                     

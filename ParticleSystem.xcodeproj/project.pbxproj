@@ -19,6 +19,7 @@
 		6572F88F21FB49E700E5334C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6572F88D21FB49E700E5334C /* Main.storyboard */; };
 		6572F89A21FB612100E5334C /* MatrixMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6572F89921FB612100E5334C /* MatrixMath.swift */; };
 		6572F89C21FBA33900E5334C /* Particle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6572F89B21FBA33900E5334C /* Particle.swift */; };
+		65CE73B1220CDF9100878EE7 /* fountain.obj in Resources */ = {isa = PBXBuildFile; fileRef = 65CE73B0220CDF9100878EE7 /* fountain.obj */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		6572F89121FB49E700E5334C /* ParticleSystem.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ParticleSystem.entitlements; sourceTree = "<group>"; };
 		6572F89921FB612100E5334C /* MatrixMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixMath.swift; sourceTree = "<group>"; };
 		6572F89B21FBA33900E5334C /* Particle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Particle.swift; sourceTree = "<group>"; };
+		65CE73B0220CDF9100878EE7 /* fountain.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fountain.obj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +90,7 @@
 				6572F89B21FBA33900E5334C /* Particle.swift */,
 				651A67AA2203BCFC0098A4AA /* ParticleSystem.swift */,
 				6572F88A21FB49E300E5334C /* ShaderTypes.h */,
+				65CE73B0220CDF9100878EE7 /* fountain.obj */,
 				651A67A721FE4C0B0098A4AA /* simd Extensions */,
 				6572F88B21FB49E700E5334C /* Assets.xcassets */,
 				6572F88D21FB49E700E5334C /* Main.storyboard */,
@@ -157,6 +160,7 @@
 			files = (
 				6572F88C21FB49E700E5334C /* Assets.xcassets in Resources */,
 				6572F88F21FB49E700E5334C /* Main.storyboard in Resources */,
+				65CE73B1220CDF9100878EE7 /* fountain.obj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
