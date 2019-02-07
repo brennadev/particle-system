@@ -55,8 +55,23 @@ struct ParticleSystem {
     private let particleGenerationRate = 10
     
     
+    mutating func addParticles(for dt: Float) {
+        let particleCountToAdd = numberOfParticlesToGenerate(in: dt)
+        
+        switch mode {
+        case .firework:
+            for _ in 0..<particleCountToAdd {
+                addParticle(newParticle: generateFireworkParticle())
+            }
+        case .water:
+            for _ in 0..<particleCountToAdd {
+                addParticle(newParticle: generateWaterParticle())
+            }
+        }
+    }
+    
     /// How many new particles to generate for the given frame
-    func numberOfParticlesToGenerate(in dt: Float) -> Int {
+    private func numberOfParticlesToGenerate(in dt: Float) -> Int {
         
         
         let numberOfParticles = Float(particleGenerationRate) * dt
@@ -74,7 +89,7 @@ struct ParticleSystem {
     
     
     /// Generate the details about a water particle
-    func generateWaterParticle() -> Particle {
+    private func generateWaterParticle() -> Particle {
         // TODO: fill in
         
         // currently set up to pull a random value from a square
@@ -87,7 +102,7 @@ struct ParticleSystem {
     
     
     /// Generate the details about a firework particle
-    func generateFireworkParticle() -> Particle {
+    private func generateFireworkParticle() -> Particle {
         // TODO: fill in
         
         // start with the particles all having the same x/z, then once a particle reaches a certain height, then have the x/z change (the firework exploding)
@@ -147,7 +162,8 @@ struct ParticleSystem {
     }
     
     
-    mutating func updateFireworkParticles(for dt: Float) {
+    /// Perform updates for all firework particles
+    private mutating func updateFireworkParticles(for dt: Float) {
         for (index, particle) in allParticles.enumerated() {
             if particle.isAlive {
                 // once it's just about to the highest point, the firework should explode
@@ -168,7 +184,9 @@ struct ParticleSystem {
         }
     }
     
-    mutating func updateWaterParticles(for dt: Float) {
+    
+    /// Perform updates for all water particles
+    private mutating func updateWaterParticles(for dt: Float) {
         for (index, particle) in allParticles.enumerated() {
             if particle.isAlive {
                 allParticles[index].updatePosition(for: dt)
