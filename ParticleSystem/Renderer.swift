@@ -59,12 +59,24 @@ class Renderer: NSObject, MTKViewDelegate {
     /// Sphere vertex data
     var sphereMesh: MTKMesh
 
+    // can use for the texture coords - will be the same for all particles
     let squareVertices = [float2(0, 0),
                           float2(0, 1),
                           float2(1, 1),
                           float2(0, 0),
                           float2(1, 1),
                           float2(1, 0)]
+    
+    
+    /// Get a single square translated to a given location
+    func getSquare(at origin: float3) -> [float3] {
+        return [float3(origin.x, origin.y, origin.z),
+                float3(origin.x, origin.y + 1, origin.z),
+                float3(origin.x + 1, origin.y + 1, origin.z),
+                float3(origin.x, origin.y, origin.z),
+                float3(origin.x + 1, origin.y + 1, origin.z),
+                float3(origin.x + 1, origin.y, origin.z)]
+    }
     
     static var sphere = Particle(position: float3(0, 20, 0),
                                  velocity: float3(0, 0, 0),
