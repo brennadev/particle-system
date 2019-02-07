@@ -28,7 +28,7 @@ typedef NS_ENUM(NSInteger, BufferIndex)
     BufferIndexUniforms      = 2,
     BufferIndexFloor         = 3,
     BufferIndexFloorUniforms = 4,
-    BufferIndexParticlePositions = 5
+    BufferIndexParticlePositions = 5,
     BufferIndexParticleTexCoords = 6
 };
 

@@ -34,6 +34,7 @@ class Renderer: NSObject, MTKViewDelegate {
     
     var spherePipelineState: MTLRenderPipelineState
     var floorPipelineState: MTLRenderPipelineState
+    var particlesPipelineState: MTLRenderPipelineState
     
     var depthState: MTLDepthStencilState
     var colorMap: MTLTexture
@@ -58,6 +59,12 @@ class Renderer: NSObject, MTKViewDelegate {
     /// Sphere vertex data
     var sphereMesh: MTKMesh
 
+    let squareVertices = [float2(0, 0),
+                          float2(0, 1),
+                          float2(1, 1),
+                          float2(0, 0),
+                          float2(1, 1),
+                          float2(1, 0)]
     
     static var sphere = Particle(position: float3(0, 20, 0),
                                  velocity: float3(0, 0, 0),
@@ -138,6 +145,22 @@ class Renderer: NSObject, MTKViewDelegate {
             try floorPipelineState = device.makeRenderPipelineState(descriptor: floorRenderPipelineDescriptor)
         } catch {
             print("Unable to set up floorPipelineState")
+            return nil
+        }
+        
+        let vertexParticlesFunction = library?.makeFunction(name: "vertexParticles")
+        let fragmentParticlesFunction = library?.makeFunction(name: "fragmentShader")
+        let particlesRenderPipelineDescriptor = MTLRenderPipelineDescriptor()
+        particlesRenderPipelineDescriptor.vertexFunction = vertexParticlesFunction
+        particlesRenderPipelineDescriptor.fragmentFunction = fragmentParticlesFunction
+        particlesRenderPipelineDescriptor.colorAttachments[0].pixelFormat = metalKitView.colorPixelFormat
+        particlesRenderPipelineDescriptor.depthAttachmentPixelFormat = metalKitView.depthStencilPixelFormat
+        particlesRenderPipelineDescriptor.stencilAttachmentPixelFormat = metalKitView.depthStencilPixelFormat
+        
+        do {
+            try particlesPipelineState = device.makeRenderPipelineState(descriptor: particlesRenderPipelineDescriptor)
+        } catch {
+            print("Unable to set up particlesPipelineState")
             return nil
         }
 
