@@ -97,6 +97,7 @@ class Renderer: NSObject, MTKViewDelegate {
     /// Does a lot of the work of the particle system
     var particleSystem = ParticleSystem()
     
+    
     // MARK: - Setup
     init?(metalKitView: MTKView) {
         device = metalKitView.device!
@@ -199,9 +200,18 @@ class Renderer: NSObject, MTKViewDelegate {
         }
         
         // fountain mesh
-        let fountainMeshURL = URL(fileURLWithPath: "fountain.obj")
-        let fountainMeshAsset = MDLAsset(url: fountainMeshURL)
+        //let fountainMeshURL = URL(string: "~/Desktop/Homework/CSCI5611/ParticleSystem/ParticleSystem/fountain.obj")
+        let fountainMeshURL = Bundle.main.url(forResource: "fountain", withExtension: ".obj")
         
+        print("fountain URL: \(fountainMeshURL)")
+        if let url = fountainMeshURL {
+            
+        }
+        
+        guard let url = fountainMeshURL else { return nil }
+        
+        //let fountainMeshAsset = MDLAsset(url: url)
+        let fountainMeshAsset = MDLAsset(url: url, vertexDescriptor: MTKModelIOVertexDescriptorFromMetal(mtlVertexDescriptor), bufferAllocator: MTKMeshBufferAllocator(device: device))
         
         do {
             let meshes = try MTKMesh.newMeshes(asset: fountainMeshAsset, device: device)
@@ -212,7 +222,7 @@ class Renderer: NSObject, MTKViewDelegate {
         }
         
         
-
+        
         do {
             colorMap = try Renderer.loadTexture(device: device, textureName: "ColorMap")
         } catch {
@@ -431,7 +441,7 @@ class Renderer: NSObject, MTKViewDelegate {
                     renderEncoder.setRenderPipelineState(spherePipelineState)
                     renderEncoder.setVertexBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
                     
-                    renderEncoder.setFragmentBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
+                    //renderEncoder.setFragmentBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
                     
                     for (index, element) in sphereMesh.vertexDescriptor.layouts.enumerated() {
                         guard let layout = element as? MDLVertexBufferLayout else {
@@ -465,7 +475,8 @@ class Renderer: NSObject, MTKViewDelegate {
 
                     
                     // fountain
-                    
+                    renderEncoder.setRenderPipelineState(spherePipelineState)
+                    renderEncoder.setFragmentTexture(fountainTexture, index: TextureIndex.color.rawValue)
                     
                     
                     // particles

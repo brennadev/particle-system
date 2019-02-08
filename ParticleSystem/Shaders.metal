@@ -55,7 +55,7 @@ vertex ColorInOut vertexParticles(uint vertexID [[ vertex_id ]],
 
 
 fragment float4 fragmentShader(ColorInOut in [[stage_in]],
-                               constant Uniforms & uniforms [[ buffer(BufferIndexUniforms) ]],
+                               //constant Uniforms & uniforms [[ buffer(BufferIndexUniforms) ]],
                                texture2d<half> colorMap     [[ texture(TextureIndexColor) ]])
 {
     constexpr sampler colorSampler(mip_filter::linear,
