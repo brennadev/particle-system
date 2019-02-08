@@ -200,17 +200,11 @@ class Renderer: NSObject, MTKViewDelegate {
         }
         
         // fountain mesh
-        //let fountainMeshURL = URL(string: "~/Desktop/Homework/CSCI5611/ParticleSystem/ParticleSystem/fountain.obj")
         let fountainMeshURL = Bundle.main.url(forResource: "fountain", withExtension: ".obj")
         
-        print("fountain URL: \(fountainMeshURL)")
-        if let url = fountainMeshURL {
-            
-        }
         
         guard let url = fountainMeshURL else { return nil }
         
-        //let fountainMeshAsset = MDLAsset(url: url)
         let fountainMeshAsset = MDLAsset(url: url, vertexDescriptor: MTKModelIOVertexDescriptorFromMetal(mtlVertexDescriptor), bufferAllocator: MTKMeshBufferAllocator(device: device))
         
         do {
@@ -220,7 +214,6 @@ class Renderer: NSObject, MTKViewDelegate {
             print("Unable to set up fountain mesh")
             return nil
         }
-        
         
         
         do {
