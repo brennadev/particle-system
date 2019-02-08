@@ -61,6 +61,7 @@ class Renderer: NSObject, MTKViewDelegate {
     
     /// Sphere vertex data
     var sphereMesh: MTKMesh
+    var fountainMesh: MTKMesh
 
     // can use for the texture coords - will be the same for all particles
     let unitSquareVertices = [float2(0, 0),
@@ -195,6 +196,21 @@ class Renderer: NSObject, MTKViewDelegate {
             print("Unable to build MetalKit Mesh. Error info: \(error)")
             return nil
         }
+        
+        // fountain mesh
+        let fountainMeshURL = URL(fileURLWithPath: "fountain.obj")
+        let fountainMeshAsset = MDLAsset(url: fountainMeshURL)
+        
+        
+        do {
+            let meshes = try MTKMesh.newMeshes(asset: fountainMeshAsset, device: device)
+            fountainMesh = meshes.metalKitMeshes[0]
+        } catch {
+            print("Unable to set up fountain mesh")
+            return nil
+        }
+        
+        
 
         do {
             colorMap = try Renderer.loadTexture(device: device, textureName: "ColorMap")
