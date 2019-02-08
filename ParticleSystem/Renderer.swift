@@ -467,10 +467,22 @@ class Renderer: NSObject, MTKViewDelegate {
                     renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: floorVertexCount)
 
                     
+                    // fountain
+                    
+                    
                     // particles
                     renderEncoder.setRenderPipelineState(particlesPipelineState)
                     renderEncoder.setVertexBytes(unitSquareVertices, length: MemoryLayout<float2>.stride * 6, index: BufferIndex.particleTexCoords.rawValue)
                     renderEncoder.setVertexBuffer(particleVerticesBuffer, offset: 0, index: BufferIndex.particlePositions.rawValue)
+                    
+                    switch particleSystem.mode {
+                    case .firework:
+                        renderEncoder.setFragmentTexture(fireworkTexture, index: TextureIndex.color.rawValue)
+                    case .water:
+                        renderEncoder.setFragmentTexture(waterTexture, index: TextureIndex.color.rawValue)
+                    }
+                    
+                    
                     
                     // ready to draw
                     renderEncoder.endEncoding()

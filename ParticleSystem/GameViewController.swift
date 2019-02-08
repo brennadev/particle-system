@@ -48,6 +48,10 @@ class GameViewController: NSViewController {
     
     @IBAction func modeSegmentedControlSegmentClicked(_ sender: NSSegmentedCell) {
         // TODO: need to put some stuff in so things are properly regenerated
+        
+        // handles resetting values
+        renderer.particleSystem.particleSystemTypeChanged()
+        
         switch sender.label(forSegment: sender.selectedSegment) {
         case "Firework":
             renderer.particleSystem.mode = .firework

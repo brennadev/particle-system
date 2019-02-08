@@ -12,7 +12,6 @@ import simd
 struct ParticleSystem {
  
     init() {
-        
     }
     
     /// Which simulation the particle system is currently showing. Default is `.firework`.
