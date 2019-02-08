@@ -43,6 +43,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var colorMap: MTLTexture
     var fireworkTexture: MTLTexture
     var waterTexture: MTLTexture
+    var fountainTexture: MTLTexture
     
     
     // MARK: - Buffer Properties
@@ -221,17 +222,13 @@ class Renderer: NSObject, MTKViewDelegate {
         
         do {
             fireworkTexture = try Renderer.loadTexture(device: device, textureName: "Firework")
-        } catch {
-            print("Unable to load firework texture. Error info: \(error)")
-            return nil
-        }
-        
-        do {
             waterTexture = try Renderer.loadTexture(device: device, textureName: "Water")
+            fountainTexture = try Renderer.loadTexture(device: device, textureName: "Fountain")
         } catch {
-            print("Unable to load water texture. Error info: \(error)")
+            print("Unable to load textures. Error info: \(error)")
             return nil
         }
+
         
         // attempting to get the ball inside the fov more
         Renderer.sphere.position.x = -30
@@ -468,6 +465,7 @@ class Renderer: NSObject, MTKViewDelegate {
 
                     
                     // fountain
+                    
                     
                     
                     // particles
