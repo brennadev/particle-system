@@ -236,9 +236,9 @@ class Renderer: NSObject, MTKViewDelegate {
 
         
         // attempting to get the ball inside the fov more
-        Renderer.sphere.position.x = -30
-        Renderer.sphere.position.y = 4
-        Renderer.sphere.position.z = -30
+        //Renderer.sphere.position.x = -30
+        //Renderer.sphere.position.y = 4
+        //Renderer.sphere.position.z = -30
 
         super.init()
 
@@ -497,11 +497,11 @@ class Renderer: NSObject, MTKViewDelegate {
                         }
                     }*/
                     
-                    //print("allParticles: \(particleSystem.allParticles)\n\n")
                     // particles
                     renderEncoder.setRenderPipelineState(particlesPipelineState)
                     renderEncoder.setVertexBytes(unitSquareVertices, length: MemoryLayout<float2>.stride * 6, index: BufferIndex.particleTexCoords.rawValue)
                     renderEncoder.setVertexBuffer(particleVerticesBuffer, offset: 0, index: BufferIndex.particlePositions.rawValue)
+                    renderEncoder.setVertexBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
                     
                     switch particleSystem.mode {
                     case .firework:
