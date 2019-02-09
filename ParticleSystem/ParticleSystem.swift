@@ -34,21 +34,6 @@ struct ParticleSystem {
     /// Add a new particle into the system
     mutating func addParticle(newParticle: Particle) {
         allParticles.append(newParticle)
-        
-        // TODO: eventually remove the code from here to the end of the method
-        // when there's an available space due to a dead particle, use it
-        /*if let last = emptyIndices.last {
-            allParticles[last] = newParticle
-            emptyIndices.removeLast(1)
-            
-            updatedParticleIndices.append(last)
-         
-        // if not, then just append it on the end
-        } else {
-            allParticles.append(newParticle)
-            
-            updatedParticleIndices.append(allParticles.count - 1)
-        }*/
     }
     
     /// All particles that have been moved in the allParticles array
@@ -61,13 +46,18 @@ struct ParticleSystem {
     var particleIndicesInUse = [Int]()
     
     
+    /// Location in `allParticles` of the first new particle added
+    private(set) var firstAddedParticleIndex: Int?
+    
+    
+    
     // MARK: - Initial Generation
     
     /// If the type of thing being rendered changes, then everything must start all over
     mutating func particleSystemTypeChanged() {
         allParticles = []
         
-        // not sure if anything else needs to go here since then the updates just need to start occurring
+        // TODO: not sure if anything else needs to go here since then the updates just need to start occurring
         
     }
     
@@ -80,6 +70,7 @@ struct ParticleSystem {
     
     mutating func addParticles(for dt: Float) {
         let particleCountToAdd = numberOfParticlesToGenerate(in: dt)
+        firstAddedParticleIndex = allParticles.count
         
         switch mode {
         case .firework:
@@ -95,7 +86,6 @@ struct ParticleSystem {
     
     /// How many new particles to generate for the given frame
     private func numberOfParticlesToGenerate(in dt: Float) -> Int {
-        
         
         let numberOfParticles = Float(ParticleSystem.particleGenerationRate) * dt
         let numberOfParticlesRoundedDown = Int(numberOfParticles.rounded(.down))
