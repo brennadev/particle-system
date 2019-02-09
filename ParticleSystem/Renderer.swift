@@ -403,6 +403,23 @@ class Renderer: NSObject, MTKViewDelegate {
     
     func updateParticleVerticesBuffer() {
         
+        // TODO: make sure to handle the particle location updates - if that needs to be done, then doesn't everything need to be updated in the buffer anyway, causing me to not need to check for what's been moved/added as the location is the only piece of data being stored anyway?
+        for particle in particleSystem.allParticles {
+            particleVerticesBuffer?.contents().storeBytes(of: particle.position, toByteOffset: MemoryLayout<float3>.stride, as: float3.self)
+        }
+        
+        // don't think I need this stuff
+        /*
+        // particles that got moved to a different location in the particles array
+        for particle in particleSystem.movedParticles {
+            
+        }
+        
+        if let firstAddedIndex = particleSystem.firstAddedParticleIndex {
+            for index in firstAddedIndex..<particleSystem.allParticles.count - 1 {
+                
+            }
+        }*/
     }
 
     
@@ -470,6 +487,7 @@ class Renderer: NSObject, MTKViewDelegate {
                     renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: floorVertexCount)
 
                     
+                    // TODO: eventually uncomment this
                     // fountain - only want if simulating water
                     /*if particleSystem.mode == .water {
                         renderEncoder.setRenderPipelineState(spherePipelineState)
