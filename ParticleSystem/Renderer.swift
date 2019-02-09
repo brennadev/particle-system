@@ -22,6 +22,8 @@ enum RendererError: Error {
     case badVertexDescriptor
 }
 
+// TODO: switch to release mode to test performance
+
 class Renderer: NSObject, MTKViewDelegate {
 
     // MARK: - Metal Properties
@@ -62,7 +64,7 @@ class Renderer: NSObject, MTKViewDelegate {
     
     /// Sphere vertex data
     var sphereMesh: MTKMesh
-    var fountainMesh: MTKMesh
+    //var fountainMesh: MTKMesh
 
     // can use for the texture coords - will be the same for all particles
     let unitSquareVertices = [float2(0, 0),
@@ -207,13 +209,13 @@ class Renderer: NSObject, MTKViewDelegate {
         
         let fountainMeshAsset = MDLAsset(url: url, vertexDescriptor: MTKModelIOVertexDescriptorFromMetal(mtlVertexDescriptor), bufferAllocator: MTKMeshBufferAllocator(device: device))
         
-        do {
+        /*do {
             let meshes = try MTKMesh.newMeshes(asset: fountainMeshAsset, device: device)
             fountainMesh = meshes.metalKitMeshes[0]
         } catch {
             print("Unable to set up fountain mesh")
             return nil
-        }
+        }*/
         
         
         do {
@@ -264,6 +266,8 @@ class Renderer: NSObject, MTKViewDelegate {
         mtlVertexDescriptor.layouts[BufferIndex.meshGenerics.rawValue].stride = 8
         mtlVertexDescriptor.layouts[BufferIndex.meshGenerics.rawValue].stepRate = 1
         mtlVertexDescriptor.layouts[BufferIndex.meshGenerics.rawValue].stepFunction = MTLVertexStepFunction.perVertex
+        
+        print("vertex descriptor layouts: \(mtlVertexDescriptor.layouts)")
 
         return mtlVertexDescriptor
     }
@@ -434,8 +438,7 @@ class Renderer: NSObject, MTKViewDelegate {
                     renderEncoder.setRenderPipelineState(spherePipelineState)
                     renderEncoder.setVertexBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
                     
-                    //renderEncoder.setFragmentBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
-                    
+                   
                     for (index, element) in sphereMesh.vertexDescriptor.layouts.enumerated() {
                         guard let layout = element as? MDLVertexBufferLayout else {
                             return
@@ -467,9 +470,32 @@ class Renderer: NSObject, MTKViewDelegate {
                     renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: floorVertexCount)
 
                     
-                    // fountain
-                    renderEncoder.setRenderPipelineState(spherePipelineState)
-                    renderEncoder.setFragmentTexture(fountainTexture, index: TextureIndex.color.rawValue)
+                    // fountain - only want if simulating water
+                    /*if particleSystem.mode == .water {
+                        renderEncoder.setRenderPipelineState(spherePipelineState)
+                        
+                        for (index, element) in fountainMesh.vertexDescriptor.layouts.enumerated() {
+                            guard let layout = element as? MDLVertexBufferLayout else {
+                                return
+                            }
+                            
+                            if layout.stride != 0 {
+                                let buffer = fountainMesh.vertexBuffers[index]
+                                renderEncoder.setVertexBuffer(buffer.buffer, offset:buffer.offset, index: index)
+                            }
+                        }
+                        
+                        
+                        renderEncoder.setFragmentTexture(fountainTexture, index: TextureIndex.color.rawValue)
+                        
+                        for submesh in fountainMesh.submeshes {
+                            renderEncoder.drawIndexedPrimitives(type: submesh.primitiveType,
+                                                                indexCount: submesh.indexCount,
+                                                                indexType: submesh.indexType,
+                                                                indexBuffer: submesh.indexBuffer.buffer,
+                                                                indexBufferOffset: submesh.indexBuffer.offset)
+                        }
+                    }*/
                     
                     
                     // particles
