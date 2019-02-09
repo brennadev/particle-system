@@ -149,12 +149,13 @@ struct ParticleSystem {
                     allParticles[index].isAlive = false
                     movedParticles.append(MovedParticle(before: allParticles.count - 1, after: index))
                     
-                    // here because otherwise, you're trying to assign to an index that was just removed
+                    // if statement here because otherwise, you're trying to assign to an index that was just removed
                     if index != lastValidIndex {
                         allParticles[index] = allParticles.removeLast()
                     } else {
                         allParticles.removeLast()
                     }
+                    
                     lastValidIndex -= 1
                 }
             }
@@ -164,7 +165,10 @@ struct ParticleSystem {
     
     /// Perform updates for all water particles
     private mutating func updateWaterParticles(for dt: Float) {
-        for (index, particle) in allParticles.enumerated() {
+        
+        var lastValidIndex = allParticles.count - 1
+        
+        for (index, particle) in allParticles.enumerated() where index <= lastValidIndex {
             if particle.isAlive {
                 allParticles[index].updatePosition(for: dt)
                 allParticles[index].lifespan += dt
@@ -173,7 +177,15 @@ struct ParticleSystem {
                 if particle.lifespan > 10 {
                     allParticles[index].isAlive = false
                     movedParticles.append(MovedParticle(before: allParticles.count - 1, after: index))
-                    allParticles[index] = allParticles.removeLast()
+                    
+                    // if statement here because otherwise, you're trying to assign to an index that was just removed
+                    if index != lastValidIndex {
+                        allParticles[index] = allParticles.removeLast()
+                    } else {
+                        allParticles.removeLast()
+                    }
+                    
+                    lastValidIndex -= 1
                 }
             }
         }
