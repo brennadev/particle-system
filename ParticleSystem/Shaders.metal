@@ -46,9 +46,23 @@ vertex ColorInOut vertexParticles(uint vertexID [[ vertex_id ]],
                                   constant float2 *particleTexCoords [[ buffer(BufferIndexParticleTexCoords) ]]) {
     ColorInOut returnValue;
     
+    int vertexRelativeLocation = vertexID % 6;
     float4 position = float4(particleVertices[vertexID / 6], 1);
+    
+    switch (vertexRelativeLocation) {
+        case 1:
+            
+            break;
+        case 2:
+            break;
+        case 4:
+            break;
+        case 5:
+            break;    
+    }
+    
     returnValue.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
-    returnValue.texCoord = particleTexCoords[vertexID];
+    returnValue.texCoord = particleTexCoords[vertexRelativeLocation];
     
     return returnValue;
 }
