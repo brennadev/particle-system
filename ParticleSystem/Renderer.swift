@@ -64,7 +64,7 @@ class Renderer: NSObject, MTKViewDelegate {
     
     /// Sphere vertex data
     var sphereMesh: MTKMesh
-    //var fountainMesh: MTKMesh
+    var fountainMesh: MTKMesh
 
     // can use for the texture coords - will be the same for all particles
     let unitSquareVertices = [float2(0, 0),
@@ -74,21 +74,6 @@ class Renderer: NSObject, MTKViewDelegate {
                               float2(1, 1),
                               float2(1, 0)]
     
-    
-    /// Get a single square translated to a given location
-    func getSquare(at origin: float3) -> [float3] {
-        return [float3(origin.x, origin.y, origin.z),
-                float3(origin.x, origin.y + 1, origin.z),
-                float3(origin.x + 1, origin.y + 1, origin.z),
-                float3(origin.x, origin.y, origin.z),
-                float3(origin.x + 1, origin.y + 1, origin.z),
-                float3(origin.x + 1, origin.y, origin.z)]
-    }
-    
-    static var sphere = Particle(position: float3(0, 20, 0),
-                                 velocity: float3(0, 0, 0),
-                                 acceleration: float3(0.75, -9.8, 0),  // standard acceleration due to gravity
-                                 radius: 1)
     
     /// Floor plane's location
     /// - note: This is exposed as a property so it can be detected when the sphere has come in contact with it
@@ -209,13 +194,13 @@ class Renderer: NSObject, MTKViewDelegate {
         
         let fountainMeshAsset = MDLAsset(url: url, vertexDescriptor: MTKModelIOVertexDescriptorFromMetal(mtlVertexDescriptor), bufferAllocator: MTKMeshBufferAllocator(device: device))
         
-        /*do {
+        do {
             let meshes = try MTKMesh.newMeshes(asset: fountainMeshAsset, device: device)
             fountainMesh = meshes.metalKitMeshes[0]
         } catch {
             print("Unable to set up fountain mesh")
             return nil
-        }*/
+        }
         
         
         do {
@@ -533,11 +518,5 @@ class Renderer: NSObject, MTKViewDelegate {
 
         let aspect = Float(size.width) / Float(size.height)
         projectionMatrix = matrix_perspective_right_hand(fovyRadians: radians_from_degrees(65), aspectRatio:aspect, nearZ: 0.001, farZ: 500.0)
-    }
-    
-    // MARK: - Particle Setup
-    /// For each new particle that's to be added
-    func addParticle() {
-        
     }
 }
