@@ -393,7 +393,7 @@ class Renderer: NSObject, MTKViewDelegate {
         sphereModelMatrix[3] = float4(xyz: Renderer.sphere.position)
 */
         
-        let scale: Float = 0.125
+        let scale: Float = 0.0625
         
         sphereModelMatrix[0][0] = scale
         sphereModelMatrix[1][1] = scale
