@@ -370,7 +370,7 @@ class Renderer: NSObject, MTKViewDelegate {
         
         let dt = secondsElapsedSinceLastDrawCall.timeIntervalSinceNow * -1
 
-        
+        /*
         // update physics
         // when the ball is going downward
         if Renderer.sphere.position.y > floorY + Particle.radius {
@@ -391,9 +391,15 @@ class Renderer: NSObject, MTKViewDelegate {
 
         
         sphereModelMatrix[3] = float4(xyz: Renderer.sphere.position)
-
+*/
+        
+        let scale: Float = 0.125
+        
+        sphereModelMatrix[0][0] = scale
+        sphereModelMatrix[1][1] = scale
         
         sphereUniforms[0].modelViewMatrix = simd_mul(viewMatrix, sphereModelMatrix)
+        //sphereUniforms[0].modelViewMatrix = viewMatrix
         floorUniforms[0].modelViewMatrix = simd_mul(viewMatrix, floorModelMatrix)
         
         particleSystem.updateParticles(for: Float(dt))
