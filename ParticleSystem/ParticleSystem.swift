@@ -22,13 +22,17 @@ struct ParticleSystem {
     /// - note: Particles are removed by setting an individual element's `isAlive` property to `false`.
     private(set) var allParticles = [Particle]()
     
+    // TODO: may be able to remove this
     /// All available indices due to dead particles
     private var emptyIndices = [Int]()
     
     /// Add a new particle into the system
     mutating func addParticle(newParticle: Particle) {
+        allParticles.append(newParticle)
+        
+        // TODO: eventually remove the code from here to the end of the method
         // when there's an available space due to a dead particle, use it
-        if let last = emptyIndices.last {
+        /*if let last = emptyIndices.last {
             allParticles[last] = newParticle
             emptyIndices.removeLast(1)
             
@@ -39,7 +43,7 @@ struct ParticleSystem {
             allParticles.append(newParticle)
             
             updatedParticleIndices.append(allParticles.count - 1)
-        }
+        }*/
     }
     
     /// All particle indices that need updating - for Renderer to use in buffer updating
@@ -114,11 +118,6 @@ struct ParticleSystem {
     
     /// Generate the details about a firework particle
     private func generateFireworkParticle() -> Particle {
-        // TODO: fill in
-        
-        // start with the particles all having the same x/z, then once a particle reaches a certain height, then have the x/z change (the firework exploding)
-        // the particles will start out in a straight line going in the y direction - thus don't want a lot of perturbation in the x/z directions
-        
         
         // these values may need to be tweaked some once I can test
         
@@ -160,6 +159,7 @@ struct ParticleSystem {
                 // TODO: this value may need to be tweaked some
                 if particle.lifespan > 10 {
                     allParticles[index].isAlive = false
+                    allParticles[index] = allParticles.removeLast()
                     emptyIndices.append(index)
                 }
             }
@@ -177,6 +177,7 @@ struct ParticleSystem {
                 // TODO: this value may need to be tweaked some
                 if particle.lifespan > 10 {
                     allParticles[index].isAlive = false
+                    allParticles[index] = allParticles.removeLast()
                     emptyIndices.append(index)
                 }
             }
