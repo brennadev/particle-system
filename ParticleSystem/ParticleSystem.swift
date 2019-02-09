@@ -8,6 +8,11 @@
 
 import simd
 
+struct MovedParticle {
+    var before: Int
+    var after: Int
+}
+
 /// Singleton to manage all the particles in use in the particle system. Will manage empty holes in the array from dead particles and fill them as needed when new particles are created.
 struct ParticleSystem {
  
@@ -45,6 +50,9 @@ struct ParticleSystem {
             updatedParticleIndices.append(allParticles.count - 1)
         }*/
     }
+    
+    /// All particles that have been moved in the allParticles array
+    private(set) var movedParticles = [MovedParticle]()
     
     /// All particle indices that need updating - for Renderer to use in buffer updating
     // TODO: how will the buffer know which indices are the ones to use since right now, this will just correspond to the index in allParticles regardless of if it's being used; the only thing is if it's not being used to set it to some sentinel - but I can't exactly use -1 as a sentinel though
@@ -133,6 +141,8 @@ struct ParticleSystem {
     // MARK: - Updates
     /// Perform updates for all particles
     mutating func updateParticles(for dt: Float) {
+        movedParticles = []
+        
         switch mode {
         case .firework:
             updateFireworkParticles(for: dt)
@@ -159,6 +169,7 @@ struct ParticleSystem {
                 // TODO: this value may need to be tweaked some
                 if particle.lifespan > 10 {
                     allParticles[index].isAlive = false
+                    movedParticles.append(MovedParticle(before: allParticles.count - 1, after: index))
                     allParticles[index] = allParticles.removeLast()
                     emptyIndices.append(index)
                 }
@@ -177,6 +188,7 @@ struct ParticleSystem {
                 // TODO: this value may need to be tweaked some
                 if particle.lifespan > 10 {
                     allParticles[index].isAlive = false
+                    movedParticles.append(MovedParticle(before: allParticles.count - 1, after: index))
                     allParticles[index] = allParticles.removeLast()
                     emptyIndices.append(index)
                 }
