@@ -370,30 +370,10 @@ class Renderer: NSObject, MTKViewDelegate {
         
         let dt = secondsElapsedSinceLastDrawCall.timeIntervalSinceNow * -1
 
-        /*
-        // update physics
-        // when the ball is going downward
-        if Renderer.sphere.position.y > floorY + Particle.radius {
-            Renderer.sphere.updatePosition(for: Float(dt))
-            
-        // once the ball hits the ground
-        } else {
-            // the ball should be moving less both in the x and y directions as it hits the ground more times
-            Renderer.sphere.velocity.x *= 0.7
-            Renderer.sphere.velocity.y *= -0.85     // the ball has to reverse direction
-            Renderer.sphere.updatePosition(for: Float(dt))
-        }
-        
-        if Renderer.sphere.position.y < floorY + Particle.radius {
-            Renderer.sphere.position.y = floorY + Particle.radius
-        }
-        
 
-        
-        sphereModelMatrix[3] = float4(xyz: Renderer.sphere.position)
-*/
         let scale: Float
         
+        // what size is best for each particle type varies
         switch particleSystem.mode {
         case .firework:
             scale = 0.04
@@ -402,12 +382,10 @@ class Renderer: NSObject, MTKViewDelegate {
         }
         
         
-        
         sphereModelMatrix[0][0] = scale
         sphereModelMatrix[1][1] = scale
         
         sphereUniforms[0].modelViewMatrix = simd_mul(viewMatrix, sphereModelMatrix)
-        //sphereUniforms[0].modelViewMatrix = viewMatrix
         floorUniforms[0].modelViewMatrix = simd_mul(viewMatrix, floorModelMatrix)
         
         particleSystem.updateParticles(for: Float(dt))
@@ -455,7 +433,8 @@ class Renderer: NSObject, MTKViewDelegate {
                     
                     
                     // sphere
-                    renderEncoder.setRenderPipelineState(spherePipelineState)
+                    // TODO: remove eventually
+                    /*renderEncoder.setRenderPipelineState(spherePipelineState)
                     renderEncoder.setVertexBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
                     
                    
@@ -478,7 +457,7 @@ class Renderer: NSObject, MTKViewDelegate {
                                                             indexType: submesh.indexType,
                                                             indexBuffer: submesh.indexBuffer.buffer,
                                                             indexBufferOffset: submesh.indexBuffer.offset)
-                    }
+                    }*/
                     
                     
                     // floor
