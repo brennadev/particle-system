@@ -49,7 +49,7 @@ vertex ColorInOut vertexParticles(uint vertexID [[ vertex_id ]],
     int vertexRelativeLocation = vertexID % 6;
     float4 position = float4(particleVertices[vertexID / 6], 1);
     
-    float particleSize = 10;
+    float particleSize = 5;
     
     switch (vertexRelativeLocation) {
         case 1:

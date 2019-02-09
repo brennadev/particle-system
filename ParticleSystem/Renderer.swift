@@ -267,7 +267,7 @@ class Renderer: NSObject, MTKViewDelegate {
         mtlVertexDescriptor.layouts[BufferIndex.meshGenerics.rawValue].stepRate = 1
         mtlVertexDescriptor.layouts[BufferIndex.meshGenerics.rawValue].stepFunction = MTLVertexStepFunction.perVertex
         
-        print("vertex descriptor layouts: \(mtlVertexDescriptor.layouts)")
+        //print("vertex descriptor layouts: \(mtlVertexDescriptor.layouts)")
 
         return mtlVertexDescriptor
     }
@@ -504,7 +504,7 @@ class Renderer: NSObject, MTKViewDelegate {
                         }
                     }*/
                     
-                    print("allParticles: \(particleSystem.allParticles)\n\n")
+                    //print("allParticles: \(particleSystem.allParticles)\n\n")
                     // particles
                     renderEncoder.setRenderPipelineState(particlesPipelineState)
                     renderEncoder.setVertexBytes(unitSquareVertices, length: MemoryLayout<float2>.stride * 6, index: BufferIndex.particleTexCoords.rawValue)

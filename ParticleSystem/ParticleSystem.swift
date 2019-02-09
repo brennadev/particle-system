@@ -129,7 +129,10 @@ struct ParticleSystem {
     
     /// Perform updates for all firework particles
     private mutating func updateFireworkParticles(for dt: Float) {
-        for (index, particle) in allParticles.enumerated() {
+        
+        var lastValidIndex = allParticles.count - 1
+        
+        for (index, particle) in allParticles.enumerated() where index <= lastValidIndex {
             if particle.isAlive {
                 // once it's just about to the highest point, the firework should explode
                 if abs(particle.velocity.y) < 0.001 {
@@ -145,7 +148,14 @@ struct ParticleSystem {
                 if particle.lifespan > 10 {
                     allParticles[index].isAlive = false
                     movedParticles.append(MovedParticle(before: allParticles.count - 1, after: index))
-                    allParticles[index] = allParticles.removeLast()
+                    
+                    // here because otherwise, you're trying to assign to an index that was just removed
+                    if index != lastValidIndex {
+                        allParticles[index] = allParticles.removeLast()
+                    } else {
+                        allParticles.removeLast()
+                    }
+                    lastValidIndex -= 1
                 }
             }
         }
