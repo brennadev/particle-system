@@ -16,8 +16,7 @@ struct MovedParticle {
 /// Singleton to manage all the particles in use in the particle system. Will manage empty holes in the array from dead particles and fill them as needed when new particles are created.
 struct ParticleSystem {
  
-    init() {
-    }
+    init() {}
     
     /// Which simulation the particle system is currently showing. Default is `.firework`.
     var mode = ParticleSystemType.firework
@@ -27,23 +26,9 @@ struct ParticleSystem {
     /// - note: Particles are removed by setting an individual element's `isAlive` property to `false`.
     private(set) var allParticles = [Particle]()
     
-    // TODO: may be able to remove this
-    /// All available indices due to dead particles
-    private var emptyIndices = [Int]()
     
-    /// Add a new particle into the system
-    mutating func addParticle(newParticle: Particle) {
-        allParticles.append(newParticle)
-    }
-    
-    /// All particles that have been moved in the allParticles array
+    /// All particles that have been moved in the `allParticles`
     private(set) var movedParticles = [MovedParticle]()
-    
-    /// All particle indices that need updating - for Renderer to use in buffer updating
-    // TODO: how will the buffer know which indices are the ones to use since right now, this will just correspond to the index in allParticles regardless of if it's being used; the only thing is if it's not being used to set it to some sentinel - but I can't exactly use -1 as a sentinel though
-    var updatedParticleIndices = [Int]()
-    /// So the vertex buffer and shader know which indices to access for particle vertex data
-    var particleIndicesInUse = [Int]()
     
     
     /// Location in `allParticles` of the first new particle added
@@ -58,7 +43,6 @@ struct ParticleSystem {
         allParticles = []
         
         // TODO: not sure if anything else needs to go here since then the updates just need to start occurring
-        
     }
     
     
@@ -75,11 +59,12 @@ struct ParticleSystem {
         switch mode {
         case .firework:
             for _ in 0..<particleCountToAdd {
-                addParticle(newParticle: generateFireworkParticle())
+                allParticles.append(generateFireworkParticle())
+                
             }
         case .water:
             for _ in 0..<particleCountToAdd {
-                addParticle(newParticle: generateWaterParticle())
+                allParticles.append(generateWaterParticle())
             }
         }
     }
@@ -161,7 +146,6 @@ struct ParticleSystem {
                     allParticles[index].isAlive = false
                     movedParticles.append(MovedParticle(before: allParticles.count - 1, after: index))
                     allParticles[index] = allParticles.removeLast()
-                    emptyIndices.append(index)
                 }
             }
         }
@@ -180,7 +164,6 @@ struct ParticleSystem {
                     allParticles[index].isAlive = false
                     movedParticles.append(MovedParticle(before: allParticles.count - 1, after: index))
                     allParticles[index] = allParticles.removeLast()
-                    emptyIndices.append(index)
                 }
             }
         }
