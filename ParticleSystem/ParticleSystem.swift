@@ -105,8 +105,8 @@ struct ParticleSystem {
         // these values may need to be tweaked some once I can test
         
         // currently set up to pull a random value from a square
-        let position = float3(Float.random(in: 0...1), 0, Float.random(in: 0...1))
-        let velocity = float3(Float.random(in: 0...1), 4, Float.random(in: 0...1))
+        let position = float3(Float.random(in: -1...1), 0, Float.random(in: 0...1))
+        let velocity = float3(Float.random(in: -1...1), 4, Float.random(in: 0...0.1))
         
         
         return Particle(position: position, velocity: velocity, acceleration: float3(0, -1, 0), radius: 1)
@@ -137,7 +137,7 @@ struct ParticleSystem {
                 // once it's just about to the highest point, the firework should explode
                 if abs(particle.velocity.y) < 0.001 {
                     allParticles[index].stage = .afterExplosion
-                    allParticles[index].velocity = float3(Float.random(in: 0.1...5), Float.random(in: 0.1...5), Float.random(in: 0.1...5))
+                    allParticles[index].velocity = float3(Float.random(in: -5...5), Float.random(in: 0.1...5), Float.random(in: 0...0.1))
                     
                 }
                 

@@ -1,7 +1,6 @@
 {
   "properties" : {
-    "origin" : "bottom-left",
-    "interpretation" : "non-premultiplied-colors"
+    "origin" : "bottom-left"
   },
   "info" : {
     "version" : 1,

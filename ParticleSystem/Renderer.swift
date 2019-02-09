@@ -392,8 +392,16 @@ class Renderer: NSObject, MTKViewDelegate {
         
         sphereModelMatrix[3] = float4(xyz: Renderer.sphere.position)
 */
+        let scale: Float
         
-        let scale: Float = 0.0625
+        switch particleSystem.mode {
+        case .firework:
+            scale = 0.04
+        case .water:
+            scale = 0.02
+        }
+        
+        
         
         sphereModelMatrix[0][0] = scale
         sphereModelMatrix[1][1] = scale
