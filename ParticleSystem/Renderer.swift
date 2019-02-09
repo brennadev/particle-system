@@ -368,20 +368,20 @@ class Renderer: NSObject, MTKViewDelegate {
         let floorModelMatrix = matrix_identity_float4x4
         
         
-        let positionUpdateAmount = secondsElapsedSinceLastDrawCall.timeIntervalSinceNow * -1
+        let dt = secondsElapsedSinceLastDrawCall.timeIntervalSinceNow * -1
 
         
         // update physics
         // when the ball is going downward
         if Renderer.sphere.position.y > floorY + Particle.radius {
-            Renderer.sphere.updatePosition(for: Float(positionUpdateAmount))
+            Renderer.sphere.updatePosition(for: Float(dt))
             
         // once the ball hits the ground
         } else {
             // the ball should be moving less both in the x and y directions as it hits the ground more times
             Renderer.sphere.velocity.x *= 0.7
             Renderer.sphere.velocity.y *= -0.85     // the ball has to reverse direction
-            Renderer.sphere.updatePosition(for: Float(positionUpdateAmount))
+            Renderer.sphere.updatePosition(for: Float(dt))
         }
         
         if Renderer.sphere.position.y < floorY + Particle.radius {
@@ -396,30 +396,18 @@ class Renderer: NSObject, MTKViewDelegate {
         sphereUniforms[0].modelViewMatrix = simd_mul(viewMatrix, sphereModelMatrix)
         floorUniforms[0].modelViewMatrix = simd_mul(viewMatrix, floorModelMatrix)
         
+        particleSystem.updateParticles(for: Float(dt))
+        particleSystem.addParticles(for: Float(dt))
+        
         // reset the timer to what's now the current number of seconds
         secondsElapsedSinceLastDrawCall = Date()
     }
     
     
     func updateParticleVerticesBuffer() {
-        
-        // TODO: make sure to handle the particle location updates - if that needs to be done, then doesn't everything need to be updated in the buffer anyway, causing me to not need to check for what's been moved/added as the location is the only piece of data being stored anyway?
-        for particle in particleSystem.allParticles {
-            particleVerticesBuffer?.contents().storeBytes(of: particle.position, toByteOffset: MemoryLayout<float3>.stride, as: float3.self)
+        for (index, particle) in particleSystem.allParticles.enumerated() {
+            particleVerticesBuffer?.contents().storeBytes(of: particle.position, toByteOffset: MemoryLayout<float3>.stride * index, as: float3.self)
         }
-        
-        // don't think I need this stuff
-        /*
-        // particles that got moved to a different location in the particles array
-        for particle in particleSystem.movedParticles {
-            
-        }
-        
-        if let firstAddedIndex = particleSystem.firstAddedParticleIndex {
-            for index in firstAddedIndex..<particleSystem.allParticles.count - 1 {
-                
-            }
-        }*/
     }
 
     
@@ -437,6 +425,7 @@ class Renderer: NSObject, MTKViewDelegate {
             
             updateDynamicBufferState()
             updateMatrices()
+            updateParticleVerticesBuffer()
             
             /// Delay getting the currentRenderPassDescriptor until we absolutely need it to avoid
             ///   holding onto the drawable and blocking the display pipeline any longer than necessary
@@ -515,7 +504,7 @@ class Renderer: NSObject, MTKViewDelegate {
                         }
                     }*/
                     
-                    
+                    print("allParticles: \(particleSystem.allParticles)\n\n")
                     // particles
                     renderEncoder.setRenderPipelineState(particlesPipelineState)
                     renderEncoder.setVertexBytes(unitSquareVertices, length: MemoryLayout<float2>.stride * 6, index: BufferIndex.particleTexCoords.rawValue)
@@ -527,6 +516,8 @@ class Renderer: NSObject, MTKViewDelegate {
                     case .water:
                         renderEncoder.setFragmentTexture(waterTexture, index: TextureIndex.color.rawValue)
                     }
+                    
+                    renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: particleSystem.allParticles.count * 6)
                     
                     
                     
