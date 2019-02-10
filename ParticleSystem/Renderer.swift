@@ -84,7 +84,7 @@ class Renderer: NSObject, MTKViewDelegate {
     // MARK: - Firework Color Changes
     var fireworkColor = float4(1, 0, 0, 1)
     var fireworkColorChangeState = ColorChangeState.RedConstantGreenUp
-    let colorChangeAmountPerFrame: Float = 0.1
+    let colorChangeAmountPerFrame: Float = 0.01
     
     
     // MARK: - Setup
