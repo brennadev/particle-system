@@ -63,7 +63,7 @@ class Renderer: NSObject, MTKViewDelegate {
 
     
     /// Sphere vertex data
-    var sphereMesh: MTKMesh
+    //var sphereMesh: MTKMesh
     var fountainMesh: MTKMesh
 
     // can use for the texture coords - will be the same for all particles
@@ -74,10 +74,6 @@ class Renderer: NSObject, MTKViewDelegate {
                               float2(1, 1),
                               float2(1, 0)]
     
-    
-    /// Floor plane's location
-    /// - note: This is exposed as a property so it can be detected when the sphere has come in contact with it
-    private let floorY: Float = -8
     
     private var secondsElapsedSinceLastDrawCall = Date()
     
@@ -103,6 +99,7 @@ class Renderer: NSObject, MTKViewDelegate {
         // floor buffer
         
         let floorXZ: Float = 45
+        let floorY: Float = -8
         /// floor in x-z plane
         var floorVertices = [float3(-floorXZ, floorY, -floorXZ),    // far left
                              float3(-floorXZ, floorY, floorXZ),     // close left
@@ -179,12 +176,12 @@ class Renderer: NSObject, MTKViewDelegate {
         depthStateDesciptor.isDepthWriteEnabled = true
         self.depthState = device.makeDepthStencilState(descriptor:depthStateDesciptor)!
 
-        do {
+        /*do {
             sphereMesh = try Renderer.buildSphereMesh(device: device, mtlVertexDescriptor: mtlVertexDescriptor)
         } catch {
             print("Unable to build MetalKit Mesh. Error info: \(error)")
             return nil
-        }
+        }*/
         
         // fountain mesh
         let fountainMeshURL = Bundle.main.url(forResource: "fountain", withExtension: ".obj")
@@ -219,14 +216,7 @@ class Renderer: NSObject, MTKViewDelegate {
             return nil
         }
 
-        
-        // attempting to get the ball inside the fov more
-        //Renderer.sphere.position.x = -30
-        //Renderer.sphere.position.y = 4
-        //Renderer.sphere.position.z = -30
-
         super.init()
-
     }
 
     
@@ -456,8 +446,10 @@ class Renderer: NSObject, MTKViewDelegate {
                     
                     // TODO: eventually uncomment this
                     // fountain - only want if simulating water
-                    /*if particleSystem.mode == .water {
+                    if particleSystem.mode == .water {
                         renderEncoder.setRenderPipelineState(spherePipelineState)
+                        
+                        renderEncoder.setVertexBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
                         
                         for (index, element) in fountainMesh.vertexDescriptor.layouts.enumerated() {
                             guard let layout = element as? MDLVertexBufferLayout else {
@@ -480,7 +472,7 @@ class Renderer: NSObject, MTKViewDelegate {
                                                                 indexBuffer: submesh.indexBuffer.buffer,
                                                                 indexBufferOffset: submesh.indexBuffer.offset)
                         }
-                    }*/
+                    }
                     
                     // particles
                     renderEncoder.setRenderPipelineState(particlesPipelineState)
