@@ -499,7 +499,7 @@ class Renderer: NSObject, MTKViewDelegate {
 
                     
                     // fountain - only want if simulating water
-                    if particleSystem.mode == .water {
+                    /*if particleSystem.mode == .water {
                         renderEncoder.setRenderPipelineState(spherePipelineState)
                         
                         renderEncoder.setVertexBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
@@ -525,7 +525,7 @@ class Renderer: NSObject, MTKViewDelegate {
                                                                 indexBuffer: submesh.indexBuffer.buffer,
                                                                 indexBufferOffset: submesh.indexBuffer.offset)
                         }
-                    }
+                    }*/
                     
                     
                     // particles
