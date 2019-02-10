@@ -86,7 +86,7 @@ fragment float4 fragmentShader(ColorInOut in [[stage_in]],
 }
 
 fragment float4 fragmentFirework(ColorInOut in [[stage_in]],
-                                 float4 color,
+                                 constant float4 *color [[ buffer(BufferIndexFireworkColor) ]],
                                //constant Uniforms & uniforms [[ buffer(BufferIndexUniforms) ]],
                                texture2d<half> colorMap     [[ texture(TextureIndexColor) ]])
 {
@@ -97,7 +97,7 @@ fragment float4 fragmentFirework(ColorInOut in [[stage_in]],
     half4 colorSample   = colorMap.sample(colorSampler, in.texCoord.xy);
     
     // want to adjust the color of the texture to the desired firework color
-    return float4(colorSample) * color;
+    return float4(colorSample) * *color;
 }
 
 
