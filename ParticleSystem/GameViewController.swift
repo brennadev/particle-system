@@ -109,6 +109,6 @@ class GameViewController: NSViewController {
                                                      0,
                                                      (Float(sender.translation(in: mtkView).y) * 0.9 - previousPanLocation.y) )*/
         
-        previousPanLocation = float2(Float(sender.location(in: mtkView).x), Float(sender.location(in: mtkView).y))
+        previousPanLocation = float2(Float(translation.x), Float(translation.y))
     }   
 }

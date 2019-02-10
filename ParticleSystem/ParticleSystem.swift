@@ -30,8 +30,6 @@ struct ParticleSystem {
     /// If the type of thing being rendered changes, then everything must start all over
     mutating func particleSystemTypeChanged() {
         allParticles = []
-        
-        // TODO: not sure if anything else needs to go here since then the updates just need to start occurring
     }
     
     

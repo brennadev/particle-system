@@ -207,7 +207,14 @@ class Renderer: NSObject, MTKViewDelegate {
         
         guard let url = fountainMeshURL else { return nil }
         
-        let fountainMeshAsset = MDLAsset(url: url, vertexDescriptor: MTKModelIOVertexDescriptorFromMetal(mtlVertexDescriptor), bufferAllocator: MTKMeshBufferAllocator(device: device))
+        let fountainVertexDescriptor = MDLVertexDescriptor()
+        fountainVertexDescriptor.attributes[0] = MDLVertexAttribute(name: MDLVertexAttributePosition, format: .float3, offset: 0, bufferIndex: 0)
+        fountainVertexDescriptor.attributes[1] = MDLVertexAttribute(name: MDLVertexAttributeNormal, format: .float3, offset: MemoryLayout<float3>.stride, bufferIndex: 0)
+        fountainVertexDescriptor.attributes[2] = MDLVertexAttribute(name: MDLVertexAttributeTextureCoordinate, format: .float2, offset: MemoryLayout<float3>.stride * 2, bufferIndex: 0)
+        fountainVertexDescriptor.layouts[0] = MDLVertexBufferLayout(stride: MemoryLayout<float3>.stride * 2 + MemoryLayout<float2>.stride)
+        
+        
+        let fountainMeshAsset = MDLAsset(url: url, vertexDescriptor: fountainVertexDescriptor, bufferAllocator: MTKMeshBufferAllocator(device: device))
         
         do {
             let meshes = try MTKMesh.newMeshes(asset: fountainMeshAsset, device: device)
@@ -377,6 +384,9 @@ class Renderer: NSObject, MTKViewDelegate {
         
         sphereModelMatrix[0][0] = scale
         sphereModelMatrix[1][1] = scale
+        
+        
+        // TODO: particle-other object collision code goes here
         
         let rotationMatrix = matrix4x4_rotation(radians: viewMatrixRotation, axis: float3(0, 1, 0))
         let translationMatrix = matrix4x4_translation(viewMatrixTranslation.x, 0, viewMatrixTranslation.z)

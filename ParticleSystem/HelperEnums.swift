@@ -12,6 +12,15 @@
 enum ParticleSystemType {
     case firework
     case water
+    
+    var scale: Float {
+        switch self {
+        case .firework:
+            return 0.04
+        case .water:
+            return 0.02
+        }
+    }
 }
 
 enum FireworkParticleStage {

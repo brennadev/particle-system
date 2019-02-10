@@ -73,7 +73,6 @@ vertex ColorInOut vertexParticles(uint vertexID [[ vertex_id ]],
 
 
 fragment float4 fragmentShader(ColorInOut in [[stage_in]],
-                               //constant Uniforms & uniforms [[ buffer(BufferIndexUniforms) ]],
                                texture2d<half> colorMap     [[ texture(TextureIndexColor) ]])
 {
     constexpr sampler colorSampler(mip_filter::linear,
@@ -85,9 +84,9 @@ fragment float4 fragmentShader(ColorInOut in [[stage_in]],
     return float4(colorSample);
 }
 
+
 fragment float4 fragmentFirework(ColorInOut in [[stage_in]],
                                  constant float4 *color [[ buffer(BufferIndexFireworkColor) ]],
-                               //constant Uniforms & uniforms [[ buffer(BufferIndexUniforms) ]],
                                texture2d<half> colorMap     [[ texture(TextureIndexColor) ]])
 {
     constexpr sampler colorSampler(mip_filter::linear,
