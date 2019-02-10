@@ -16,4 +16,36 @@ extension float4 {
     static var white: float4 {
         return float4(1, 1, 1, 1)
     }
+    
+    var red: Float {
+        get {
+            return x
+        } set {
+            x = newValue
+        }
+    }
+    
+    var green: Float {
+        get {
+            return y
+        } set {
+            y = newValue
+        }
+    }
+    
+    var blue: Float {
+        get {
+            return z
+        } set {
+            z = newValue
+        }
+    }
+    
+    var alpha: Float {
+        get {
+            return w
+        } set {
+            w = newValue
+        }
+    }
 }

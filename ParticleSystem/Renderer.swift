@@ -381,6 +381,49 @@ class Renderer: NSObject, MTKViewDelegate {
             particleVerticesBuffer?.contents().storeBytes(of: particle.position, toByteOffset: MemoryLayout<float3>.stride * index, as: float3.self)
         }
     }
+    
+    
+    /// As the firework particle color should change over time, this controls the changes to that color
+    func updateFireworkColor() {
+        switch fireworkColorChangeState {
+        case .RedConstantGreenUp:
+            fireworkColor.green += colorChangeAmountPerFrame
+            
+            if fireworkColor.green >= 1 {
+                fireworkColorChangeState = .RedDownGreenConstant
+            }
+        case .RedDownGreenConstant:
+            fireworkColor.red -= colorChangeAmountPerFrame
+            
+            if fireworkColor.red <= 0 {
+                fireworkColorChangeState = .GreenConstantBlueUp
+            }
+        case .GreenConstantBlueUp:
+            fireworkColor.blue += colorChangeAmountPerFrame
+            
+            if fireworkColor.blue >= 1 {
+                fireworkColorChangeState = .GreenDownBlueConstant
+            }
+        case .GreenDownBlueConstant:
+            fireworkColor.green -= colorChangeAmountPerFrame
+            
+            if fireworkColor.green <= 0 {
+                fireworkColorChangeState = .BlueConstantRedUp
+            }
+        case .BlueConstantRedUp:
+            fireworkColor.red += colorChangeAmountPerFrame
+            
+            if fireworkColor.red >= 1 {
+                fireworkColorChangeState = .BlueDownRedConstant
+            }
+        case .BlueDownRedConstant:
+            fireworkColor.blue -= colorChangeAmountPerFrame
+            
+            if fireworkColor.blue <= 0 {
+                fireworkColorChangeState = .RedConstantGreenUp
+            }
+        }
+    }
 
     
     // MARK: - MTKViewDelegate
@@ -398,6 +441,10 @@ class Renderer: NSObject, MTKViewDelegate {
             updateDynamicBufferState()
             updateMatrices()
             updateParticleVerticesBuffer()
+            
+            if particleSystem.mode == .firework {
+                updateFireworkColor()
+            }
             
             /// Delay getting the currentRenderPassDescriptor until we absolutely need it to avoid
             ///   holding onto the drawable and blocking the display pipeline any longer than necessary
