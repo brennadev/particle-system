@@ -115,29 +115,26 @@ struct ParticleSystem {
         var lastValidIndex = allParticles.count - 1
         
         for (index, particle) in allParticles.enumerated() where index <= lastValidIndex {
-            if particle.isAlive {
-                // once it's just about to the highest point, the firework should explode
-                if abs(particle.velocity.y) < 0.001 {
-                    allParticles[index].stage = .afterExplosion
-                    allParticles[index].velocity = float3(Float.random(in: -7...7), Float.random(in: 0.1...5), Float.random(in: 0...0.1))
-                    
+            // once it's just about to the highest point, the firework should explode
+            if abs(particle.velocity.y) < 0.001 {
+                allParticles[index].stage = .afterExplosion
+                allParticles[index].velocity = float3(Float.random(in: -7...7), Float.random(in: 0.1...5), Float.random(in: 0...0.1))
+                
+            }
+            
+            allParticles[index].updatePosition(for: dt)
+            allParticles[index].lifespan += dt
+            
+            if particle.lifespan > Float(ParticleSystem.particleLifespan) {
+                
+                // if statement here because otherwise, you're trying to assign to an index that was just removed
+                if index != lastValidIndex {
+                    allParticles[index] = allParticles.removeLast()
+                } else {
+                    allParticles.removeLast()
                 }
                 
-                allParticles[index].updatePosition(for: dt)
-                allParticles[index].lifespan += dt
-                
-                if particle.lifespan > Float(ParticleSystem.particleLifespan) {
-                    allParticles[index].isAlive = false
-                    
-                    // if statement here because otherwise, you're trying to assign to an index that was just removed
-                    if index != lastValidIndex {
-                        allParticles[index] = allParticles.removeLast()
-                    } else {
-                        allParticles.removeLast()
-                    }
-                    
-                    lastValidIndex -= 1
-                }
+                lastValidIndex -= 1
             }
         }
     }
@@ -149,22 +146,20 @@ struct ParticleSystem {
         var lastValidIndex = allParticles.count - 1
         
         for (index, particle) in allParticles.enumerated() where index <= lastValidIndex {
-            if particle.isAlive {
-                allParticles[index].updatePosition(for: dt)
-                allParticles[index].lifespan += dt
+            
+            allParticles[index].updatePosition(for: dt)
+            allParticles[index].lifespan += dt
+            
+            if particle.lifespan > Float(ParticleSystem.particleLifespan) {
                 
-                if particle.lifespan > Float(ParticleSystem.particleLifespan) {
-                    allParticles[index].isAlive = false
-                    
-                    // if statement here because otherwise, you're trying to assign to an index that was just removed
-                    if index != lastValidIndex {
-                        allParticles[index] = allParticles.removeLast()
-                    } else {
-                        allParticles.removeLast()
-                    }
-                    
-                    lastValidIndex -= 1
+                // if statement here because otherwise, you're trying to assign to an index that was just removed
+                if index != lastValidIndex {
+                    allParticles[index] = allParticles.removeLast()
+                } else {
+                    allParticles.removeLast()
                 }
+                
+                lastValidIndex -= 1
             }
         }
     }

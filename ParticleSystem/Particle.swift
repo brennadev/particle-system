@@ -19,7 +19,6 @@ struct Particle {
     var stage: FireworkParticleStage
     var color: float4
     var lifespan: Float = 0
-    var isAlive = true
     
     
     init(position: float3, velocity: float3, acceleration: float3, radius: Float, stage: FireworkParticleStage = .beforeExplosion, color: float4 = .white) {
