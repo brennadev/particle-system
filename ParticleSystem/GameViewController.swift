@@ -96,9 +96,9 @@ class GameViewController: NSViewController {
         }
         
         if translation.y >= 0 {
-            
+            renderer.viewMatrixTranslation.z += (Float(translation.y) - previousPanLocation.y) * -0.001
         } else {
-            
+            renderer.viewMatrixTranslation.z -= (Float(translation.y) - previousPanLocation.y) * -0.001
         }
         
         //renderer.viewMatrixTranslation += float2(Float(translation.x) - previousPanLocation.x, (Float(translation.y) - previousPanLocation.y) * -1) * 0.001
