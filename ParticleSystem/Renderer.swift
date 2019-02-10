@@ -381,6 +381,7 @@ class Renderer: NSObject, MTKViewDelegate {
         let rotationMatrix = matrix4x4_rotation(radians: viewMatrixRotation, axis: float3(0, 1, 0))
         let translationMatrix = matrix4x4_translation(viewMatrixTranslation.x, 0, viewMatrixTranslation.z)
         
+        viewMatrix = matrix4x4_translation(0.0, 0.0, -8.0)
         viewMatrix *= rotationMatrix
         viewMatrix *= translationMatrix
         

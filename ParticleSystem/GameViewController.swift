@@ -76,7 +76,7 @@ class GameViewController: NSViewController {
             previousRotation = 0
         }
         
-        renderer.viewMatrix *= matrix4x4_rotation(radians: Float(sender.rotation) - previousRotation, axis: float3(0, 1, 0))
+        //renderer.viewMatrix *= matrix4x4_rotation(radians: Float(sender.rotation) - previousRotation, axis: float3(0, 1, 0))
         renderer.viewMatrixRotation = Float(sender.rotation)
         previousRotation = Float(sender.rotation)
     }
@@ -92,9 +92,9 @@ class GameViewController: NSViewController {
         renderer.viewMatrixTranslation = float2(Float(translation.x), Float(translation.y) * -1)
         
         print("translation: \(sender.translation(in: mtkView))")
-        renderer.viewMatrix *= matrix4x4_translation((Float(sender.translation(in: mtkView).x) * 0.9 - previousPanLocation.x),
+        /*renderer.viewMatrix *= matrix4x4_translation((Float(sender.translation(in: mtkView).x) * 0.9 - previousPanLocation.x),
                                                      0,
-                                                     (Float(sender.translation(in: mtkView).y) * 0.9 - previousPanLocation.y) )
+                                                     (Float(sender.translation(in: mtkView).y) * 0.9 - previousPanLocation.y) )*/
         
         previousPanLocation = float2(Float(sender.location(in: mtkView).x), Float(sender.location(in: mtkView).y))
     }   
