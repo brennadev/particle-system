@@ -123,7 +123,7 @@ class Renderer: NSObject, MTKViewDelegate {
         
         // particle vertex buffer
         // because there's a max number of particles, this shouldn't need to be resized
-        particleVerticesBuffer = device.makeBuffer(length: ParticleSystem.particleGenerationRate * ParticleSystem.particleLifespan * MemoryLayout<float2>.stride * 6, options: .storageModeShared)
+        particleVerticesBuffer = device.makeBuffer(length: 50000 * ParticleSystem.particleLifespan * MemoryLayout<float2>.stride * 6, options: .storageModeShared)
         
         // pipeline states
         // sphere

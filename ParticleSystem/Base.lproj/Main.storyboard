@@ -740,32 +740,39 @@
                                     </connections>
                                 </segmentedCell>
                             </segmentedControl>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mcc-5y-Vhu">
-                                <rect key="frame" x="510" y="564" width="70" height="32"/>
-                                <buttonCell key="cell" type="push" title="Start" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ZhP-kU-T1e">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
+                            <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4BC-jc-zrj">
+                                <rect key="frame" x="483" y="572" width="219" height="19"/>
+                                <sliderCell key="cell" state="on" alignment="left" minValue="10" maxValue="50000" doubleValue="10" tickMarkPosition="above" sliderType="linear" id="IIQ-za-8xz"/>
                                 <connections>
-                                    <action selector="startButtonClicked:" target="XfG-lQ-9wD" id="I5u-Zu-BHM"/>
+                                    <action selector="particleGenerationRateSliderValueChanged:" target="XfG-lQ-9wD" id="s9U-91-JXw"/>
                                 </connections>
-                            </button>
+                            </slider>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2vg-EN-XjR">
+                                <rect key="frame" x="717" y="573" width="19" height="17"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="10" id="o2g-3a-4nw">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="4BC-jc-zrj" firstAttribute="leading" secondItem="8Vw-E0-NSK" secondAttribute="trailing" constant="17" id="09K-gh-bOp"/>
                             <constraint firstItem="8Vw-E0-NSK" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="4Gp-tE-RQ4"/>
                             <constraint firstAttribute="trailing" secondItem="9uB-ZC-Zxh" secondAttribute="trailing" id="7Dp-bM-4GW"/>
+                            <constraint firstItem="2vg-EN-XjR" firstAttribute="leading" secondItem="4BC-jc-zrj" secondAttribute="trailing" constant="19" id="9tY-gs-US7"/>
                             <constraint firstItem="8Vw-E0-NSK" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="8" id="Hm5-Ox-bVy"/>
                             <constraint firstItem="9uB-ZC-Zxh" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="O3r-Eo-ndA"/>
                             <constraint firstItem="9uB-ZC-Zxh" firstAttribute="top" secondItem="8Vw-E0-NSK" secondAttribute="bottom" constant="8" id="QcS-2k-dR1"/>
                             <constraint firstAttribute="bottom" secondItem="9uB-ZC-Zxh" secondAttribute="bottom" id="R3U-pk-S7o"/>
-                            <constraint firstItem="Mcc-5y-Vhu" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="8" id="Uk8-U4-PcX"/>
-                            <constraint firstItem="9uB-ZC-Zxh" firstAttribute="top" secondItem="Mcc-5y-Vhu" secondAttribute="bottom" constant="8" id="i07-sa-Pb6"/>
-                            <constraint firstAttribute="trailing" secondItem="Mcc-5y-Vhu" secondAttribute="trailing" constant="226" id="l0k-TN-ipH"/>
-                            <constraint firstItem="Mcc-5y-Vhu" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="8Vw-E0-NSK" secondAttribute="trailing" constant="8" symbolic="YES" id="vRP-gP-hws"/>
+                            <constraint firstItem="4BC-jc-zrj" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="11" id="S1S-uB-ut6"/>
+                            <constraint firstItem="2vg-EN-XjR" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="10" id="atv-Vc-kfi"/>
+                            <constraint firstAttribute="trailing" secondItem="2vg-EN-XjR" secondAttribute="trailing" constant="66" id="blu-Zy-Xhi"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="mtkView" destination="9uB-ZC-Zxh" id="ZEW-Bp-TUD"/>
+                        <outlet property="particleGenerationRateLabel" destination="2vg-EN-XjR" id="E1n-74-zIW"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

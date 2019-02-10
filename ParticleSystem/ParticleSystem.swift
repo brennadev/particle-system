@@ -47,9 +47,9 @@ struct ParticleSystem {
     
     
     /// Particles per second to generate
-    static let particleGenerationRate = 10
+    static var particleGenerationRate = 1000
     /// Lifespan of single particle
-    static let particleLifespan = 10
+    static let particleLifespan = 20
     
     
     mutating func addParticles(for dt: Float) {
@@ -88,14 +88,13 @@ struct ParticleSystem {
     
     /// Generate the details about a water particle
     private func generateWaterParticle() -> Particle {
-        // TODO: fill in
         
         // currently set up to pull a random value from a square
-        let position = float3(Float.random(in: 0...2), 0, Float.random(in: 0...2))
-        let velocity = float3(Float.random(in: 0...1), 4, Float.random(in: 0...1))
+        let position = float3(Float.random(in: -2...2), 0, Float.random(in: -1...1))
+        let velocity = float3(Float.random(in: -1...1), Float.random(in: 0...5), Float.random(in: -0.1...0.1))
         
         
-        return Particle(position: position, velocity: velocity, acceleration: float3(0, -9.8, 0), radius: 1)
+        return Particle(position: position, velocity: velocity, acceleration: float3(0, -3, 0), radius: 1)
     }
     
     
@@ -145,7 +144,7 @@ struct ParticleSystem {
                 allParticles[index].lifespan += dt
                 
                 // TODO: this value may need to be tweaked some
-                if particle.lifespan > 10 {
+                if particle.lifespan > Float(ParticleSystem.particleLifespan) {
                     allParticles[index].isAlive = false
                     movedParticles.append(MovedParticle(before: allParticles.count - 1, after: index))
                     
@@ -174,7 +173,7 @@ struct ParticleSystem {
                 allParticles[index].lifespan += dt
                 
                 // TODO: this value may need to be tweaked some
-                if particle.lifespan > 10 {
+                if particle.lifespan > Float(ParticleSystem.particleLifespan) {
                     allParticles[index].isAlive = false
                     movedParticles.append(MovedParticle(before: allParticles.count - 1, after: index))
                     

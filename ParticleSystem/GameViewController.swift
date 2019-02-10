@@ -13,6 +13,8 @@ import MetalKit
 class GameViewController: NSViewController {
     
     @IBOutlet var mtkView: MTKView!
+    @IBOutlet weak var particleGenerationRateLabel: NSTextField!
+    
     
     var renderer: Renderer!
     
@@ -62,10 +64,6 @@ class GameViewController: NSViewController {
         }
     }
     
-    @IBAction func startButtonClicked(_ sender: NSButton) {
-        //mtkView.isPaused = false
-    }
-    
     
     @IBAction func metalViewRotated(_ sender: NSRotationGestureRecognizer) {
         if sender.state == .began {
@@ -90,5 +88,12 @@ class GameViewController: NSViewController {
         
         previousPanLocation = float2(Float(sender.location(in: mtkView).x), Float(sender.location(in: mtkView).y))
     }
+    
+    
+    @IBAction func particleGenerationRateSliderValueChanged(_ sender: NSSlider) {
+        particleGenerationRateLabel.intValue = sender.intValue
+        ParticleSystem.particleGenerationRate = Int(sender.intValue)
+    }
+    
     
 }
