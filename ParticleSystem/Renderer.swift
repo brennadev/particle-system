@@ -80,6 +80,11 @@ class Renderer: NSObject, MTKViewDelegate {
     /// Does a lot of the work of the particle system
     var particleSystem = ParticleSystem()
     
+    // MARK: - Firework Color Changes
+    var fireworkColor = float4(1, 0, 0, 1)
+    var fireworkColorChangeState = ColorChangeState.RedConstantGreenUp
+    let colorChangeAmountPerFrame: Float = 0.1
+    
     
     // MARK: - Setup
     init?(metalKitView: MTKView) {

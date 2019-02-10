@@ -20,6 +20,7 @@
 		6572F89A21FB612100E5334C /* MatrixMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6572F89921FB612100E5334C /* MatrixMath.swift */; };
 		6572F89C21FBA33900E5334C /* Particle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6572F89B21FBA33900E5334C /* Particle.swift */; };
 		65CE73B1220CDF9100878EE7 /* fountain.obj in Resources */ = {isa = PBXBuildFile; fileRef = 65CE73B0220CDF9100878EE7 /* fountain.obj */; };
+		65CE73B322109AFF00878EE7 /* ColorChangeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CE73B222109AFF00878EE7 /* ColorChangeState.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		6572F89921FB612100E5334C /* MatrixMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixMath.swift; sourceTree = "<group>"; };
 		6572F89B21FBA33900E5334C /* Particle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Particle.swift; sourceTree = "<group>"; };
 		65CE73B0220CDF9100878EE7 /* fountain.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fountain.obj; sourceTree = "<group>"; };
+		65CE73B222109AFF00878EE7 /* ColorChangeState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorChangeState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,7 @@
 				6572F88221FB49E300E5334C /* AppDelegate.swift */,
 				6572F88421FB49E300E5334C /* GameViewController.swift */,
 				6572F88621FB49E300E5334C /* Renderer.swift */,
+				65CE73B222109AFF00878EE7 /* ColorChangeState.swift */,
 				6572F89921FB612100E5334C /* MatrixMath.swift */,
 				6572F88821FB49E300E5334C /* Shaders.metal */,
 				651A67A821FF3E6C0098A4AA /* HelperEnums.swift */,
@@ -179,6 +182,7 @@
 				6572F88721FB49E300E5334C /* Renderer.swift in Sources */,
 				651A67AB2203BCFC0098A4AA /* ParticleSystem.swift in Sources */,
 				6572F89A21FB612100E5334C /* MatrixMath.swift in Sources */,
+				65CE73B322109AFF00878EE7 /* ColorChangeState.swift in Sources */,
 				651A67A621FE4B500098A4AA /* matrix_float4x4Extension.swift in Sources */,
 				6572F88321FB49E300E5334C /* AppDelegate.swift in Sources */,
 			);
