@@ -85,6 +85,21 @@ fragment float4 fragmentShader(ColorInOut in [[stage_in]],
     return float4(colorSample);
 }
 
+fragment float4 fragmentFirework(ColorInOut in [[stage_in]],
+                                 float4 color,
+                               //constant Uniforms & uniforms [[ buffer(BufferIndexUniforms) ]],
+                               texture2d<half> colorMap     [[ texture(TextureIndexColor) ]])
+{
+    constexpr sampler colorSampler(mip_filter::linear,
+                                   mag_filter::linear,
+                                   min_filter::linear);
+    
+    half4 colorSample   = colorMap.sample(colorSampler, in.texCoord.xy);
+    
+    // want to adjust the color of the texture to the desired firework color
+    return float4(colorSample) * color;
+}
+
 
 # pragma mark - Non-textured Shading
 /// Only returns the position - no texture coordinates or other data; based off of the Apple-provided vertex function above
