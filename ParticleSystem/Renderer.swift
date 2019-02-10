@@ -103,7 +103,6 @@ class Renderer: NSObject, MTKViewDelegate {
         
         
         // floor buffer
-        
         let floorXZ: Float = 45
         let floorY: Float = -8
         /// floor in x-z plane
@@ -199,12 +198,6 @@ class Renderer: NSObject, MTKViewDelegate {
         depthStateDesciptor.isDepthWriteEnabled = true
         self.depthState = device.makeDepthStencilState(descriptor:depthStateDesciptor)!
 
-        /*do {
-            sphereMesh = try Renderer.buildSphereMesh(device: device, mtlVertexDescriptor: mtlVertexDescriptor)
-        } catch {
-            print("Unable to build MetalKit Mesh. Error info: \(error)")
-            return nil
-        }*/
         
         // fountain mesh
         let fountainMeshURL = Bundle.main.url(forResource: "fountain", withExtension: ".obj")
