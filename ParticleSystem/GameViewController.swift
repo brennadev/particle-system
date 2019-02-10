@@ -48,9 +48,9 @@ class GameViewController: NSViewController {
     }
     
     
+    // MARK: - Control Changes
     @IBAction func modeSegmentedControlSegmentClicked(_ sender: NSSegmentedCell) {
-        // TODO: need to put some stuff in so things are properly regenerated
-        
+
         // handles resetting values
         renderer.particleSystem.particleSystemTypeChanged()
         
@@ -64,7 +64,13 @@ class GameViewController: NSViewController {
         }
     }
     
+    @IBAction func particleGenerationRateSliderValueChanged(_ sender: NSSlider) {
+        particleGenerationRateLabel.intValue = sender.intValue
+        ParticleSystem.particleGenerationRate = Int(sender.intValue)
+    }
     
+    
+    // MARK: - Moving the Scene
     @IBAction func metalViewRotated(_ sender: NSRotationGestureRecognizer) {
         if sender.state == .began {
             previousRotation = 0
@@ -87,13 +93,5 @@ class GameViewController: NSViewController {
                                                      (Float(sender.translation(in: mtkView).y) * 0.9 - previousPanLocation.y) )
         
         previousPanLocation = float2(Float(sender.location(in: mtkView).x), Float(sender.location(in: mtkView).y))
-    }
-    
-    
-    @IBAction func particleGenerationRateSliderValueChanged(_ sender: NSSlider) {
-        particleGenerationRateLabel.intValue = sender.intValue
-        ParticleSystem.particleGenerationRate = Int(sender.intValue)
-    }
-    
-    
+    }   
 }
