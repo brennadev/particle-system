@@ -8,12 +8,7 @@
 
 import simd
 
-struct MovedParticle {
-    var before: Int
-    var after: Int
-}
-
-/// Singleton to manage all the particles in use in the particle system. Will manage empty holes in the array from dead particles and fill them as needed when new particles are created.
+/// Manage all the particles in use in the particle system. Will manage empty holes in the array from dead particles and fill them as needed when new particles are created.
 struct ParticleSystem {
  
     init() {}
@@ -26,14 +21,8 @@ struct ParticleSystem {
     /// - note: Particles are removed by setting an individual element's `isAlive` property to `false`.
     private(set) var allParticles = [Particle]()
     
-    
-    /// All particles that have been moved in the `allParticles`
-    private(set) var movedParticles = [MovedParticle]()
-    
-    
     /// Location in `allParticles` of the first new particle added
     private(set) var firstAddedParticleIndex: Int?
-    
     
     
     // MARK: - Initial Generation
@@ -74,10 +63,7 @@ struct ParticleSystem {
         
         let numberOfParticles = Float(ParticleSystem.particleGenerationRate) * dt
         let numberOfParticlesRoundedDown = Int(numberOfParticles.rounded(.down))
-        // not sure where this is supposed to be used
-        let numberOfParticlesFraction = numberOfParticles - Float(numberOfParticlesRoundedDown)
         
-        // TODO: don't know what the random range should be
         if Float.random(in: 0...1) < dt * Float(ParticleSystem.particleGenerationRate) {
             return numberOfParticlesRoundedDown + 1
         } else {
@@ -92,7 +78,6 @@ struct ParticleSystem {
         // currently set up to pull a random value from a square
         let position = float3(Float.random(in: -2...2), 0, Float.random(in: -1...1))
         let velocity = float3(Float.random(in: -1...1), Float.random(in: 0...5), Float.random(in: -0.1...0.1))
-        
         
         return Particle(position: position, velocity: velocity, acceleration: float3(0, -3, 0), radius: 1)
     }
@@ -115,8 +100,6 @@ struct ParticleSystem {
     // MARK: - Updates
     /// Perform updates for all particles
     mutating func updateParticles(for dt: Float) {
-        movedParticles = []
-        
         switch mode {
         case .firework:
             updateFireworkParticles(for: dt)
@@ -143,10 +126,8 @@ struct ParticleSystem {
                 allParticles[index].updatePosition(for: dt)
                 allParticles[index].lifespan += dt
                 
-                // TODO: this value may need to be tweaked some
                 if particle.lifespan > Float(ParticleSystem.particleLifespan) {
                     allParticles[index].isAlive = false
-                    movedParticles.append(MovedParticle(before: allParticles.count - 1, after: index))
                     
                     // if statement here because otherwise, you're trying to assign to an index that was just removed
                     if index != lastValidIndex {
@@ -172,10 +153,8 @@ struct ParticleSystem {
                 allParticles[index].updatePosition(for: dt)
                 allParticles[index].lifespan += dt
                 
-                // TODO: this value may need to be tweaked some
                 if particle.lifespan > Float(ParticleSystem.particleLifespan) {
                     allParticles[index].isAlive = false
-                    movedParticles.append(MovedParticle(before: allParticles.count - 1, after: index))
                     
                     // if statement here because otherwise, you're trying to assign to an index that was just removed
                     if index != lastValidIndex {
