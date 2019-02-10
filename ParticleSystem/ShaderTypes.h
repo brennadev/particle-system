@@ -29,7 +29,8 @@ typedef NS_ENUM(NSInteger, BufferIndex)
     BufferIndexFloor         = 3,
     BufferIndexFloorUniforms = 4,
     BufferIndexParticlePositions = 5,
-    BufferIndexParticleTexCoords = 6
+    BufferIndexParticleTexCoords = 6,
+    BufferIndexFireworkColor = 7
 };
 
 typedef NS_ENUM(NSInteger, VertexAttribute)

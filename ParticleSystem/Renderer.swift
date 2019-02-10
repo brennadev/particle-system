@@ -39,7 +39,8 @@ class Renderer: NSObject, MTKViewDelegate {
     
     var spherePipelineState: MTLRenderPipelineState
     var floorPipelineState: MTLRenderPipelineState
-    var particlesPipelineState: MTLRenderPipelineState
+    var waterParticlesPipelineState: MTLRenderPipelineState
+    var fireworkParticlesPipelineState: MTLRenderPipelineState
     
     var depthState: MTLDepthStencilState
     var colorMap: MTLTexture
@@ -170,11 +171,28 @@ class Renderer: NSObject, MTKViewDelegate {
         particlesRenderPipelineDescriptor.stencilAttachmentPixelFormat = metalKitView.depthStencilPixelFormat
         
         do {
-            try particlesPipelineState = device.makeRenderPipelineState(descriptor: particlesRenderPipelineDescriptor)
+            try waterParticlesPipelineState = device.makeRenderPipelineState(descriptor: particlesRenderPipelineDescriptor)
         } catch {
-            print("Unable to set up particlesPipelineState")
+            print("Unable to set up waterParticlesPipelineState")
             return nil
         }
+        
+        
+        let fragmentFireworkParticlesFunction = library?.makeFunction(name: "fragmentFirework")
+        let fireworkParticlesRenderPipelineDescriptor = MTLRenderPipelineDescriptor()
+        fireworkParticlesRenderPipelineDescriptor.vertexFunction = vertexParticlesFunction
+        fireworkParticlesRenderPipelineDescriptor.fragmentFunction = fragmentFireworkParticlesFunction
+        fireworkParticlesRenderPipelineDescriptor.colorAttachments[0].pixelFormat = metalKitView.colorPixelFormat
+        fireworkParticlesRenderPipelineDescriptor.depthAttachmentPixelFormat = metalKitView.depthStencilPixelFormat
+        fireworkParticlesRenderPipelineDescriptor.stencilAttachmentPixelFormat = metalKitView.depthStencilPixelFormat
+        
+        do {
+            try fireworkParticlesPipelineState = device.makeRenderPipelineState(descriptor: fireworkParticlesRenderPipelineDescriptor)
+        } catch {
+            print("Unable to set up fireworkParticlesPipelineState")
+            return nil
+        }
+        
 
         let depthStateDesciptor = MTLDepthStencilDescriptor()
         depthStateDesciptor.depthCompareFunction = MTLCompareFunction.less
@@ -498,7 +516,9 @@ class Renderer: NSObject, MTKViewDelegate {
                     
                     // TODO: eventually uncomment this
                     // fountain - only want if simulating water
-                    if particleSystem.mode == .water {
+                    
+                    switch particleSystem.mode {
+                    case .water:
                         renderEncoder.setRenderPipelineState(spherePipelineState)
                         
                         renderEncoder.setVertexBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
@@ -523,11 +543,15 @@ class Renderer: NSObject, MTKViewDelegate {
                                                                 indexType: submesh.indexType,
                                                                 indexBuffer: submesh.indexBuffer.buffer,
                                                                 indexBufferOffset: submesh.indexBuffer.offset)
+                            
                         }
+                        
+                    case .firework:
+                        renderEncoder.setFragmentBytes(&fireworkColor, length: MemoryLayout<float4>.stride, index: BufferIndex.fireworkColor.rawValue)
                     }
                     
                     // particles
-                    renderEncoder.setRenderPipelineState(particlesPipelineState)
+                    renderEncoder.setRenderPipelineState(waterParticlesPipelineState)
                     renderEncoder.setVertexBytes(unitSquareVertices, length: MemoryLayout<float2>.stride * 6, index: BufferIndex.particleTexCoords.rawValue)
                     renderEncoder.setVertexBuffer(particleVerticesBuffer, offset: 0, index: BufferIndex.particlePositions.rawValue)
                     renderEncoder.setVertexBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
