@@ -61,10 +61,12 @@ class Renderer: NSObject, MTKViewDelegate {
 
     var projectionMatrix = matrix_float4x4()
     var viewMatrix = matrix4x4_translation(0.0, 0.0, -8.0)
+    
+    // separate out the view matrix transformations to make sure they're multiplied correctly later
+    var viewMatrixRotation: Float = 0
+    var viewMatrixTranslation = float2(0, 0)
 
     
-    /// Sphere vertex data
-    //var sphereMesh: MTKMesh
     var fountainMesh: MTKMesh
 
     // can use for the texture coords - will be the same for all particles
