@@ -9,7 +9,7 @@
 import simd
 
 extension float2 {
-    /// For when a `float2` is needed as (x, z)
+    /// For when a `float2` is needed as (x, z) - the second value stored
     var z: Float {
         get {
             return y

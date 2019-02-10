@@ -378,6 +378,12 @@ class Renderer: NSObject, MTKViewDelegate {
         sphereModelMatrix[0][0] = scale
         sphereModelMatrix[1][1] = scale
         
+        let rotationMatrix = matrix4x4_rotation(radians: viewMatrixRotation, axis: float3(0, 1, 0))
+        let translationMatrix = matrix4x4_translation(viewMatrixTranslation.x, 0, viewMatrixTranslation.z)
+        
+        viewMatrix *= rotationMatrix
+        viewMatrix *= translationMatrix
+        
         sphereUniforms[0].modelViewMatrix = simd_mul(viewMatrix, sphereModelMatrix)
         floorUniforms[0].modelViewMatrix = simd_mul(viewMatrix, floorModelMatrix)
         
