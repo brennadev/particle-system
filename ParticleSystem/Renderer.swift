@@ -477,34 +477,6 @@ class Renderer: NSObject, MTKViewDelegate {
                     renderEncoder.setDepthStencilState(depthState)
                     
                     
-                    // sphere
-                    // TODO: remove eventually
-                    /*renderEncoder.setRenderPipelineState(spherePipelineState)
-                    renderEncoder.setVertexBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
-                    
-                   
-                    for (index, element) in sphereMesh.vertexDescriptor.layouts.enumerated() {
-                        guard let layout = element as? MDLVertexBufferLayout else {
-                            return
-                        }
-                        
-                        if layout.stride != 0 {
-                            let buffer = sphereMesh.vertexBuffers[index]
-                            renderEncoder.setVertexBuffer(buffer.buffer, offset:buffer.offset, index: index)
-                        }
-                    }
-                    
-                    renderEncoder.setFragmentTexture(colorMap, index: TextureIndex.color.rawValue)
-                    
-                    for submesh in sphereMesh.submeshes {
-                        renderEncoder.drawIndexedPrimitives(type: submesh.primitiveType,
-                                                            indexCount: submesh.indexCount,
-                                                            indexType: submesh.indexType,
-                                                            indexBuffer: submesh.indexBuffer.buffer,
-                                                            indexBufferOffset: submesh.indexBuffer.offset)
-                    }*/
-                    
-                    
                     // floor
                     renderEncoder.setRenderPipelineState(floorPipelineState)
                     
