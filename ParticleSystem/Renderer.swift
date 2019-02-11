@@ -421,7 +421,8 @@ class Renderer: NSObject, MTKViewDelegate {
         fountainBottomModelMatrix[1][1] = fountainScale
         fountainBottomModelMatrix[2][2] = fountainScale
         
-        
+        fountainTopModelMatrix *= matrix4x4_translation(0, -2, 0)
+        fountainBottomModelMatrix *= matrix4x4_translation(0, -4, 0)
         
         // TODO: particle-other object collision code goes here
         
