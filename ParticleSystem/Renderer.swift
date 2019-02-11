@@ -31,6 +31,8 @@ class Renderer: NSObject, MTKViewDelegate {
     let commandQueue: MTLCommandQueue
     
     var dynamicUniformBuffer: MTLBuffer
+    var fountainTopUniformBuffer: MTLBuffer
+    var fountainBottomUniformBuffer: MTLBuffer
     var floorUniformBuffer: MTLBuffer
     var floorBuffer: MTLBuffer?
     
@@ -56,7 +58,9 @@ class Renderer: NSObject, MTKViewDelegate {
     var uniformBufferIndex = 0
 
     // separate values for sphere and float as the model matrices may vary
-    var sphereUniforms: UnsafeMutablePointer<Uniforms>
+    var particleUniforms: UnsafeMutablePointer<Uniforms>
+    var fountainTopUniforms: UnsafeMutablePointer<Uniforms>
+    var fountainBottomUniforms: UnsafeMutablePointer<Uniforms>
     var floorUniforms: UnsafeMutablePointer<Uniforms>
 
     var projectionMatrix = matrix_float4x4()
@@ -102,6 +106,10 @@ class Renderer: NSObject, MTKViewDelegate {
         dynamicUniformBuffer = device.makeBuffer(length:uniformBufferSize,
                                                            options:.storageModeShared)!
         
+        // fountain uniforms buffers
+        fountainTopUniformBuffer = device.makeBuffer(length: uniformBufferSize, options: .storageModeShared)!
+        fountainBottomUniformBuffer = device.makeBuffer(length: uniformBufferSize, options: .storageModeShared)!
+        
         // floor uniforms buffer
         floorUniformBuffer = device.makeBuffer(length: uniformBufferSize, options: .storageModeShared)!
         
@@ -119,7 +127,9 @@ class Renderer: NSObject, MTKViewDelegate {
         floorBuffer = device.makeBuffer(bytes: &floorVertices, length: MemoryLayout<float3>.stride * floorVertices.count, options: .storageModeShared)
         
         
-        sphereUniforms = UnsafeMutableRawPointer(dynamicUniformBuffer.contents()).bindMemory(to:Uniforms.self, capacity:1)
+        particleUniforms = UnsafeMutableRawPointer(dynamicUniformBuffer.contents()).bindMemory(to:Uniforms.self, capacity:1)
+        fountainTopUniforms = UnsafeMutableRawPointer(fountainTopUniformBuffer.contents()).bindMemory(to: Uniforms.self, capacity: 1)
+        fountainBottomUniforms = UnsafeMutableRawPointer(fountainBottomUniformBuffer.contents()).bindMemory(to: Uniforms.self, capacity: 1)
         floorUniforms = UnsafeMutableRawPointer(floorUniformBuffer.contents()).bindMemory(to: Uniforms.self, capacity: 1)
 
         metalKitView.depthStencilPixelFormat = MTLPixelFormat.depth32Float_stencil8
@@ -367,14 +377,14 @@ class Renderer: NSObject, MTKViewDelegate {
 
         uniformBufferOffset = alignedUniformsSize * uniformBufferIndex
 
-        sphereUniforms = UnsafeMutableRawPointer(dynamicUniformBuffer.contents() + uniformBufferOffset).bindMemory(to: Uniforms.self, capacity: 1)
+        particleUniforms = UnsafeMutableRawPointer(dynamicUniformBuffer.contents() + uniformBufferOffset).bindMemory(to: Uniforms.self, capacity: 1)
         floorUniforms = UnsafeMutableRawPointer(floorUniformBuffer.contents() + uniformBufferOffset).bindMemory(to: Uniforms.self, capacity: 1)
     }
 
     
     /// Update any movement of objects
     private func updateMatrices() {
-        sphereUniforms[0].projectionMatrix = projectionMatrix
+        particleUniforms[0].projectionMatrix = projectionMatrix
         floorUniforms[0].projectionMatrix = projectionMatrix
         
         var sphereModelMatrix = matrix_identity_float4x4
@@ -408,7 +418,7 @@ class Renderer: NSObject, MTKViewDelegate {
         viewMatrix *= rotationMatrix
         viewMatrix *= translationMatrix
         
-        sphereUniforms[0].modelViewMatrix = simd_mul(viewMatrix, sphereModelMatrix)
+        particleUniforms[0].modelViewMatrix = simd_mul(viewMatrix, sphereModelMatrix)
         floorUniforms[0].modelViewMatrix = simd_mul(viewMatrix, floorModelMatrix)
         
         particleSystem.updateParticles(for: Float(dt))
@@ -539,6 +549,7 @@ class Renderer: NSObject, MTKViewDelegate {
                                                                 indexBuffer: submesh.indexBuffer.buffer,
                                                                 indexBufferOffset: submesh.indexBuffer.offset)
                         }
+                        
                         
                         // top of fountain
                         for (index, element) in fountainMeshTop.vertexDescriptor.layouts.enumerated() {
