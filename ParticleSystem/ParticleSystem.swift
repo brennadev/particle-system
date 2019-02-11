@@ -149,21 +149,68 @@ struct ParticleSystem {
         for (index, particle) in allParticles.enumerated() where index <= lastValidIndex {
             
             
-            let particleFloorAdjustmentAmount: Float = 50
+            // figure out which circular part (of the fountain) the particle is over
+            let particleRadius = Float.maximum(abs(allParticles[index].position.x),
+                                               abs(allParticles[index].position.z))
             
-            // when a particle hits the ground
-            if allParticles[index].position.y > ParticleSystem.floorY - particleFloorAdjustmentAmount {
-                allParticles[index].updatePosition(for: dt)
+            
+            
+            switch particleRadius {
+            // over inner (top) part of fountain
+            case 0..<10:
+                let particleFountainTopAdjustmentAmount: Float = 5
                 
-
-            } else {
-                allParticles[index].velocity *= -0.9
-                allParticles[index].updatePosition(for: dt)
+                if allParticles[index].position.y > ParticleSystem.floorY - particleFountainTopAdjustmentAmount {
+                    allParticles[index].updatePosition(for: dt)
+                } else {
+                    allParticles[index].velocity *= -0.9
+                    allParticles[index].updatePosition(for: dt)
+                }
+                
+                // get particle out from below
+                if allParticles[index].position.y < ParticleSystem.floorY - particleFountainTopAdjustmentAmount {
+                    allParticles[index].position.y = ParticleSystem.floorY - particleFountainTopAdjustmentAmount
+                }
+                
+                
+            // over outer (bottom) part of fountain
+            case 10..<20:
+                let particleFountainBottomAdjustmentAmount: Float = 10
+                
+                if allParticles[index].position.y > ParticleSystem.floorY - particleFountainBottomAdjustmentAmount {
+                    allParticles[index].updatePosition(for: dt)
+                } else {
+                    allParticles[index].velocity *= -0.9
+                    allParticles[index].updatePosition(for: dt)
+                }
+                
+                // get particle out from below
+                if allParticles[index].position.y < ParticleSystem.floorY - particleFountainBottomAdjustmentAmount {
+                    allParticles[index].position.y = ParticleSystem.floorY - particleFountainBottomAdjustmentAmount
+                }
+                
+            // over floor
+            default:
+                
+                let particleFloorAdjustmentAmount: Float = 50
+                
+                // when a particle hits the ground
+                if allParticles[index].position.y > ParticleSystem.floorY - particleFloorAdjustmentAmount {
+                    allParticles[index].updatePosition(for: dt)
+                    
+                    
+                } else {
+                    allParticles[index].velocity *= -0.9
+                    allParticles[index].updatePosition(for: dt)
+                }
+                
+                // get particle out from below
+                if allParticles[index].position.y < ParticleSystem.floorY - particleFloorAdjustmentAmount {
+                    allParticles[index].position.y = ParticleSystem.floorY - particleFloorAdjustmentAmount
+                }
             }
             
-            if allParticles[index].position.y < ParticleSystem.floorY - particleFloorAdjustmentAmount {
-                allParticles[index].position.y = ParticleSystem.floorY - particleFloorAdjustmentAmount
-            }
+            
             
             
             allParticles[index].lifespan += dt
