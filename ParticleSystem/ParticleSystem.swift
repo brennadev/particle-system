@@ -77,7 +77,7 @@ struct ParticleSystem {
         let position = float3(Float.random(in: -2...2), 0, Float.random(in: -1...1))
         let velocity = float3(Float.random(in: -6...6), Float.random(in: 0...5), Float.random(in: -0.1...0.1))
         
-        return Particle(position: position, velocity: velocity, acceleration: float3(0, -3, 0), radius: 1)
+        return Particle(position: position, velocity: velocity, acceleration: float3(0, -2, 0), radius: 1)
     }
     
     
