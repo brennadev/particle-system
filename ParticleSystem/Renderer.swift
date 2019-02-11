@@ -395,6 +395,7 @@ class Renderer: NSObject, MTKViewDelegate {
         let dt = secondsElapsedSinceLastDrawCall.timeIntervalSinceNow * -1
 
 
+        // scaling
         let particleScale: Float
         
         // what size is best for each particle type varies
@@ -418,11 +419,15 @@ class Renderer: NSObject, MTKViewDelegate {
         fountainBottomModelMatrix[1][1] = fountainScale
         fountainBottomModelMatrix[2][2] = fountainScale
         
+        
+        // translation
         fountainTopModelMatrix *= matrix4x4_translation(0, -2, 0)
         fountainBottomModelMatrix *= matrix4x4_translation(0, -4, 0)
         
         // TODO: particle-other object collision code goes here
         
+        
+        // view matrix
         let rotationMatrix = matrix4x4_rotation(radians: viewMatrixRotation, axis: float3(0, 1, 0))
         let translationMatrix = matrix4x4_translation(viewMatrixTranslation.x, 0, viewMatrixTranslation.z)
         
@@ -443,6 +448,7 @@ class Renderer: NSObject, MTKViewDelegate {
     }
     
     
+    /// Store per-frame updates to particles
     func updateParticleVerticesBuffer() {
         for (index, particle) in particleSystem.allParticles.enumerated() {
             particleVerticesBuffer?.contents().storeBytes(of: particle.position, toByteOffset: MemoryLayout<float3>.stride * index, as: float3.self)

@@ -38,6 +38,9 @@ struct ParticleSystem {
     /// Lifespan of single particle
     static let particleLifespan = 20
     
+    /// Y location of floor plane - for collision detection
+    static let floorY: Float = -8
+    
     
     mutating func addParticles(for dt: Float) {
         let particleCountToAdd = numberOfParticlesToGenerate(in: dt)
@@ -145,7 +148,24 @@ struct ParticleSystem {
         
         for (index, particle) in allParticles.enumerated() where index <= lastValidIndex {
             
-            allParticles[index].updatePosition(for: dt)
+            
+            let particleFloorAdjustmentAmount: Float = 50
+            
+            // when a particle hits the ground
+            if allParticles[index].position.y > ParticleSystem.floorY - particleFloorAdjustmentAmount {
+                allParticles[index].updatePosition(for: dt)
+                
+
+            } else {
+                allParticles[index].velocity *= -0.9
+                allParticles[index].updatePosition(for: dt)
+            }
+            
+            if allParticles[index].position.y < ParticleSystem.floorY - particleFloorAdjustmentAmount {
+                allParticles[index].position.y = ParticleSystem.floorY - particleFloorAdjustmentAmount
+            }
+            
+            
             allParticles[index].lifespan += dt
             
             if particle.lifespan > Float(ParticleSystem.particleLifespan) {
