@@ -78,7 +78,7 @@ struct ParticleSystem {
         
         // currently set up to pull a random value from a square
         let position = float3(Float.random(in: -2...2), 0, Float.random(in: -1...1))
-        let velocity = float3(Float.random(in: -6...6), Float.random(in: 0...5), Float.random(in: -0.1...0.1))
+        let velocity = float3(Float.random(in: -7...7), Float.random(in: 0...5), Float.random(in: -0.2...0.2))
         
         return Particle(position: position, velocity: velocity, acceleration: float3(0, -2, 0), radius: 1)
     }
@@ -157,8 +157,8 @@ struct ParticleSystem {
             
             switch particleRadius {
             // over inner (top) part of fountain
-            case 0..<10:
-                let particleFountainTopAdjustmentAmount: Float = 5
+            case 0..<25:
+                let particleFountainTopAdjustmentAmount: Float = 2
                 
                 if allParticles[index].position.y > ParticleSystem.floorY - particleFountainTopAdjustmentAmount {
                     allParticles[index].updatePosition(for: dt)
@@ -174,8 +174,8 @@ struct ParticleSystem {
                 
                 
             // over outer (bottom) part of fountain
-            case 10..<20:
-                let particleFountainBottomAdjustmentAmount: Float = 10
+            case 25..<40:
+                let particleFountainBottomAdjustmentAmount: Float = 8
                 
                 if allParticles[index].position.y > ParticleSystem.floorY - particleFountainBottomAdjustmentAmount {
                     allParticles[index].updatePosition(for: dt)
