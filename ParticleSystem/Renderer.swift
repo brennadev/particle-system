@@ -511,6 +511,58 @@ class Renderer: NSObject, MTKViewDelegate {
                     renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: floorVertexCount)
 
                     
+                    
+                    if particleSystem.mode == .water {
+                        renderEncoder.setRenderPipelineState(spherePipelineState)
+                        
+                        renderEncoder.setVertexBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
+                        renderEncoder.setFragmentTexture(fountainTexture, index: TextureIndex.color.rawValue)
+                        
+                        
+                        // bottom of fountain
+                        for (index, element) in fountainMeshBottom.vertexDescriptor.layouts.enumerated() {
+                            guard let layout = element as? MDLVertexBufferLayout else {
+                                return
+                            }
+                            
+                            if layout.stride != 0 {
+                                let buffer = fountainMeshBottom.vertexBuffers[index]
+                                renderEncoder.setVertexBuffer(buffer.buffer, offset:buffer.offset, index: index)
+                            }
+                        }
+                    
+                        
+                        for submesh in fountainMeshBottom.submeshes {
+                            renderEncoder.drawIndexedPrimitives(type: submesh.primitiveType,
+                                                                indexCount: submesh.indexCount,
+                                                                indexType: submesh.indexType,
+                                                                indexBuffer: submesh.indexBuffer.buffer,
+                                                                indexBufferOffset: submesh.indexBuffer.offset)
+                        }
+                        
+                        // top of fountain
+                        for (index, element) in fountainMeshTop.vertexDescriptor.layouts.enumerated() {
+                            guard let layout = element as? MDLVertexBufferLayout else {
+                                return
+                            }
+                            
+                            if layout.stride != 0 {
+                                let buffer = fountainMeshTop.vertexBuffers[index]
+                                renderEncoder.setVertexBuffer(buffer.buffer, offset:buffer.offset, index: index)
+                            }
+                        }
+                        
+                        
+                        
+                        for submesh in fountainMeshTop.submeshes {
+                            renderEncoder.drawIndexedPrimitives(type: submesh.primitiveType,
+                                                                indexCount: submesh.indexCount,
+                                                                indexType: submesh.indexType,
+                                                                indexBuffer: submesh.indexBuffer.buffer,
+                                                                indexBufferOffset: submesh.indexBuffer.offset)
+                        }
+                    }
+                    
                     // fountain - only want if simulating water
                     /*if particleSystem.mode == .water {
                         renderEncoder.setRenderPipelineState(spherePipelineState)
