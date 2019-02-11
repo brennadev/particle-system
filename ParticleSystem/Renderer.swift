@@ -68,6 +68,8 @@ class Renderer: NSObject, MTKViewDelegate {
 
     
     var fountainMesh: MTKMesh
+    var fountainMeshTop: MTKMesh
+    var fountainMeshBottom: MTKMesh
 
     // can use for the texture coords - will be the same for all particles
     let unitSquareVertices = [float2(0, 0),
@@ -221,6 +223,16 @@ class Renderer: NSObject, MTKViewDelegate {
             fountainMesh = meshes.metalKitMeshes[0]
         } catch {
             print("Unable to set up fountain mesh")
+            return nil
+        }
+        
+        let vertexDescriptor = Renderer.buildMetalVertexDescriptor()
+        
+        do {
+            fountainMeshTop = try Renderer.buildCylinderMesh(device: device, mtlVertexDescriptor: vertexDescriptor, radius: 3, height: 2)
+            fountainMeshBottom = try Renderer.buildCylinderMesh(device: device, mtlVertexDescriptor: vertexDescriptor, radius: 5, height: 2)
+        } catch {
+            print("Unable to set up fountain mesh pieces")
             return nil
         }
         
