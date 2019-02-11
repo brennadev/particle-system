@@ -36,7 +36,7 @@ struct ParticleSystem {
     /// Particles per second to generate
     static var particleGenerationRate = 1000
     /// Lifespan of single particle
-    static let particleLifespan = 20
+    static let particleLifespan = 15
     
     /// Y location of floor plane - for collision detection
     static let floorY: Float = -8

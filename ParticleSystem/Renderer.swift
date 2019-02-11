@@ -396,6 +396,8 @@ class Renderer: NSObject, MTKViewDelegate {
         var fountainBottomModelMatrix = matrix_identity_float4x4
         let floorModelMatrix = matrix_identity_float4x4
         
+        let mainTranslationMatrix = matrix4x4_translation(0.0, 0.0, -8.0)
+        var particleViewMatrix = matrix_identity_float4x4
         
         let dt = secondsElapsedSinceLastDrawCall.timeIntervalSinceNow * -1
 
@@ -434,13 +436,20 @@ class Renderer: NSObject, MTKViewDelegate {
         
         // view matrix
         let rotationMatrix = matrix4x4_rotation(radians: viewMatrixRotation, axis: float3(0, 1, 0))
+        let rotationMatrixParticleSelf = matrix4x4_rotation(radians: viewMatrixRotation * -1, axis: float3(0, 1, 0))
         let translationMatrix = matrix4x4_translation(viewMatrixTranslation.x, 0, viewMatrixTranslation.z)
         
-        viewMatrix = matrix4x4_translation(0.0, 0.0, -8.0)
+        viewMatrix = matrix_identity_float4x4
         viewMatrix *= rotationMatrix
         viewMatrix *= translationMatrix
+        viewMatrix *= mainTranslationMatrix
         
-        particleUniforms[0].modelViewMatrix = simd_mul(viewMatrix, particleModelMatrix)
+        particleViewMatrix *= rotationMatrixParticleSelf
+        particleViewMatrix *= rotationMatrix
+        particleViewMatrix *= translationMatrix
+        particleViewMatrix *= mainTranslationMatrix
+        
+        particleUniforms[0].modelViewMatrix = simd_mul(particleViewMatrix, particleModelMatrix)
         fountainTopUniforms[0].modelViewMatrix = simd_mul(viewMatrix, fountainTopModelMatrix)
         fountainBottomUniforms[0].modelViewMatrix = simd_mul(viewMatrix, fountainBottomModelMatrix)
         floorUniforms[0].modelViewMatrix = simd_mul(viewMatrix, floorModelMatrix)
