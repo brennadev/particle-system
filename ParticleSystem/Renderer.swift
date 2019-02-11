@@ -180,6 +180,11 @@ class Renderer: NSObject, MTKViewDelegate {
         particlesRenderPipelineDescriptor.vertexFunction = vertexParticlesFunction
         particlesRenderPipelineDescriptor.fragmentFunction = fragmentParticlesFunction
         particlesRenderPipelineDescriptor.colorAttachments[0].pixelFormat = metalKitView.colorPixelFormat
+        particlesRenderPipelineDescriptor.colorAttachments[0].isBlendingEnabled = true
+        /*particlesRenderPipelineDescriptor.colorAttachments[0].sourceRGBBlendFactor = .blendColor
+        particlesRenderPipelineDescriptor.colorAttachments[0].sourceAlphaBlendFactor = .blendAlpha
+        particlesRenderPipelineDescriptor.colorAttachments[0].destinationRGBBlendFactor = .blendColor
+        particlesRenderPipelineDescriptor.colorAttachments[0].destinationAlphaBlendFactor = .blendAlpha*/
         particlesRenderPipelineDescriptor.depthAttachmentPixelFormat = metalKitView.depthStencilPixelFormat
         particlesRenderPipelineDescriptor.stencilAttachmentPixelFormat = metalKitView.depthStencilPixelFormat
         
