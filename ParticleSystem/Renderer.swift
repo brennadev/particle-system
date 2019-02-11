@@ -299,8 +299,8 @@ class Renderer: NSObject, MTKViewDelegate {
 
     
     /// Set up the vertices for a sphere
-    class func buildSphereMesh(device: MTLDevice,
-                         mtlVertexDescriptor: MTLVertexDescriptor) throws -> MTKMesh {
+    class func buildCylinderMesh(device: MTLDevice,
+                                 mtlVertexDescriptor: MTLVertexDescriptor, radius: Float, height: Float) throws -> MTKMesh {
         /// Create and condition mesh data to feed into a pipeline using the given vertex descriptor
 
         let metalAllocator = MTKMeshBufferAllocator(device: device)
@@ -308,7 +308,8 @@ class Renderer: NSObject, MTKViewDelegate {
         
         let segmentCount = 30
         
-        let sphereMesh = MDLMesh.newEllipsoid(withRadii: float3(Particle.radius, Particle.radius, Particle.radius), radialSegments: segmentCount, verticalSegments: segmentCount, geometryType: .triangles, inwardNormals: false, hemisphere: false, allocator: metalAllocator)
+        //let cylinderMesh = MDLMesh.newEllipsoid(withRadii: float3(Particle.radius, Particle.radius, Particle.radius), radialSegments: segmentCount, verticalSegments: segmentCount, geometryType: .triangles, inwardNormals: false, hemisphere: false, allocator: metalAllocator)
+        let cylinderMesh = MDLMesh.newCylinder(withHeight: height, radii: float2(radius, radius), radialSegments: segmentCount, verticalSegments: segmentCount, geometryType: .triangles, inwardNormals: false, allocator: metalAllocator)
         
 
         let mdlVertexDescriptor = MTKModelIOVertexDescriptorFromMetal(mtlVertexDescriptor)
@@ -319,9 +320,9 @@ class Renderer: NSObject, MTKViewDelegate {
         attributes[VertexAttribute.position.rawValue].name = MDLVertexAttributePosition
         attributes[VertexAttribute.texcoord.rawValue].name = MDLVertexAttributeTextureCoordinate
 
-        sphereMesh.vertexDescriptor = mdlVertexDescriptor
+        cylinderMesh.vertexDescriptor = mdlVertexDescriptor
 
-        return try MTKMesh(mesh:sphereMesh, device:device)
+        return try MTKMesh(mesh:cylinderMesh, device:device)
     }
 
     
