@@ -39,7 +39,7 @@ class Renderer: NSObject, MTKViewDelegate {
     /// Locations of all particles
     var particleVerticesBuffer: MTLBuffer?
     
-    var spherePipelineState: MTLRenderPipelineState
+    var fountainPipelineState: MTLRenderPipelineState
     var floorPipelineState: MTLRenderPipelineState
     var waterParticlesPipelineState: MTLRenderPipelineState
     var fireworkParticlesPipelineState: MTLRenderPipelineState
@@ -147,7 +147,7 @@ class Renderer: NSObject, MTKViewDelegate {
         // pipeline states
         // sphere
         do {
-            spherePipelineState = try Renderer.buildRenderPipelineWithDevice(device: device,
+            fountainPipelineState = try Renderer.buildRenderPipelineWithDevice(device: device,
                                                                        metalKitView: metalKitView,
                                                                        mtlVertexDescriptor: mtlVertexDescriptor)
         } catch {
@@ -289,8 +289,6 @@ class Renderer: NSObject, MTKViewDelegate {
         mtlVertexDescriptor.layouts[BufferIndex.meshGenerics.rawValue].stepRate = 1
         mtlVertexDescriptor.layouts[BufferIndex.meshGenerics.rawValue].stepFunction = MTLVertexStepFunction.perVertex
         
-        //print("vertex descriptor layouts: \(mtlVertexDescriptor.layouts)")
-
         return mtlVertexDescriptor
     }
 
@@ -330,7 +328,6 @@ class Renderer: NSObject, MTKViewDelegate {
         
         let segmentCount = 30
         
-        //let cylinderMesh = MDLMesh.newEllipsoid(withRadii: float3(Particle.radius, Particle.radius, Particle.radius), radialSegments: segmentCount, verticalSegments: segmentCount, geometryType: .triangles, inwardNormals: false, hemisphere: false, allocator: metalAllocator)
         let cylinderMesh = MDLMesh.newCylinder(withHeight: height, radii: float2(radius, radius), radialSegments: segmentCount, verticalSegments: segmentCount, geometryType: .triangles, inwardNormals: false, allocator: metalAllocator)
         
 
@@ -538,9 +535,9 @@ class Renderer: NSObject, MTKViewDelegate {
                     renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: floorVertexCount)
 
                     
-                    
+                    // fountain - only want if simulating water
                     if particleSystem.mode == .water {
-                        renderEncoder.setRenderPipelineState(spherePipelineState)
+                        renderEncoder.setRenderPipelineState(fountainPipelineState)
                         
                         renderEncoder.setFragmentTexture(fountainTexture, index: TextureIndex.color.rawValue)
                         
@@ -593,35 +590,6 @@ class Renderer: NSObject, MTKViewDelegate {
                                                                 indexBufferOffset: submesh.indexBuffer.offset)
                         }
                     }
-                    
-                    // fountain - only want if simulating water
-                    /*if particleSystem.mode == .water {
-                        renderEncoder.setRenderPipelineState(spherePipelineState)
-                        
-                        renderEncoder.setVertexBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
-                        
-                        for (index, element) in fountainMesh.vertexDescriptor.layouts.enumerated() {
-                            guard let layout = element as? MDLVertexBufferLayout else {
-                                return
-                            }
-                            
-                            if layout.stride != 0 {
-                                let buffer = fountainMesh.vertexBuffers[index]
-                                renderEncoder.setVertexBuffer(buffer.buffer, offset:buffer.offset, index: index)
-                            }
-                        }
-                        
-                        
-                        renderEncoder.setFragmentTexture(fountainTexture, index: TextureIndex.color.rawValue)
-                        
-                        for submesh in fountainMesh.submeshes {
-                            renderEncoder.drawIndexedPrimitives(type: submesh.primitiveType,
-                                                                indexCount: submesh.indexCount,
-                                                                indexType: submesh.indexType,
-                                                                indexBuffer: submesh.indexBuffer.buffer,
-                                                                indexBufferOffset: submesh.indexBuffer.offset)
-                        }
-                    }*/
                     
                     
                     // particles
