@@ -385,28 +385,32 @@ class Renderer: NSObject, MTKViewDelegate {
     /// Update any movement of objects
     private func updateMatrices() {
         particleUniforms[0].projectionMatrix = projectionMatrix
+        fountainTopUniforms[0].projectionMatrix = projectionMatrix
+        fountainBottomUniforms[0].projectionMatrix = projectionMatrix
         floorUniforms[0].projectionMatrix = projectionMatrix
         
         var sphereModelMatrix = matrix_identity_float4x4
+        var fountainTopModelMatrix = matrix_identity_float4x4
+        var fountainBottomModelMatrix = matrix_identity_float4x4
         let floorModelMatrix = matrix_identity_float4x4
         
         
         let dt = secondsElapsedSinceLastDrawCall.timeIntervalSinceNow * -1
 
 
-        let scale: Float
+        let particleScale: Float
         
         // what size is best for each particle type varies
         switch particleSystem.mode {
         case .firework:
-            scale = 0.04
+            particleScale = 0.04
         case .water:
-            scale = 0.02
+            particleScale = 0.02
         }
         
         
-        sphereModelMatrix[0][0] = scale
-        sphereModelMatrix[1][1] = scale
+        sphereModelMatrix[0][0] = particleScale
+        sphereModelMatrix[1][1] = particleScale
         
         
         // TODO: particle-other object collision code goes here
