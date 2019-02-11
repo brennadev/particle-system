@@ -389,7 +389,7 @@ class Renderer: NSObject, MTKViewDelegate {
         fountainBottomUniforms[0].projectionMatrix = projectionMatrix
         floorUniforms[0].projectionMatrix = projectionMatrix
         
-        var sphereModelMatrix = matrix_identity_float4x4
+        var particleModelMatrix = matrix_identity_float4x4
         var fountainTopModelMatrix = matrix_identity_float4x4
         var fountainBottomModelMatrix = matrix_identity_float4x4
         let floorModelMatrix = matrix_identity_float4x4
@@ -409,8 +409,18 @@ class Renderer: NSObject, MTKViewDelegate {
         }
         
         
-        sphereModelMatrix[0][0] = particleScale
-        sphereModelMatrix[1][1] = particleScale
+        particleModelMatrix[0][0] = particleScale
+        particleModelMatrix[1][1] = particleScale
+        
+        let fountainScale: Float = 0.25
+        
+        fountainTopModelMatrix[0][0] = fountainScale
+        fountainTopModelMatrix[1][1] = fountainScale
+        fountainTopModelMatrix[2][2] = fountainScale
+        fountainBottomModelMatrix[0][0] = fountainScale
+        fountainBottomModelMatrix[1][1] = fountainScale
+        fountainBottomModelMatrix[2][2] = fountainScale
+        
         
         
         // TODO: particle-other object collision code goes here
@@ -422,7 +432,9 @@ class Renderer: NSObject, MTKViewDelegate {
         viewMatrix *= rotationMatrix
         viewMatrix *= translationMatrix
         
-        particleUniforms[0].modelViewMatrix = simd_mul(viewMatrix, sphereModelMatrix)
+        particleUniforms[0].modelViewMatrix = simd_mul(viewMatrix, particleModelMatrix)
+        fountainTopUniforms[0].modelViewMatrix = simd_mul(viewMatrix, fountainTopModelMatrix)
+        fountainBottomUniforms[0].modelViewMatrix = simd_mul(viewMatrix, fountainBottomModelMatrix)
         floorUniforms[0].modelViewMatrix = simd_mul(viewMatrix, floorModelMatrix)
         
         particleSystem.updateParticles(for: Float(dt))
@@ -529,11 +541,12 @@ class Renderer: NSObject, MTKViewDelegate {
                     if particleSystem.mode == .water {
                         renderEncoder.setRenderPipelineState(spherePipelineState)
                         
-                        renderEncoder.setVertexBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
                         renderEncoder.setFragmentTexture(fountainTexture, index: TextureIndex.color.rawValue)
                         
                         
                         // bottom of fountain
+                        renderEncoder.setVertexBuffer(fountainBottomUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
+                        
                         for (index, element) in fountainMeshBottom.vertexDescriptor.layouts.enumerated() {
                             guard let layout = element as? MDLVertexBufferLayout else {
                                 return
@@ -556,6 +569,8 @@ class Renderer: NSObject, MTKViewDelegate {
                         
                         
                         // top of fountain
+                        renderEncoder.setVertexBuffer(fountainTopUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
+                        
                         for (index, element) in fountainMeshTop.vertexDescriptor.layouts.enumerated() {
                             guard let layout = element as? MDLVertexBufferLayout else {
                                 return
