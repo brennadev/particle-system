@@ -163,7 +163,7 @@ struct ParticleSystem {
                 if allParticles[index].position.y > ParticleSystem.floorY - particleFountainTopAdjustmentAmount {
                     allParticles[index].updatePosition(for: dt)
                 } else {
-                    allParticles[index].velocity *= -0.9
+                    allParticles[index].velocity *= -0.7
                     allParticles[index].updatePosition(for: dt)
                 }
                 
@@ -180,7 +180,7 @@ struct ParticleSystem {
                 if allParticles[index].position.y > ParticleSystem.floorY - particleFountainBottomAdjustmentAmount {
                     allParticles[index].updatePosition(for: dt)
                 } else {
-                    allParticles[index].velocity *= -0.9
+                    allParticles[index].velocity *= -0.7
                     allParticles[index].updatePosition(for: dt)
                 }
                 
@@ -200,7 +200,7 @@ struct ParticleSystem {
                     
                     
                 } else {
-                    allParticles[index].velocity *= -0.9
+                    allParticles[index].velocity *= -0.7
                     allParticles[index].updatePosition(for: dt)
                 }
                 
