@@ -88,26 +88,11 @@ class GameViewController: NSViewController {
         }
         
         let translation = sender.translation(in: mtkView)
-        
-        if translation.x >= 0 {
-            renderer.viewMatrixTranslation.x += (Float(translation.x) - previousPanLocation.x) * 0.01
-        } else {
-            renderer.viewMatrixTranslation.x += (Float(translation.x) - previousPanLocation.x) * 0.01
-        }
-        
-        if translation.y >= 0 {
-            renderer.viewMatrixTranslation.z += (Float(translation.y) - previousPanLocation.y) * -0.01
-        } else {
-            renderer.viewMatrixTranslation.z += (Float(translation.y) - previousPanLocation.y) * -0.01
-        }
-        
-        //renderer.viewMatrixTranslation += float2(Float(translation.x) - previousPanLocation.x, (Float(translation.y) - previousPanLocation.y) * -1) * 0.001
+
+        renderer.viewMatrixTranslation.x += (Float(translation.x) - previousPanLocation.x) * 0.01
+        renderer.viewMatrixTranslation.z += (Float(translation.y) - previousPanLocation.y) * -0.01
+
         print("translation: \(renderer.viewMatrixTranslation)")
-        
-        //print("translation: \(sender.translation(in: mtkView))")
-        /*renderer.viewMatrix *= matrix4x4_translation((Float(sender.translation(in: mtkView).x) * 0.9 - previousPanLocation.x),
-                                                     0,
-                                                     (Float(sender.translation(in: mtkView).y) * 0.9 - previousPanLocation.y) )*/
         
         previousPanLocation = float2(Float(translation.x), Float(translation.y))
     }   
