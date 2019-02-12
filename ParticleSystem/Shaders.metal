@@ -26,6 +26,11 @@ typedef struct {
 } ColorInOut;
 
 
+typedef struct {
+    float4 position [[ position ]];
+    float pointSize [[ point_size ]];
+} VertexPoint;
+
 # pragma mark - Textured Shading
 vertex ColorInOut vertexShader(Vertex in [[stage_in]],
                                constant Uniforms & uniforms [[ buffer(BufferIndexUniforms) ]])
@@ -78,16 +83,16 @@ fragment float4 fragmentShader(ColorInOut in [[stage_in]],
     constexpr sampler colorSampler(mip_filter::linear,
                                    mag_filter::linear,
                                    min_filter::linear);
-
+    
     half4 colorSample   = colorMap.sample(colorSampler, in.texCoord.xy);
-
+    
     return float4(colorSample);
 }
 
 
 fragment float4 fragmentFirework(ColorInOut in [[stage_in]],
                                  constant float4 *color [[ buffer(BufferIndexFireworkColor) ]],
-                               texture2d<half> colorMap     [[ texture(TextureIndexColor) ]])
+                                 texture2d<half> colorMap     [[ texture(TextureIndexColor) ]])
 {
     constexpr sampler colorSampler(mip_filter::linear,
                                    mag_filter::linear,
@@ -98,6 +103,27 @@ fragment float4 fragmentFirework(ColorInOut in [[stage_in]],
     // want to adjust the color of the texture to the desired firework color
     return float4(colorSample) * *color;
 }
+
+
+vertex VertexPoint vertexParticlesPoints(uint vertexID [[ vertex_id ]],
+                                         constant Uniforms &uniforms [[ buffer(BufferIndexUniforms) ]],
+                                         constant float3 *particleVertices [[ buffer(BufferIndexParticlePositions) ]]
+                                         ) {
+    VertexPoint returnValue;
+    float4 position = float4(particleVertices[vertexID], 1);
+    returnValue.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
+    returnValue.pointSize = 5;
+    
+    return returnValue;
+}
+
+fragment float4 fragmentParticlesPoints(VertexPoint in [[ stage_in ]],
+                                        constant float4 *color [[ buffer(BufferIndexFireworkColor) ]]) {
+    return *color;
+}
+
+
+
 
 
 # pragma mark - Non-textured Shading
