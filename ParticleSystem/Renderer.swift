@@ -640,29 +640,39 @@ class Renderer: NSObject, MTKViewDelegate {
                     
                     // particles
                     // different between particle types
-                    switch particleSystem.mode {
-                    case .firework:
-                        if fireworkAsPoints == false {
-                            renderEncoder.setRenderPipelineState(fireworkParticlesPipelineState)
-                            
-                            renderEncoder.setFragmentTexture(fireworkTexture, index: TextureIndex.color.rawValue)
-                        } else {
-                            renderEncoder.setRenderPipelineState(fireworkParticlesPointsPipelineState)
-                        }
-                        
-                        renderEncoder.setFragmentBytes(&fireworkColor, length: MemoryLayout<float4>.stride, index: BufferIndex.fireworkColor.rawValue)
-                    case .water:
-                        renderEncoder.setRenderPipelineState(waterParticlesPipelineState)
-                        renderEncoder.setFragmentTexture(waterTexture, index: TextureIndex.color.rawValue)
-                    }
-                    
                     
                     // common between both particle types
                     renderEncoder.setVertexBytes(unitSquareVertices, length: MemoryLayout<float2>.stride * 6, index: BufferIndex.particleTexCoords.rawValue)
                     renderEncoder.setVertexBuffer(particleVerticesBuffer, offset: 0, index: BufferIndex.particlePositions.rawValue)
                     renderEncoder.setVertexBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
                     
-                    renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: particleSystem.allParticles.count * 6)
+                    switch particleSystem.mode {
+                    case .firework:
+                        renderEncoder.setFragmentBytes(&fireworkColor, length: MemoryLayout<float4>.stride, index: BufferIndex.fireworkColor.rawValue)
+                        
+                        if fireworkAsPoints == false {
+                            renderEncoder.setRenderPipelineState(fireworkParticlesPipelineState)
+                            
+                            renderEncoder.setFragmentTexture(fireworkTexture, index: TextureIndex.color.rawValue)
+                            
+                            renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: particleSystem.allParticles.count * 6)
+                        } else {
+                            renderEncoder.setRenderPipelineState(fireworkParticlesPointsPipelineState)
+                            renderEncoder.drawPrimitives(type: .point, vertexStart: 0, vertexCount: particleSystem.allParticles.count)
+                        }
+                        
+                        
+                    case .water:
+                        renderEncoder.setRenderPipelineState(waterParticlesPipelineState)
+                        renderEncoder.setFragmentTexture(waterTexture, index: TextureIndex.color.rawValue)
+                        
+                        renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: particleSystem.allParticles.count * 6)
+                    }
+                    
+                    
+                    
+                    
+                    
                     
                     
                     

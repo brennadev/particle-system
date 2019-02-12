@@ -112,7 +112,7 @@ vertex VertexPoint vertexParticlesPoints(uint vertexID [[ vertex_id ]],
     VertexPoint returnValue;
     float4 position = float4(particleVertices[vertexID], 1);
     returnValue.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
-    returnValue.pointSize = 5;
+    returnValue.pointSize = 0.75;
     
     return returnValue;
 }
