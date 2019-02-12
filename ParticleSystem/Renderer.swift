@@ -94,6 +94,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var fireworkColor = float4(1, 0, 0, 1)
     var fireworkColorChangeState = ColorChangeState.RedConstantGreenUp
     let colorChangeAmountPerFrame: Float = 0.01
+    var fireworkAsPoints = false
     
     
     // MARK: - Setup
@@ -641,9 +642,15 @@ class Renderer: NSObject, MTKViewDelegate {
                     // different between particle types
                     switch particleSystem.mode {
                     case .firework:
-                        renderEncoder.setRenderPipelineState(fireworkParticlesPipelineState)
+                        if fireworkAsPoints == false {
+                            renderEncoder.setRenderPipelineState(fireworkParticlesPipelineState)
+                            
+                            renderEncoder.setFragmentTexture(fireworkTexture, index: TextureIndex.color.rawValue)
+                        } else {
+                            renderEncoder.setRenderPipelineState(fireworkParticlesPointsPipelineState)
+                        }
+                        
                         renderEncoder.setFragmentBytes(&fireworkColor, length: MemoryLayout<float4>.stride, index: BufferIndex.fireworkColor.rawValue)
-                        renderEncoder.setFragmentTexture(fireworkTexture, index: TextureIndex.color.rawValue)
                     case .water:
                         renderEncoder.setRenderPipelineState(waterParticlesPipelineState)
                         renderEncoder.setFragmentTexture(waterTexture, index: TextureIndex.color.rawValue)

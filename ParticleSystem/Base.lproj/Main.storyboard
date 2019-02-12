@@ -755,19 +755,32 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="j5i-Lm-EMx">
+                                <rect key="frame" x="112" y="573" width="124" height="18"/>
+                                <buttonCell key="cell" type="check" title="Render as Points" bezelStyle="regularSquare" imagePosition="left" inset="2" id="Pj0-OK-kYQ">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <connections>
+                                        <action selector="renderAsPointsCheckboxToggled:" target="XfG-lQ-9wD" id="PMm-rf-uVg"/>
+                                    </connections>
+                                </buttonCell>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="4BC-jc-zrj" firstAttribute="leading" secondItem="8Vw-E0-NSK" secondAttribute="trailing" constant="17" id="09K-gh-bOp"/>
                             <constraint firstItem="8Vw-E0-NSK" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="4Gp-tE-RQ4"/>
                             <constraint firstAttribute="trailing" secondItem="9uB-ZC-Zxh" secondAttribute="trailing" id="7Dp-bM-4GW"/>
                             <constraint firstItem="2vg-EN-XjR" firstAttribute="leading" secondItem="4BC-jc-zrj" secondAttribute="trailing" constant="19" id="9tY-gs-US7"/>
+                            <constraint firstItem="8Vw-E0-NSK" firstAttribute="leading" secondItem="j5i-Lm-EMx" secondAttribute="trailing" constant="98" id="G7d-g5-Qt2"/>
                             <constraint firstItem="8Vw-E0-NSK" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="8" id="Hm5-Ox-bVy"/>
                             <constraint firstItem="9uB-ZC-Zxh" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="O3r-Eo-ndA"/>
                             <constraint firstItem="9uB-ZC-Zxh" firstAttribute="top" secondItem="8Vw-E0-NSK" secondAttribute="bottom" constant="8" id="QcS-2k-dR1"/>
                             <constraint firstAttribute="bottom" secondItem="9uB-ZC-Zxh" secondAttribute="bottom" id="R3U-pk-S7o"/>
                             <constraint firstItem="4BC-jc-zrj" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="11" id="S1S-uB-ut6"/>
+                            <constraint firstItem="j5i-Lm-EMx" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="114" id="SNh-JE-eDR"/>
                             <constraint firstItem="2vg-EN-XjR" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="10" id="atv-Vc-kfi"/>
                             <constraint firstAttribute="trailing" secondItem="2vg-EN-XjR" secondAttribute="trailing" constant="66" id="blu-Zy-Xhi"/>
+                            <constraint firstItem="j5i-Lm-EMx" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="11" id="rQO-gh-jz9"/>
                         </constraints>
                     </view>
                     <connections>

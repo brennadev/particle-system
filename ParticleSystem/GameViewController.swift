@@ -95,5 +95,14 @@ class GameViewController: NSViewController {
         print("translation: \(renderer.viewMatrixTranslation)")
         
         previousPanLocation = float2(Float(translation.x), Float(translation.y))
-    }   
+    }
+    
+    
+    @IBAction func renderAsPointsCheckboxToggled(_ sender: NSButtonCell) {
+        if sender.intValue == 1 {
+            renderer.fireworkAsPoints = true
+        } else {
+            renderer.fireworkAsPoints = false
+        }
+    }
 }
