@@ -78,8 +78,8 @@ struct ParticleSystem {
     private func generateWaterParticle() -> Particle {
         
         // currently set up to pull a random value from a square
-        let position = float3(Float.random(in: -40...40), ParticleSystem.waterParticleStartY, Float.random(in: -1...1))
-        let velocity = float3(Float.random(in: -40...40), Float.random(in: 0...5), Float.random(in: -10...10))
+        let position = float3(Float.random(in: -90...90), ParticleSystem.waterParticleStartY, Float.random(in: -1...1))
+        let velocity = float3(Float.random(in: -10...10), Float.random(in: 0...5), Float.random(in: -10...10))
         
         return Particle(position: position, velocity: velocity, acceleration: float3(0, -2, 0), radius: 1)
     }
@@ -158,7 +158,7 @@ struct ParticleSystem {
             
             switch particleRadius {
             // over inner (top) part of fountain
-            case 0..<50:
+            case 0..<170:
                 let particleFountainTopAdjustmentAmount: Float = 40
                 
                 if allParticles[index].position.y > ParticleSystem.floorY - particleFountainTopAdjustmentAmount {
@@ -175,7 +175,7 @@ struct ParticleSystem {
                 
                 
             // over outer (bottom) part of fountain
-            case 50..<70:
+            case 170..<300:
                 let particleFountainBottomAdjustmentAmount: Float = 60
                 
                 if allParticles[index].position.y > ParticleSystem.floorY - particleFountainBottomAdjustmentAmount {
