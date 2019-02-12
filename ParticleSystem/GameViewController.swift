@@ -55,7 +55,7 @@ class GameViewController: NSViewController {
         renderer.particleSystem.particleSystemTypeChanged()
         
         switch sender.label(forSegment: sender.selectedSegment) {
-        case "Firework":
+        case "Fireworks":
             renderer.particleSystem.mode = .firework
         case "Water":
             renderer.particleSystem.mode = .water

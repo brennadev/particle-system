@@ -43,6 +43,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var floorPipelineState: MTLRenderPipelineState
     var waterParticlesPipelineState: MTLRenderPipelineState
     var fireworkParticlesPipelineState: MTLRenderPipelineState
+    var fireworkParticlesPointsPipelineState: MTLRenderPipelineState
     
     var depthState: MTLDepthStencilState
     var colorMap: MTLTexture
@@ -208,6 +209,22 @@ class Renderer: NSObject, MTKViewDelegate {
             try fireworkParticlesPipelineState = device.makeRenderPipelineState(descriptor: fireworkParticlesRenderPipelineDescriptor)
         } catch {
             print("Unable to set up fireworkParticlesPipelineState")
+            return nil
+        }
+        
+        let vertexFireworkPointsFunction = library?.makeFunction(name: "vertexParticlesPoints")
+        let fragmentFireworkPointsFunction = library?.makeFunction(name: "fragmentParticlesPoints")
+        let fireworkPointsRenderPipelineDescriptor = MTLRenderPipelineDescriptor()
+        fireworkPointsRenderPipelineDescriptor.vertexFunction = vertexFireworkPointsFunction
+        fireworkPointsRenderPipelineDescriptor.fragmentFunction = fragmentFireworkPointsFunction
+        fireworkPointsRenderPipelineDescriptor.colorAttachments[0].pixelFormat = metalKitView.colorPixelFormat
+        fireworkPointsRenderPipelineDescriptor.depthAttachmentPixelFormat = metalKitView.depthStencilPixelFormat
+        fireworkPointsRenderPipelineDescriptor.stencilAttachmentPixelFormat = metalKitView.depthStencilPixelFormat
+        
+        do {
+            try fireworkParticlesPointsPipelineState = device.makeRenderPipelineState(descriptor: fireworkPointsRenderPipelineDescriptor)
+        } catch {
+            print("Unable to set up fireworkPointsRenderPipelineState")
             return nil
         }
         
