@@ -381,6 +381,8 @@ class Renderer: NSObject, MTKViewDelegate {
 
         particleUniforms = UnsafeMutableRawPointer(dynamicUniformBuffer.contents() + uniformBufferOffset).bindMemory(to: Uniforms.self, capacity: 1)
         floorUniforms = UnsafeMutableRawPointer(floorUniformBuffer.contents() + uniformBufferOffset).bindMemory(to: Uniforms.self, capacity: 1)
+        fountainTopUniforms = UnsafeMutableRawPointer(fountainTopUniformBuffer.contents() + uniformBufferOffset).bindMemory(to: Uniforms.self, capacity: 1)
+        fountainBottomUniforms = UnsafeMutableRawPointer(fountainBottomUniformBuffer.contents() + uniformBufferOffset).bindMemory(to: Uniforms.self, capacity: 1)
     }
 
     
