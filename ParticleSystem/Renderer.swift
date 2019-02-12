@@ -412,12 +412,18 @@ class Renderer: NSObject, MTKViewDelegate {
         case .firework:
             particleScale = 0.04
         case .water:
-            particleScale = 0.02
+            particleScale = 0.005
+            // TODO: I think something needs to be updated in the particle model matrix for the initial y to be correct
+            
         }
         
         
         particleModelMatrix[0][0] = particleScale
         particleModelMatrix[1][1] = particleScale
+        
+        if particleSystem.mode == .water {
+            particleModelMatrix *= matrix4x4_translation(0, ParticleSystem.waterParticleStartY, 0)
+        }
         
         let fountainScale: Float = 0.25
         

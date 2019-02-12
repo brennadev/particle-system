@@ -41,6 +41,7 @@ struct ParticleSystem {
     /// Y location of floor plane - for collision detection
     static let floorY: Float = -8
     
+    static let waterParticleStartY: Float = -120
     
     mutating func addParticles(for dt: Float) {
         let particleCountToAdd = numberOfParticlesToGenerate(in: dt)
@@ -77,7 +78,7 @@ struct ParticleSystem {
     private func generateWaterParticle() -> Particle {
         
         // currently set up to pull a random value from a square
-        let position = float3(Float.random(in: -2...2), 0, Float.random(in: -1...1))
+        let position = float3(Float.random(in: -2...2), ParticleSystem.waterParticleStartY, Float.random(in: -1...1))
         let velocity = float3(Float.random(in: -7...7), Float.random(in: 0...5), Float.random(in: -0.2...0.2))
         
         return Particle(position: position, velocity: velocity, acceleration: float3(0, -2, 0), radius: 1)
@@ -157,8 +158,8 @@ struct ParticleSystem {
             
             switch particleRadius {
             // over inner (top) part of fountain
-            case 0..<25:
-                let particleFountainTopAdjustmentAmount: Float = 2
+            case 0..<50:
+                let particleFountainTopAdjustmentAmount: Float = 40
                 
                 if allParticles[index].position.y > ParticleSystem.floorY - particleFountainTopAdjustmentAmount {
                     allParticles[index].updatePosition(for: dt)
@@ -174,8 +175,8 @@ struct ParticleSystem {
                 
                 
             // over outer (bottom) part of fountain
-            case 25..<40:
-                let particleFountainBottomAdjustmentAmount: Float = 8
+            case 50..<70:
+                let particleFountainBottomAdjustmentAmount: Float = 60
                 
                 if allParticles[index].position.y > ParticleSystem.floorY - particleFountainBottomAdjustmentAmount {
                     allParticles[index].updatePosition(for: dt)
@@ -192,7 +193,7 @@ struct ParticleSystem {
             // over floor
             default:
                 
-                let particleFloorAdjustmentAmount: Float = 45
+                let particleFloorAdjustmentAmount: Float = 70
                 
                 // when a particle hits the ground
                 if allParticles[index].position.y > ParticleSystem.floorY - particleFloorAdjustmentAmount {
