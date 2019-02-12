@@ -78,8 +78,8 @@ struct ParticleSystem {
     private func generateWaterParticle() -> Particle {
         
         // currently set up to pull a random value from a square
-        let position = float3(Float.random(in: -2...2), ParticleSystem.waterParticleStartY, Float.random(in: -1...1))
-        let velocity = float3(Float.random(in: -7...7), Float.random(in: 0...5), Float.random(in: -0.2...0.2))
+        let position = float3(Float.random(in: -40...40), ParticleSystem.waterParticleStartY, Float.random(in: -1...1))
+        let velocity = float3(Float.random(in: -40...40), Float.random(in: 0...5), Float.random(in: -10...10))
         
         return Particle(position: position, velocity: velocity, acceleration: float3(0, -2, 0), radius: 1)
     }
