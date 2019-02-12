@@ -192,7 +192,7 @@ struct ParticleSystem {
             // over floor
             default:
                 
-                let particleFloorAdjustmentAmount: Float = 50
+                let particleFloorAdjustmentAmount: Float = 45
                 
                 // when a particle hits the ground
                 if allParticles[index].position.y > ParticleSystem.floorY - particleFloorAdjustmentAmount {
