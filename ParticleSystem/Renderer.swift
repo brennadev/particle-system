@@ -72,7 +72,6 @@ class Renderer: NSObject, MTKViewDelegate {
     var viewMatrixTranslation = float2(0, 0)
 
     
-    var fountainMesh: MTKMesh
     var fountainMeshTop: MTKMesh
     var fountainMeshBottom: MTKMesh
 
@@ -182,11 +181,6 @@ class Renderer: NSObject, MTKViewDelegate {
         particlesRenderPipelineDescriptor.vertexFunction = vertexParticlesFunction
         particlesRenderPipelineDescriptor.fragmentFunction = fragmentParticlesFunction
         particlesRenderPipelineDescriptor.colorAttachments[0].pixelFormat = metalKitView.colorPixelFormat
-        particlesRenderPipelineDescriptor.colorAttachments[0].isBlendingEnabled = true
-        /*particlesRenderPipelineDescriptor.colorAttachments[0].sourceRGBBlendFactor = .blendColor
-        particlesRenderPipelineDescriptor.colorAttachments[0].sourceAlphaBlendFactor = .blendAlpha
-        particlesRenderPipelineDescriptor.colorAttachments[0].destinationRGBBlendFactor = .blendColor
-        particlesRenderPipelineDescriptor.colorAttachments[0].destinationAlphaBlendFactor = .blendAlpha*/
         particlesRenderPipelineDescriptor.depthAttachmentPixelFormat = metalKitView.depthStencilPixelFormat
         particlesRenderPipelineDescriptor.stencilAttachmentPixelFormat = metalKitView.depthStencilPixelFormat
         
@@ -237,27 +231,6 @@ class Renderer: NSObject, MTKViewDelegate {
 
         
         // fountain mesh
-        let fountainMeshURL = Bundle.main.url(forResource: "fountain", withExtension: ".obj")
-        
-        
-        guard let url = fountainMeshURL else { return nil }
-        
-        let fountainVertexDescriptor = MDLVertexDescriptor()
-        fountainVertexDescriptor.attributes[0] = MDLVertexAttribute(name: MDLVertexAttributePosition, format: .float3, offset: 0, bufferIndex: 0)
-        fountainVertexDescriptor.attributes[1] = MDLVertexAttribute(name: MDLVertexAttributeNormal, format: .float3, offset: MemoryLayout<float3>.stride, bufferIndex: 0)
-        fountainVertexDescriptor.attributes[2] = MDLVertexAttribute(name: MDLVertexAttributeTextureCoordinate, format: .float2, offset: MemoryLayout<float3>.stride * 2, bufferIndex: 0)
-        fountainVertexDescriptor.layouts[0] = MDLVertexBufferLayout(stride: MemoryLayout<float3>.stride * 2 + MemoryLayout<float2>.stride)
-        
-        
-        let fountainMeshAsset = MDLAsset(url: url, vertexDescriptor: fountainVertexDescriptor, bufferAllocator: MTKMeshBufferAllocator(device: device))
-        
-        do {
-            let meshes = try MTKMesh.newMeshes(asset: fountainMeshAsset, device: device)
-            fountainMesh = meshes.metalKitMeshes[0]
-        } catch {
-            print("Unable to set up fountain mesh")
-            return nil
-        }
         
         let vertexDescriptor = Renderer.buildMetalVertexDescriptor()
         
